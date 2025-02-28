@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<IsPackable>true</IsPackable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Authors>POLUS+</Authors>
+		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>MedicTheme</PackageId>
+		<Version>0.0.1</Version>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+		<SignAssembly>False</SignAssembly>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Include="Fonts\*.ttf" />
+		<AvaloniaResource Include="**\*.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Assets\SVGs\search.svg" />
+		<None Remove="Assets\SVGs\search1.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\Images\right.png" />
+		<AvaloniaResource Include="Assets\Images\search.png" />
+		<AvaloniaResource Include="Assets\SVGs\search.svg" />
+		<AvaloniaResource Include="Assets\SVGs\search1.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="11.2.4" />
+		<PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0.2" />
+		<PackageReference Include="AvaSourceGenerators" Version="0.2.0" />
+		<PackageReference Include="Squircle" Version="2.0.0" />
+		<PackageReference Include="System.Reactive" Version="6.0.1" />
+	</ItemGroup>
+</Project>

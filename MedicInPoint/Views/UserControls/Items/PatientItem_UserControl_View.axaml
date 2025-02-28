@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Items"
+			 mc:Ignorable="d"
+			 d:DesignWidth="335" d:DesignHeight="135"
+			 MinWidth="335" MinHeight="135"
+			 x:Class="MedicInPoint.PatientItem_UserControl_View"
+			 x:DataType="vm:PatientItem_UserControl_ViewModel">
+	<Design.DataContext>
+		<vm:PatientItem_UserControl_ViewModel />
+	</Design.DataContext>
+
+	<Border ClipToBounds="False">
+		<Border Background="White" CornerRadius="12" Padding="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="335" MinHeight="135">
+			<Border.Effect>
+				<DropShadowEffect BlurRadius="20" Color="#E4E8F5" OffsetX="0" OffsetY="0" />
+			</Border.Effect>
+
+			<Grid Grid.Row="2" ColumnDefinitions="*,*" VerticalAlignment="Bottom">
+				<Grid Grid.Column="0" RowDefinitions="*,*" VerticalAlignment="Center">
+					<StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+						<Border CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Patient.Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" VerticalAlignment="Top" Width="5" Height="17" />
+						<Border CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Patient.Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" VerticalAlignment="Top" Width="5" Height="17" />
+						<TextBlock Text="{Binding Patient.Sex}" FontSize="16" />
+					</StackPanel>
+					<TextBlock Grid.Row="1" Text="{Binding Patient.Birthday, StringFormat=dd\\.MM\\.yyyy}" FontSize="16" />
+				</Grid>
+				<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+			</Grid> 
+		</Border>
+	</Border>
+</UserControl>

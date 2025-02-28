@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Medic.Theme/Controls/Border.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="Medic.Theme/Controls/Button.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="Medic.Theme/Controls/Custom/MenuItem.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="Medic.Theme/Controls/Custom/Pill.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="Medic.Theme/MedicTheme.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,39 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<ScrollViewer Height="100" Width="100">
+				<Button Height="200" Width="200" />
+			</ScrollViewer>
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type ScrollBar}" TargetType="ScrollBar">
+		<Setter Property="HideDelay" Value="00:00:00.4" />
+		<Setter Property="ShowDelay" Value="00:00:00.2" />
+		<Style Selector="^:horizontal">
+			<Setter Property="Padding" Value="0" />
+			<Style Selector="^ Track">
+				<Setter Property="Margin" Value="0" />
+				<Setter Property="MaxHeight" Value="5" />
+				<Setter Property="MinHeight" Value="0" />
+				<Style Selector="^ Thumb">
+					<Setter Property="Margin" Value="0" />
+					<Setter Property="MaxHeight" Value="5" />
+				</Style>
+			</Style>
+		</Style>
+		<Style Selector="^:vertical">
+			<Setter Property="Padding" Value="0" />
+			<Style Selector="^ Track">
+				<Setter Property="Margin" Value="0" />
+				<Setter Property="MaxWidth" Value="5" />
+				<Setter Property="MinWidth" Value="0" />
+				<Style Selector="^ Thumb">
+					<Setter Property="Margin" Value="0" />
+					<Setter Property="MaxWidth" Value="5" />
+				</Style>
+			</Style>
+		</Style>
+	</ControlTheme>
+</ResourceDictionary>

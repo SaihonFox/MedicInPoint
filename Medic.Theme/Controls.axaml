@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:medic="https://github.com/saihonfox">
+	<Design.PreviewWith>
+		<StackPanel Orientation="Vertical" Spacing="10" Margin="10" HorizontalAlignment="Center">
+			<Border Classes="drawerbg" Height="100" Width="{Binding $self.Height}" />
+			<Separator />
+			<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+				<RadioButton IsChecked="true" />
+				<RadioButton IsChecked="false" />
+				<RadioButton IsChecked="false" />
+			</StackPanel>
+			<Separator />
+			<Button Classes="back" />
+			<Separator />
+			<TextBox Classes="search" Height="40" Width="300" />
+			<TextBox Classes="field" Height="40" Width="300" />
+			<Separator />
+			<medic:Pill HorizontalAlignment="Center" />
+			<Separator />
+			<medic:MenuItem Text="da" />
+			<Separator />
+			<medic:ImageButton Background="" />
+		</StackPanel>
+	</Design.PreviewWith>
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceInclude Source="Controls/Border.axaml" />
+		<ResourceInclude Source="Controls/Button.axaml" />
+		<ResourceInclude Source="Controls/RadioButton.axaml" />
+		<ResourceInclude Source="Controls/Separator.axaml" />
+		<ResourceInclude Source="Controls/TextBox.axaml" />
+
+		<ResourceInclude Source="Controls/Custom/ImageButton.axaml" />
+		<ResourceInclude Source="Controls/Custom/MenuItem.axaml" />
+		<ResourceInclude Source="Controls/Custom/Pill.axaml" />
+	</ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

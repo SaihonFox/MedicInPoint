@@ -1,0 +1,49 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<Border Padding="10">
+			<StackPanel Orientation="Horizontal" Spacing="5">
+				<RadioButton Classes="onboardrb" GroupName="onboard" IsChecked="true" />
+				<RadioButton Classes="onboardrb" GroupName="onboard" IsChecked="false" />
+				<RadioButton Classes="onboardrb" GroupName="onboard" IsChecked="false" />
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
+		<Setter Property="Padding" Value="0" />
+		<Setter Property="Margin" Value="0" />
+		<Setter Property="Width" Value="15" />
+		<Setter Property="Height" Value="15" />
+		<Setter Property="Template">
+			<ControlTemplate TargetType="RadioButton">
+				<Grid>
+					<Ellipse Name="OuterEllipse"
+							 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+							 Stroke="#1A6FEE"
+							 StrokeThickness="1.5" />
+
+					<Ellipse Name="CheckOuterEllipse"
+							 Fill="#1A6FEE"
+							 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+							 Opacity="0" />
+				</Grid>
+			</ControlTemplate>
+		</Setter>
+		<Style Selector="^:pointerover /template/ Ellipse#OuterEllipse">
+			<Setter Property="Stroke" Value="#1A6FEE" />
+			<Setter Property="Fill" Value="#5fb2ff" />
+		</Style>
+
+		<Style Selector="^:pointerover /template/ Ellipse#CheckOuterEllipse">
+			<Setter Property="Stroke" Value="#1A6FEE" />
+		</Style>
+		<Style Selector="^:checked /template/ Ellipse#OuterEllipse">
+			<Setter Property="Stroke" Value="#1A6FEE" />
+		</Style>
+
+		<Style Selector="^:checked /template/ Ellipse#CheckOuterEllipse, ^:pressed /template/ Ellipse#CheckOuterEllipse">
+			<Setter Property="Opacity" Value="1" />
+		</Style>
+	</ControlTheme>
+</ResourceDictionary>

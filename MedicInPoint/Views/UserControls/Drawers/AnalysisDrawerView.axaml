@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Drawers"
+			 xmlns:btn="using:MedicInPoint.Views.UserControls.Drawers.Buttons"
+			 mc:Ignorable="d"
+			 d:DesignWidth="400" d:DesignHeight="750"
+			 ClipToBounds="False"
+			 Width="400" Height="750"
+			 x:Class="MedicInPoint.Views.UserControls.Drawers.AnalysisDrawerView"
+			 x:DataType="vm:AnalysisDrawerViewModel">
+	<Design.DataContext>
+		<vm:AnalysisDrawerViewModel />
+	</Design.DataContext>
+
+	<Border Background="White" CornerRadius="24" Padding="16">
+		<Border.Effect>
+			<DropShadowEffect Color="#DADADA" BlurRadius="10" OffsetX="0" OffsetY="0" />
+		</Border.Effect>
+
+		<Grid RowDefinitions="auto,10,auto,10,*,10,auto,10,auto">
+			<TextBlock Grid.Row="0" Text="{Binding Analysis.Name}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+			<Border Grid.Row="2" Background="#DBDBDC" CornerRadius="100" Height="1" />
+
+			<StackPanel Grid.Row="4" Orientation="Vertical">
+				
+			</StackPanel>
+
+			<Border Grid.Row="6" Background="#DBDBDC" CornerRadius="100" Height="1" />
+			<Border Grid.Row="8">
+				<Border Background="White" CornerRadius="18" Padding="8" HorizontalAlignment="Center" MinWidth="100" Height="50">
+					<Border.Effect>
+						<DropShadowEffect Color="#DADEDA" BlurRadius="10" OffsetX="0" OffsetY="0" />
+					</Border.Effect>
+
+					<Grid ColumnDefinitions="auto,7.5,auto,7.5,auto">
+						<btn:AnalysisEditBtn Grid.Column="0" Background="#1A6FEE" />
+						<Border Grid.Column="2" Background="#DBDBDC" CornerRadius="100" Width="1" />
+						<btn:AnalysisDeleteBtn Grid.Column="4" />
+					</Grid>
+				</Border>
+			</Border>
+		</Grid>
+	</Border>
+</UserControl>

@@ -1,0 +1,19 @@
+<Application xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 x:Class="MedicInPoint.App"
+			 xmlns:local="using:MedicInPoint"
+			 xmlns:medic="https://github.com/saihonfox"
+			 RequestedThemeVariant="Light">
+	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+	<Application.DataTemplates>
+		<local:ViewLocator/>
+	</Application.DataTemplates>
+
+	<Application.Styles>
+		<FluentTheme />
+		<medic:MedicTheme />
+
+		<StyleInclude Source="Controls.axaml" />
+	</Application.Styles>
+</Application>

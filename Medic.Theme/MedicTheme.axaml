@@ -1,0 +1,26 @@
+<Styles x:Class="Medic.Theme.MedicTheme"
+		xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<StackPanel Orientation="Vertical" Margin="10">
+			<TextBlock Text="{DynamicResource BACK}" FontSize="30" />
+		</StackPanel>
+	</Design.PreviewWith>
+
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+			</ResourceDictionary.ThemeDictionaries>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="ThemeResources.axaml" />
+				<ResourceInclude Source="Controls.axaml" />
+				<ResourceInclude Source="avares://Medic.Theme/Locale/ru_ru.axaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+
+	<Style Selector=":is(TemplatedControl)">
+		<Setter Property="FontFamily" Value="{StaticResource Nunito}" />
+		<Setter Property="FontWeight" Value="Bold" />
+	</Style>
+</Styles>

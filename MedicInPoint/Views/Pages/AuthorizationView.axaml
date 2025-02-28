@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
+			 xmlns:med="https://github.com/SaihonFox"
+			 mc:Ignorable="d"
+			 d:DesignWidth="1100" d:DesignHeight="850"
+			 x:Class="MedicInPoint.Views.Pages.AuthorizationView">
+	<Panel>
+		<Grid ColumnDefinitions="auto,*">
+			<Border Grid.Column="0" Classes="drawerbg" Padding="16" Margin="50" HorizontalAlignment="Left" Width="400">
+				<Grid RowDefinitions="auto,*,auto">
+					<Border />
+					<Carousel Grid.Row="1" Name="slides" SelectedIndex="0">
+						<Carousel.PageTransition>
+							<CompositePageTransition>
+								<PageSlide Duration="00:00:00.500" SlideInEasing="CubicEaseInOut" SlideOutEasing="CubicEaseInOut" Orientation="Horizontal" />
+							</CompositePageTransition>
+						</Carousel.PageTransition>
+						<Carousel.Items>
+							<Grid RowDefinitions="auto,10,auto,20,auto" VerticalAlignment="Center">
+								<TextBlock Name="title1" Grid.Row="0" Text="Анализы" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#00B712" />
+								<TextBlock Name="description1" Grid.Row="2" Text="Экспресс сбор и получение проб" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#939396" />
+								<Image Name="img1" Grid.Row="4" Source="/Assets/Images/Illustration1.png" Stretch="Uniform" Margin="50,0" />
+							</Grid>
+							<Grid RowDefinitions="auto,10,auto,20,auto" VerticalAlignment="Center">
+								<TextBlock Name="title2" Grid.Row="0" Text="Уведомления" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#00B712" />
+								<TextBlock Name="description2" Grid.Row="2" Text="Вы быстро узнаете о результатах" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#939396" />
+								<Image Name="img2" Grid.Row="4" Source="/Assets/Images/Illustration2.png" Stretch="Uniform" />
+							</Grid>
+							<Grid RowDefinitions="auto,10,auto,20,auto" VerticalAlignment="Center">
+								<TextBlock Name="title3" Grid.Row="0" Text="Мониторинг" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#00B712" />
+								<TextBlock Name="description3" Grid.Row="2" Text="Наши врачи всегда наблюдают за вашими показателями здоровья" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#939396" />
+								<Image Name="img3" Grid.Row="4" Source="/Assets/Images/Illustration3.png" Stretch="Uniform" Margin="10,0" />
+							</Grid>
+						</Carousel.Items>
+					</Carousel>
+
+					<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,4" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="15">
+						<RadioButton Name="onboard1" Classes="onboardrb" IsChecked="True" GroupName="onboard" />
+						<RadioButton Name="onboard2" Classes="onboardrb" IsChecked="False" GroupName="onboard" />
+						<RadioButton Name="onboard3" Classes="onboardrb" IsChecked="False" GroupName="onboard" />
+					</StackPanel>
+				</Grid>
+			</Border>
+
+			<Panel Grid.Column="1" Margin="50" HorizontalAlignment="Center" VerticalAlignment="Center" Width="550">
+				<AutoCompleteBox IsVisible="False" Name="acb" IsDropDownOpen="False" FilterMode="ContainsOrdinal" HorizontalAlignment="Right" VerticalAlignment="Top" Width="250">
+					<i:Interaction.Behaviors>
+						<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
+					</i:Interaction.Behaviors>
+				</AutoCompleteBox>
+				<StackPanel Orientation="Vertical" Spacing="20" Margin="0,80,0,0" HorizontalAlignment="Center">
+					<StackPanel Orientation="Horizontal" Spacing="16">
+						<Image Source="/Assets/Images/Emojies.png" Width="50" Height="50" />
+						<TextBlock Name="title" Text="Добро пожаловать!" FontSize="36" />
+					</StackPanel>
+					<TextBlock Text="Войдите, чтобы пользоваться функциями приложения" FontSize="28" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="10" Margin="0,320,0,0" HorizontalAlignment="Center">
+					<TextBlock Text="Логин" FontSize="22" />
+					<TextBox Name="login" Classes="field" MaxLength="20" Width="475" Height="60" />
+					<TextBlock Text="Пароль" FontSize="22" />
+					<TextBox Name="password" Classes="field" MaxLength="20" Width="475" Height="60" />
+				</StackPanel>
+				<Button Name="enter"
+						Content="{DynamicResource BACK}" FontSize="28"
+						CornerRadius="10"
+						Background="#1A6FEE" Foreground="White"
+						Margin="0,570,0,0" Padding="0"
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+						HorizontalAlignment="Center" VerticalAlignment="Top"
+						Width="300" Height="60" />
+			</Panel>
+		</Grid>
+	</Panel>
+</UserControl>

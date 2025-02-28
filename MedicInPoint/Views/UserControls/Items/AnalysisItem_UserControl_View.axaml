@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Items"
+			 mc:Ignorable="d"
+			 d:DesignWidth="335" d:DesignHeight="135"
+			 MinWidth="335" MinHeight="135"
+			 x:Class="MedicInPoint.AnalysisItem_UserControl_View"
+			 x:DataType="vm:AnalysisItem_UserControl_ViewModel">
+	<Design.DataContext>
+		<vm:AnalysisItem_UserControl_ViewModel />
+	</Design.DataContext>
+
+	<Border>
+	</Border>
+</UserControl>

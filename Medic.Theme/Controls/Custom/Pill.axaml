@@ -1,0 +1,49 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:medic="https://github.com/saihonfox">
+
+	<Design.PreviewWith>
+		<Border Padding="10" Width="200">
+			<medic:Pill Value="Мужской" Title="Пол" HorizontalAlignment="Center" />
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type medic:Pill}" TargetType="medic:Pill">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="ValueFontSize" Value="20" />
+		<Setter Property="TitleFontSize" Value="16" />
+		<Setter Property="PillMinWidth" Value="100" />
+		<Setter Property="PillMaxWidth" Value="400" />
+		<Setter Property="PillPadding" Value="40, 6" />
+		<Setter Property="Value" Value="Value" />
+		<Setter Property="Title" Value="Title" />
+		<Setter Property="PillBackground" Value="#F5F5F9" />
+		<Setter Property="ValueForeground" Value="Black" />
+		<Setter Property="TitleForeground" Value="#939396" />
+		<Setter Property="Template">
+			<ControlTemplate>
+				<DataValidationErrors>
+					<Grid RowDefinitions="auto,2,auto" HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
+						<Border Grid.Row="0"
+								CornerRadius="16"
+								ClipToBounds="False"
+								Background="{TemplateBinding PillBackground}"
+								Padding="{TemplateBinding PillPadding}"
+								MinWidth="{TemplateBinding PillMinWidth}" MaxWidth="{TemplateBinding PillMaxWidth}">
+							<TextBlock Name="value"
+									   Text="{TemplateBinding Value}" FontSize="{TemplateBinding ValueFontSize}"
+									   TextAlignment="Center" TextWrapping="WrapWithOverflow"
+									   Foreground="{TemplateBinding ValueForeground}"
+									   VerticalAlignment="Center" />
+						</Border>
+						<TextBlock Grid.Row="2" Name="title"
+								   Text="{TemplateBinding Title}" FontSize="{TemplateBinding TitleFontSize}"
+								   TextAlignment="Center" TextWrapping="WrapWithOverflow"
+								   Foreground="{TemplateBinding TitleForeground}"
+								   Margin="0" Padding="0" />
+					</Grid>
+				</DataValidationErrors>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+</ResourceDictionary>

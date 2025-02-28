@@ -1,0 +1,16 @@
+<ResourceDictionary x:Class="Medic.Theme.Locale.ru_ru"
+					xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<StackPanel Orientation="Vertical" Margin="10">
+			<TextBlock Text="{DynamicResource DETAILED}" />
+			<TextBlock Text="{DynamicResource BACK}" />
+			<TextBlock Text="{DynamicResource MENU}" />
+		</StackPanel>
+	</Design.PreviewWith>
+
+	<!-- Add Resources Here -->
+	<x:String x:Key="DETAILED">Подробнее</x:String>
+	<x:String x:Key="BACK">Назад</x:String>
+	<x:String x:Key="MENU">Меню</x:String>
+</ResourceDictionary>
