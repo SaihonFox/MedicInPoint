@@ -35,12 +35,12 @@
 		</Setter>
 
 		<Style Selector="^:pointerover">
-			<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
+			<Setter Property="Background" Value="#F3F3F3" />
 		</Style>
 
 		<Style Selector="^:pressed">
 			<Setter Property="RenderTransform" Value="scale(0.98)" />
-			<Setter Property="Background" Value="#44222222" />
+			<Setter Property="Background" Value="#EBEBEB" />
 		</Style>
 	</ControlTheme>
 </ResourceDictionary>

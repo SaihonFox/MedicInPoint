@@ -1,16 +1,11 @@
 using Avalonia.Controls;
 
-using MedicInPoint.ViewModels.UserControls.Drawers;
-
-namespace MedicInPoint;
+namespace MedicInPoint.Views.UserControls.Drawers;
 
 public partial class PatientDrawerView : UserControl
 {
-    public static PatientDrawerViewModel ViewModel = new();
-
-    public PatientDrawerView()
-    {
-        DataContext = ViewModel;
-        InitializeComponent();
-    }
+	public PatientDrawerView()
+	{
+		InitializeComponent();
+	}
 }

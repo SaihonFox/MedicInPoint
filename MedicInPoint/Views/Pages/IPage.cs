@@ -4,5 +4,5 @@ namespace MedicInPoint.Views.Pages;
 
 public interface IPage<TWindowOwner> where TWindowOwner : WindowBase
 {
-	//public TWindowOwner TOwner { get; init; }
+	public TWindowOwner TOwner { get; }
 }

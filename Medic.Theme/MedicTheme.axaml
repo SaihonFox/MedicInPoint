@@ -1,12 +1,6 @@
 <Styles x:Class="Medic.Theme.MedicTheme"
 		xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<Design.PreviewWith>
-		<StackPanel Orientation="Vertical" Margin="10">
-			<TextBlock Text="{DynamicResource BACK}" FontSize="30" />
-		</StackPanel>
-	</Design.PreviewWith>
-
 	<Styles.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.ThemeDictionaries>

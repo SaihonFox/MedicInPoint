@@ -6,6 +6,9 @@
 			<TextBlock Text="{DynamicResource DETAILED}" />
 			<TextBlock Text="{DynamicResource BACK}" />
 			<TextBlock Text="{DynamicResource MENU}" />
+			<TextBlock Text="{DynamicResource ENTER}" />
+			<TextBlock Text="{DynamicResource EDIT}" />
+			<TextBlock Text="{DynamicResource DELETE}" />
 		</StackPanel>
 	</Design.PreviewWith>
 
@@ -13,4 +16,7 @@
 	<x:String x:Key="DETAILED">Подробнее</x:String>
 	<x:String x:Key="BACK">Назад</x:String>
 	<x:String x:Key="MENU">Меню</x:String>
+	<x:String x:Key="ENTER">Войти</x:String>
+	<x:String x:Key="EDIT">Изменить</x:String>
+	<x:String x:Key="DELETE">Удалить</x:String>
 </ResourceDictionary>

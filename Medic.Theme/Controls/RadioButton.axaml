@@ -1,49 +1,97 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Design.PreviewWith>
-		<Border Padding="10">
-			<StackPanel Orientation="Horizontal" Spacing="5">
-				<RadioButton Classes="onboardrb" GroupName="onboard" IsChecked="true" />
+		<StackPanel Spacing="10" Margin="10">
+			<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+				<RadioButton Classes="onboardrb" GroupName="onboard" Content="first" IsChecked="true" />
 				<RadioButton Classes="onboardrb" GroupName="onboard" IsChecked="false" />
 				<RadioButton Classes="onboardrb" GroupName="onboard" IsChecked="false" />
 			</StackPanel>
-		</Border>
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<RadioButton Classes="ac" GroupName="onac" IsChecked="true" Content="first" Height="50" />
+				<RadioButton Classes="ac" GroupName="onac" IsChecked="false" Content="second" />
+			</StackPanel>
+		</StackPanel>
 	</Design.PreviewWith>
 
 	<ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
-		<Setter Property="Padding" Value="0" />
-		<Setter Property="Margin" Value="0" />
-		<Setter Property="Width" Value="15" />
-		<Setter Property="Height" Value="15" />
-		<Setter Property="Template">
-			<ControlTemplate TargetType="RadioButton">
-				<Grid>
-					<Ellipse Name="OuterEllipse"
-							 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-							 Stroke="#1A6FEE"
-							 StrokeThickness="1.5" />
+		<Style Selector="^.onboardrb">
+			<Setter Property="Padding" Value="5,0,5,0" />
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="MinWidth" Value="15" />
+			<Setter Property="Height" Value="15" />
+			<Setter Property="HorizontalContentAlignment" Value="Left" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Left" />
 
-					<Ellipse Name="CheckOuterEllipse"
-							 Fill="#1A6FEE"
-							 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-							 Opacity="0" />
-				</Grid>
-			</ControlTemplate>
-		</Setter>
-		<Style Selector="^:pointerover /template/ Ellipse#OuterEllipse">
-			<Setter Property="Stroke" Value="#1A6FEE" />
-			<Setter Property="Fill" Value="#5fb2ff" />
+			<Setter Property="Content" Value="" />
+
+			<Setter Property="Template">
+				<ControlTemplate TargetType="RadioButton">
+					<Grid ColumnDefinitions="*,auto">
+						<Ellipse Grid.Column="0" Name="OuterEllipse"
+								 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+								 Stroke="#1A6FEE"
+								 StrokeThickness="1.5"
+								 Width="15" Height="15" />
+
+						<Ellipse Grid.Column="0" Name="CheckOuterEllipse"
+								 Fill="#1A6FEE"
+								 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+								 Opacity="0" />
+
+						<ContentPresenter Grid.Column="1" Name="PART_ContentPresenter"
+										  IsVisible="{Binding ., Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+										  Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+										  LineHeight="{TemplateBinding FontSize}"
+										  Foreground="{TemplateBinding Foreground}"
+										  Margin="{TemplateBinding Padding}"
+										  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter>
+			<Style Selector="^:pointerover /template/ Ellipse#OuterEllipse">
+				<Setter Property="Stroke" Value="#1A6FEE" />
+				<Setter Property="Fill" Value="#5fb2ff" />
+			</Style>
+
+			<Style Selector="^:pointerover /template/ Ellipse#CheckOuterEllipse">
+				<Setter Property="Stroke" Value="#1A6FEE" />
+			</Style>
+			<Style Selector="^:checked /template/ Ellipse#OuterEllipse">
+				<Setter Property="Stroke" Value="#1A6FEE" />
+			</Style>
+
+			<Style Selector="^:checked /template/ Ellipse#CheckOuterEllipse, ^:pressed /template/ Ellipse#CheckOuterEllipse">
+				<Setter Property="Opacity" Value="1" />
+			</Style>
 		</Style>
 
-		<Style Selector="^:pointerover /template/ Ellipse#CheckOuterEllipse">
-			<Setter Property="Stroke" Value="#1A6FEE" />
-		</Style>
-		<Style Selector="^:checked /template/ Ellipse#OuterEllipse">
-			<Setter Property="Stroke" Value="#1A6FEE" />
-		</Style>
+		<Style Selector="^.ac">
+			<Setter Property="FontSize" Value="20" />
 
-		<Style Selector="^:checked /template/ Ellipse#CheckOuterEllipse, ^:pressed /template/ Ellipse#CheckOuterEllipse">
-			<Setter Property="Opacity" Value="1" />
+			<Setter Property="Background" Value="#F5F5F9" />
+			<Setter Property="Foreground" Value="Black" />
+
+			<Setter Property="Padding" Value="15,5" />
+
+			<Setter Property="MinWidth" Value="100" />
+			<Setter Property="Height" Value="50" />
+
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="{TemplateBinding MinWidth}" Height="{TemplateBinding Height}">
+						<TextBlock Text="{TemplateBinding Content}" FontSize="{TemplateBinding FontSize}"
+								   Foreground="{TemplateBinding Foreground}"
+								   Padding="{TemplateBinding Padding}"
+								   HorizontalAlignment="Center" VerticalAlignment="Center" />
+					</Border>
+				</ControlTemplate>
+			</Setter>
+			<Style Selector="^:checked">
+				<Setter Property="Background" Value="#1A6FEE" />
+				<Setter Property="Foreground" Value="White" />
+			</Style>
 		</Style>
 	</ControlTheme>
 </ResourceDictionary>

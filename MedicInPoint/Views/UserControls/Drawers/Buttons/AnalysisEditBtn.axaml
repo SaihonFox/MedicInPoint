@@ -26,7 +26,7 @@
 
 		<Setter Property="Transitions">
 			<Transitions>
-				<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+				<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" Easing="CubicEaseInOut" />
 			</Transitions>
 		</Setter>
 
@@ -35,7 +35,7 @@
 				<Border Name="PART_Background" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
 					<StackPanel Orientation="Horizontal" Spacing="6">
 						<Svg Path="/Assets/SVGs/buttons/edit.svg" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}" Width="22" Height="22" />
-						<TextBlock Text="Изменить" FontSize="16" FontWeight="Bold" Foreground="White" />
+						<TextBlock Text="{DynamicResource EDIT}" FontSize="16" FontWeight="Bold" Foreground="White" />
 					</StackPanel>
 				</Border>
 			</ControlTemplate>
@@ -78,7 +78,7 @@
 		</Style>
 
 		<Style Selector="^:pressed">
-			<Setter Property="RenderTransform" Value="scale(0.97)" />
+			<Setter Property="RenderTransform" Value="scale(0.96)" />
 		</Style>
 	</ControlTheme>
 </ResourceDictionary>

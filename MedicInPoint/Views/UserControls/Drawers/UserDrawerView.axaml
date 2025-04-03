@@ -8,7 +8,7 @@
 			 d:DesignWidth="300" d:DesignHeight="750"
 			 ClipToBounds="False"
 			 Width="300" Height="750"
-			 x:Class="MedicInPoint.UserDrawerView"
+			 x:Class="MedicInPoint.Views.UserControls.Drawers.UserDrawerView"
 			 x:DataType="vm:UserDrawerViewModel">
 	<Design.DataContext>
 		<vm:UserDrawerViewModel />
@@ -34,11 +34,10 @@
 						<DropShadowEffect Color="#DADEDA" BlurRadius="10" OffsetX="0" OffsetY="0" />
 					</Border.Effect>
 
-					<Grid ColumnDefinitions="auto,7.5,auto,7.5,auto">
-						<btn:AnalysisEditBtn Grid.Column="0" Background="#1A6FEE" />
-						<Border Grid.Column="2" Background="#DBDBDC" CornerRadius="100" Width="1" />
-						<btn:AnalysisDeleteBtn Grid.Column="4" />
-					</Grid>
+					<StackPanel Orientation="Horizontal">
+						<btn:UserFireBtn IsVisible="{Binding !User.IsBlocked}" />
+						<btn:UserReturnBtn IsVisible="{Binding User.IsBlocked}" />
+					</StackPanel>
 				</Border>
 			</Border>
 		</Grid>

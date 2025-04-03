@@ -3,11 +3,25 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="Medic.Theme/Controls.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="Medic.Theme/Controls/Border.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="Medic.Theme/Controls/Button.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="Medic.Theme/Controls/Custom/MenuItem.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="Medic.Theme/Controls/Custom/Pill.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="Medic.Theme/Locale/en-us.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="Medic.Theme/Locale/ru-ru.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="Medic.Theme/MedicTheme.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/App.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/ViewModels/Pages/Admin/AnalysisAdminViewModel.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/MainView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/MainWindow.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/Admin/AnalysisAdminView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/AuthorizationView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/FlyoutMenuView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/MenuView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/UserControls/Drawers/AnalysisDrawerView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/UserControls/Drawers/Buttons/AnalysisDeleteBtn.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/UserControls/Drawers/Buttons/AnalysisEditBtn.axaml" value="MedicInPoint/MedicInPoint.csproj" />
       </map>
     </option>
   </component>

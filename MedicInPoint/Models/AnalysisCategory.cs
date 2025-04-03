@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MedicInPoint.Models;
 
 public partial class AnalysisCategory
 {
-	public int Id { get; set; }
+    public int Id { get; set; }
 
-	public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-	public ICollection<Analysis> Analyses { get; set; } = [];
+    public virtual ICollection<AnalysisCategoriesList> AnalysisCategoriesLists { get; set; } = new List<AnalysisCategoriesList>();
 }

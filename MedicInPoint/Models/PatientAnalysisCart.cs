@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MedicInPoint.Models;
 
@@ -13,4 +14,6 @@ public partial class PatientAnalysisCart
     public Patient? Patient { get; set; }
 
     public ICollection<PatientAnalysisCartItem> PatientAnalysisCartItems { get; set; } = [];
+
+    public ICollection<Request> Requests { get; set; } = [];
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MedicInPoint.Models;
 
@@ -10,6 +11,9 @@ public partial class PatientsDataList
 
     public int PatientId { get; set; }
 
+    /// <summary>
+    /// insert or update
+    /// </summary>
     public string Method { get; set; } = null!;
 
     public string Surname { get; set; } = null!;
@@ -25,6 +29,10 @@ public partial class PatientsDataList
     public string? Email { get; set; }
 
     public string Login { get; set; } = null!;
+
+    public float? Weight { get; set; }
+
+    public float? Height { get; set; }
 
     public Patient Patient { get; set; } = null!;
 }

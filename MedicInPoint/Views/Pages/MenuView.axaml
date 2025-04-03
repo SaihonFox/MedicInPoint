@@ -5,21 +5,29 @@
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages"
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
 			 xmlns:medic="https://github.com/saihonfox"
+			 xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
 			 mc:Ignorable="d"
+			 Background="{StaticResource WindowBackground}"
 			 d:DesignWidth="1500" d:DesignHeight="1000"
 			 x:Class="MedicInPoint.Views.Pages.MenuView"
 			 x:DataType="vm:MenuViewModel">
 	<Design.DataContext>
 		<vm:MenuViewModel />
 	</Design.DataContext>
-
+	
 	<Grid>
-		<StackPanel Spacing="20" VerticalAlignment="Center">
+		<ItemsControl ItemsSource="{CompiledBinding DoctorMenu}" ClipToBounds="False" Margin="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Vertical" Spacing="20" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
+		<!--<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 			<medic:MenuItem Name="analyses" ImageSource="/Assets/Images/analyses_btn.png" Text="Список анализов" />
 			<medic:MenuItem Name="patients" ImageSource="/Assets/Images/patients_btn.png" Text="Список пациентов" />
 			<medic:MenuItem Name="users" ImageSource="/Assets/Images/users_btn.png" Text="Список сотрудников" />
 			<medic:MenuItem Name="categories" ImageSource="/Assets/Images/categories_btn.png" Text="Список категорий" />
-		</StackPanel>
-		<drawer:AnalysisDrawerView HorizontalAlignment="Right" />
+		</StackPanel>-->
 	</Grid>
 </UserControl>

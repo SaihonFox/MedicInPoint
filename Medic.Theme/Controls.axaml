@@ -20,11 +20,12 @@
 			<Separator />
 			<medic:MenuItem Text="da" />
 			<Separator />
-			<medic:ImageButton Background="" />
+			<medic:ImageButton />
 		</StackPanel>
 	</Design.PreviewWith>
 
 	<ResourceDictionary.MergedDictionaries>
+		<ResourceInclude Source="Controls/AutoCompleteBox.axaml" />
 		<ResourceInclude Source="Controls/Border.axaml" />
 		<ResourceInclude Source="Controls/Button.axaml" />
 		<ResourceInclude Source="Controls/RadioButton.axaml" />

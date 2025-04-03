@@ -1,4 +1,7 @@
-﻿namespace MedicInPoint.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace MedicInPoint.Models;
 
 public partial class PatientAnalysisCartItem
 {

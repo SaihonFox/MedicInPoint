@@ -2,7 +2,7 @@ using Avalonia.Controls;
 
 using MedicInPoint.ViewModels.UserControls.Drawers;
 
-namespace MedicInPoint;
+namespace MedicInPoint.Views.UserControls.Drawers;
 
 public partial class UserDrawerView : UserControl
 {

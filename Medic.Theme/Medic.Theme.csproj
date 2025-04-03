@@ -28,6 +28,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Assets\SVGs\eye_close.svg" />
+		<None Remove="Assets\SVGs\eye_open.svg" />
 		<None Remove="Assets\SVGs\search.svg" />
 		<None Remove="Assets\SVGs\search1.svg" />
 	</ItemGroup>
@@ -35,15 +37,23 @@
 	<ItemGroup>
 		<AvaloniaResource Include="Assets\Images\right.png" />
 		<AvaloniaResource Include="Assets\Images\search.png" />
+		<AvaloniaResource Include="Assets\SVGs\eye_close.svg" />
+		<AvaloniaResource Include="Assets\SVGs\eye_open.svg" />
 		<AvaloniaResource Include="Assets\SVGs\search.svg" />
 		<AvaloniaResource Include="Assets\SVGs\search1.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.2.4" />
+		<PackageReference Include="Avalonia" Version="11.2.5" />
 		<PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0.2" />
 		<PackageReference Include="AvaSourceGenerators" Version="0.2.0" />
 		<PackageReference Include="Squircle" Version="2.0.0" />
 		<PackageReference Include="System.Reactive" Version="6.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Controls\Separator.axaml.cs">
+	    <DependentUpon>Separator.axaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 </Project>

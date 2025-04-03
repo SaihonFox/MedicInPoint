@@ -7,14 +7,8 @@ namespace MedicInPoint.Views;
 
 public partial class MainWindow : Window
 {
-	public static MainWindow instance = default!;
-	public static readonly MainWindowViewModel ViewModel = new();
-
 	public MainWindow()
 	{
-		instance = this;
-
-		DataContext = ViewModel;
 		InitializeComponent();
 
 		AddHandler(DragDrop.DropEvent, Drop);
@@ -36,10 +30,5 @@ public partial class MainWindow : Window
 		}))}");
 		sb.AppendLine($"Files: {string.Join(" | ", e.Data.GetFiles()?.Select(f => $"Name: {f.Name}, Path: {f.Path}") ?? [])}");
 		control.Content = new TextBlock { Text = sb.ToString(), TextWrapping = Avalonia.Media.TextWrapping.WrapWithOverflow }; */
-	}
-
-	public void ChangePage(UserControl page)
-	{
-		ViewModel.CurrentPage = page;
 	}
 }

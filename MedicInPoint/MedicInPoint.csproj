@@ -6,44 +6,58 @@
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DebugType>none</DebugType>
-		<DefineConstants>$(DefineConstants);ENABLE_XAML_HOT_RELOAD</DefineConstants>
+		<DefineConstants>$(DefineConstants);ENABLE_XAML_HOT_RELOAD;USE_LOCALHOST</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DebugType>none</DebugType>
+		<DefineConstants>$(DefineConstants);USE_LOCALHOST</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<Folder Include="AI\**" />
 		<AvaloniaResource Include="Assets\**" />
-		<Folder Include="API\" />
-		<Folder Include="Views\Pages\Doctor\" />
+		<Folder Include="API\AIMLAPI\" />
+		<Folder Include="Converters\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.2.4" />
+		<PackageReference Include="Avalonia" Version="11.2.6" />
 		<PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.2.4" />
-		<PackageReference Include="Avalonia.ReactiveUI" Version="11.2.4" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.4" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.2.6" />
+		<PackageReference Include="Avalonia.Skia" Version="11.2.6" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.6" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-		<PackageReference Include="Avalonia.Diagnostics" Version="11.2.4">
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.2.6">
 			<IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
 			<PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.2.0.9" />
+		<PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.2.0.14" />
 
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 
-		<PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="Avalonia.Markup.Xaml.Loader" Version="11.2.4" />
-		<PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="HotAvalonia" Version="2.1.0" />
-		<PackageReference Include="HotAvalonia.Extensions" Version="2.1.0" PrivateAssets="All" />
+		<PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="Avalonia.Markup.Xaml.Loader" Version="11.2.6" />
+
+		<PackageReference Include="DialogHost.Avalonia" Version="0.9.2" />
+
+		<PackageReference Include="FluentAvaloniaUI" Version="2.3.0" />
+		<PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.3" />
 
 		<PackageReference Include="MikD1.AvaloniaFixedWrapPanel" Version="0.0.2" />
 
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
 		<PackageReference Include="Refit" Version="8.0.0" />
+
+		<PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
+
+		<PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
+
+		<PackageReference Include="Sandreas.Avalonia.SimpleRouter" Version="0.0.5" />
 
 		<PackageReference Include="Velopack" Version="0.0.1053" />
 		<PackageReference Include="Velopack.Build" Version="0.0.1053">
@@ -60,6 +74,9 @@
 		<Compile Update="Views\Pages\AuthorizationView.axaml.cs">
 			<DependentUpon>AuthorizationView.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\Pages\FlyoutMenuView.axaml.cs">
+		  <DependentUpon>FlyoutMenuView.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\UserControls\Drawers\Buttons\UserReturnBtn.axaml.cs">
 		  <DependentUpon>UserReturnBtn.axaml</DependentUpon>
 		</Compile>
@@ -71,6 +88,9 @@
 		</Compile>
 		<Compile Update="Views\UserControls\Drawers\PatientDrawerView.axaml.cs">
 		  <DependentUpon>PatientDrawerView.axaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\UserControls\Items\AnalysisCategoryItemAdmin_UserControl_View.axaml.cs">
+		  <DependentUpon>AnalysisCategoryItemAdmin_UserControl_View.axaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 </Project>

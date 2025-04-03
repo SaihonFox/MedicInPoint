@@ -1,18 +1,22 @@
-using System;
 using System.Net;
-using System.Timers;
 
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+//using Avalonia.ReactiveUI;
 using Avalonia.Threading;
+
+using MedicInPoint.Extensions;
+using MedicInPoint.ViewModels.Pages;
+
+//using ReactiveUI;
 
 using Refit;
 
 namespace MedicInPoint.Views.Pages;
 
-public partial class AuthorizationView : UserControl, IPage<MainWindow>
+public partial class AuthorizationView : UserControl
 {
-	public Timer timer = new(1000);
+	public System.Timers.Timer timer = new(1000);
 	public int itimer;
 
 	public AuthorizationView()
@@ -25,7 +29,7 @@ public partial class AuthorizationView : UserControl, IPage<MainWindow>
 		onboard2.Click += Onboard_Click;
 		onboard3.Click += Onboard_Click;
 
-		enter.Click += Button_Click;
+		//enter.Click += enter_Click;
 	}
 
 	//public MainWindow TOwner { get => default!; init => TOwner = (MainWindow)Parent!; }
@@ -52,11 +56,11 @@ public partial class AuthorizationView : UserControl, IPage<MainWindow>
 		timer.Start();
 	}
 
-	async void Button_Click(object? sender, RoutedEventArgs e)
+	async void enter_Click(object? sender, RoutedEventArgs e)
 	{
-		if (string.IsNullOrWhiteSpace(login.Text) || string.IsNullOrWhiteSpace(password.Text))
+		if (login.Text.IsNullOrWhiteSpace() || password.Text.IsNullOrWhiteSpace())
 		{
-			//TOwner.ErrorNotification("Ошибка", "Поля пустые!");
+			//TOwner.ErrorNotification("пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
 			return;
 		}
 
@@ -70,21 +74,21 @@ public partial class AuthorizationView : UserControl, IPage<MainWindow>
 		{
 			if (ex.StatusCode != HttpStatusCode.NotFound)
 			{
-				//TOwner.ErrorNotification("Ошибка", ex.StatusCode.ToString());
+				//TOwner.ErrorNotification("пїЅпїЅпїЅпїЅпїЅпїЅ", ex.StatusCode.ToString());
 				enter.IsEnabled = true;
 				return;
 			}
 		}
 		catch (Exception ex)
 		{
-			//TOwner.ErrorNotification("Ошибка", ex.StackTrace!);
+			//TOwner.ErrorNotification("пїЅпїЅпїЅпїЅпїЅпїЅ", ex.StackTrace!);
 			enter.IsEnabled = true;
 			return;
 		}
 		/*if (user == null)
 		{
 			new WindowNotificationManager(this) { Position = NotificationPosition.BottomRight }
-				.Show(new Notification("Ошибка", "Пользователь не найден", NotificationType.Error));
+				.Show(new Notification("пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", NotificationType.Error));
 			enter.IsEnabled = true;
 			return;
 		}*/

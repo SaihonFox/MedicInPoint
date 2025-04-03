@@ -40,7 +40,8 @@
 								   Text="{TemplateBinding Title}" FontSize="{TemplateBinding TitleFontSize}"
 								   TextAlignment="Center" TextWrapping="WrapWithOverflow"
 								   Foreground="{TemplateBinding TitleForeground}"
-								   Margin="0" Padding="0" />
+								   Margin="0" Padding="0"
+								   HorizontalAlignment="Center" />
 					</Grid>
 				</DataValidationErrors>
 			</ControlTemplate>

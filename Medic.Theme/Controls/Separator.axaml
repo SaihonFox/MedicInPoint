@@ -1,25 +1,59 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:medic="https://github.com/saihonfox">
 	<Design.PreviewWith>
+		<Border Height="50" Width="200">
+			<medic:Separator Content="da das" Orientation="Horizontal" />
+		</Border>
 	</Design.PreviewWith>
 
-	<ControlTheme x:Key="{x:Type Separator}" TargetType="Separator">
+	<ControlTheme x:Key="{x:Type medic:Separator}" TargetType="medic:Separator">
+		<Setter Property="Orientation" Value="Horizontal" />
+
+		<Setter Property="FontSize" Value="14" />
+
+		<Setter Property="CornerRadius" Value="100" />
 		<Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
+		<Setter Property="Foreground" Value="Black" />
+
+		<Setter Property="IsHitTestVisible" Value="False" />
 		<Setter Property="Focusable" Value="False" />
-		<Setter Property="Height" Value="{DynamicResource MenuFlyoutSeparatorThemeHeight}" />
-		<Setter Property="HorizontalAlignment" Value="Stretch" />
+
 		<Setter Property="Margin" Value="{DynamicResource MenuFlyoutSeparatorThemePadding}" />
+
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="HorizontalAlignment" Value="Stretch" />
+		<Setter Property="VerticalAlignment" Value="Stretch" />
+
+		<Setter Property="ClipToBounds" Value="False" />
+
 		<Setter Property="Template">
-			<ControlTemplate>
-				<Border
-						Height="{TemplateBinding Height}"
-						HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-						VerticalAlignment="{TemplateBinding VerticalAlignment}"
+			<ControlTemplate TargetType="ContentControl">
+				<Border Name="PART_Border"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						ClipToBounds="False"
+						Background="{TemplateBinding Background}"
 						BorderBrush="{TemplateBinding BorderBrush}"
 						BorderThickness="{TemplateBinding BorderThickness}"
-						CornerRadius="100"
-						Background="{TemplateBinding Background}" />
+						HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+						VerticalAlignment="{TemplateBinding VerticalAlignment}"
+						Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+					<ContentPresenter Content="{TemplateBinding Content}" FontSize="{TemplateBinding FontSize}" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+				</Border>
 			</ControlTemplate>
 		</Setter>
+
+		<Style Selector="^[Orientation=Horizontal]">
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Height" Value="{DynamicResource MenuFlyoutSeparatorThemeHeight}" />
+		</Style>
+
+		<Style Selector="^[Orientation=Vertical]">
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Stretch" />
+			<Setter Property="Width" Value="{DynamicResource MenuFlyoutSeparatorThemeHeight}" />
+		</Style>
 	</ControlTheme>
 </ResourceDictionary>
