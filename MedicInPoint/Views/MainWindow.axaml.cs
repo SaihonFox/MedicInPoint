@@ -11,7 +11,7 @@ public partial class MainWindow : Window
 	{
 		InitializeComponent();
 
-		AddHandler(DragDrop.DropEvent, Drop);
+		//AddHandler(DragDrop.DropEvent, Drop);
 	}
 
 	void Drop(object? sender, DragEventArgs e)

@@ -3,7 +3,19 @@
 	<Design.PreviewWith>
 		<Border Padding="20">
 			<ScrollViewer Height="100" Width="100">
-				<Button Height="200" Width="200" />
+				<TextBlock TextWrapping="Wrap">
+					das
+					<LineBreak />
+					asd
+					<LineBreak />
+					asdas
+					<LineBreak />
+					asgaas
+					<LineBreak />
+					asgaas
+					<LineBreak />
+					asdasfaf
+				</TextBlock>
 			</ScrollViewer>
 		</Border>
 	</Design.PreviewWith>

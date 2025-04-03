@@ -72,7 +72,7 @@
 					<TextBlock Text="Логин" FontSize="22" />
 					<TextBox Name="login" Classes="field" MaxLength="20" Width="475" Height="60" />
 					<TextBlock Text="Пароль" FontSize="22" />
-					<TextBox Name="password" Classes="field" MaxLength="20" Width="475" Height="60" />
+					<TextBox Name="password" Classes="password" MaxLength="20" Width="475" Height="60" />
 				</StackPanel>
 				<Button Name="enter"
 						Content="{DynamicResource ENTER}" FontSize="28"

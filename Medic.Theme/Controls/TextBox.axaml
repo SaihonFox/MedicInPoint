@@ -32,7 +32,7 @@
 									MinWidth="{TemplateBinding MinWidth}"
 									MinHeight="{TemplateBinding MinHeight}">
 								<Grid ColumnDefinitions="10,auto,10,*,10">
-									<Image Grid.Column="1" Source="/Assets/Images/search.png" Width="24" Height="24" />
+									<Image Grid.Column="1" Source="avares://Medic.Theme/Assets/Images/search.png" Width="24" Height="24" />
 									<!-- <Image Grid.Column="1" Source="Assets/Images/search.png" VerticalAlignment="Stretch" Width="{Binding $self.Height}" /> -->
 									<DockPanel x:Name="PART_InnerDockPanel"
 											   Grid.Column="3"
@@ -253,13 +253,13 @@
 															   VerticalAlignment="Center" />
 											</Panel>
 											<ScrollViewer.Styles>
-												<Style Selector="ScrollContentPresenter#PART_ContentPresenter">
-													<Setter Property="Cursor" Value="IBeam" />
+												<Style Selector="ScrollContentPresenter#PART_ContentPresenter, TextPresenter#PART_TextPresenter">
+													<Setter Property="Cursor" Value="Ibeam" />
 												</Style>
 											</ScrollViewer.Styles>
 										</ScrollViewer>
 									</DockPanel>
-									<ToggleButton Grid.Column="3" Padding="8" MinWidth="40" MinHeight="40">
+									<ToggleButton Grid.Column="3" IsChecked="{Binding $parent[TextBox].RevealPassword, Mode=TwoWay}" Padding="8" MinWidth="40" MinHeight="40">
 										<ToggleButton.Styles>
 											<Style Selector="ToggleButton">
 												<Setter Property="Background" Value="White" />
@@ -267,8 +267,8 @@
 											</Style>
 										</ToggleButton.Styles>
 										<Panel>
-											<Svg Path="Assets/SVGs/eye_open.svg" IsVisible="{Binding !$parent[ToggleButton].IsChecked, Mode=TwoWay}" Width="24" Height="24" />
-											<Svg Path="Assets/SVGs/eye_close.svg" IsVisible="{Binding $parent[ToggleButton].IsChecked, Mode=TwoWay}" Width="24" Height="24" />
+											<Svg Path="avares://Medic.Theme/Assets/SVGs/eye_open.svg" IsVisible="{Binding !$parent[ToggleButton].IsChecked, Mode=TwoWay}" Width="24" Height="24" />
+											<Svg Path="avares://Medic.Theme/Assets/SVGs/eye_close.svg" IsVisible="{Binding $parent[ToggleButton].IsChecked, Mode=TwoWay}" Width="24" Height="24" />
 										</Panel>
 									</ToggleButton>
 								</Grid>

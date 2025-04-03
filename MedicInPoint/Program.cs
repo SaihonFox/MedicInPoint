@@ -35,7 +35,9 @@ static class MyLogExtensions
 	}
 }
 
+#pragma warning disable CS9113
 class MedicLogSink(LogEventLevel level, params string[] areas) : ILogSink
+#pragma warning restore CS9113
 {
 	public bool IsEnabled(LogEventLevel level, string area) => false;
 

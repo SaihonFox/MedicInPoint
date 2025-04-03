@@ -29,8 +29,10 @@
 		<ResourceInclude Source="Controls/Border.axaml" />
 		<ResourceInclude Source="Controls/Button.axaml" />
 		<ResourceInclude Source="Controls/RadioButton.axaml" />
+		<ResourceInclude Source="Controls/Scrollbar.axaml" />
 		<ResourceInclude Source="Controls/Separator.axaml" />
 		<ResourceInclude Source="Controls/TextBox.axaml" />
+		<ResourceInclude Source="Controls/Thumb.axaml" />
 
 		<ResourceInclude Source="Controls/Custom/ImageButton.axaml" />
 		<ResourceInclude Source="Controls/Custom/MenuItem.axaml" />

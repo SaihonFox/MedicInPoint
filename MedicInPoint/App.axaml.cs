@@ -1,15 +1,17 @@
+using System;
+
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.SimpleRouter;
 
-
+using MedicInPoint.Services;
 using MedicInPoint.ViewModels;
 using MedicInPoint.ViewModels.Pages;
 using MedicInPoint.ViewModels.Pages.Admin;
 using MedicInPoint.ViewModels.Pages.Doctor;
-
 
 //using HotAvalonia;
 
@@ -27,28 +29,26 @@ public partial class App : Application
 	{
 		//this.EnableHotReload();
 		AvaloniaXamlLoader.Load(this);
-		
-		/*Navigation.UIPlatform.RegisterPage(typeof(AuthorizationView));
-
-		var mainStack = new NavigationPageStack(Navigation.MainStackName, "Medic");
-		Navigation.UIPlatform.AddStack(mainStack);
-
-		mainStack.AddPage<AuthorizationView>(string.Empty);*/
 	}
 
 	public override void OnFrameworkInitializationCompleted()
 	{
 		services = ConfigureServices();
-		var mainViewModel = services.GetRequiredService<MainViewModel>();
 
 		switch (ApplicationLifetime)
 		{
 			case IClassicDesktopStyleApplicationLifetime desktop:
 				DisableAvaloniaDataAnnotationValidation();
-				desktop.MainWindow = new MainWindow { DataContext = mainViewModel };
+				var mainWindow = services.GetRequiredService<MainWindow>();
+				var viewModel = services.GetRequiredService<MainViewModel>();
+				mainWindow.DataContext = viewModel;
+				desktop.MainWindow = mainWindow;
 				break;
 			case ISingleViewApplicationLifetime singleViewPlatform:
-				singleViewPlatform.MainView = new MainView { DataContext = mainViewModel };
+				var mainView = services.GetRequiredService<MainView>();
+				var singleViewModel = services.GetRequiredService<MainViewModel>();
+				mainView.DataContext = singleViewModel;
+				singleViewPlatform.MainView = mainView;
 				break;
 		}
 		
@@ -60,7 +60,19 @@ public partial class App : Application
 		var services = new ServiceCollection();
 		// Add the HistoryRouter as a service
 		services.AddSingleton(s => 
-			new NestedHistoryRouter<ViewModelBase, MainViewModel>( t => (ViewModelBase)s.GetRequiredService(t)));
+			new NestedHistoryRouter<ViewModelBase, MainViewModel>(t => (ViewModelBase)s.GetRequiredService(t)));
+		services.AddSingleton<INotificationService, NotificationService>();
+		services.AddSingleton<MainWindow>();
+		services.AddSingleton<MainView>();
+		services.AddSingleton<INotificationManager>(c =>
+		{
+			var mainWindow = c.GetRequiredService<MainWindow>();
+			return new WindowNotificationManager(mainWindow)
+			{
+				Position = NotificationPosition.BottomRight,
+				MaxItems = 2,
+			};
+		});
 
 		// Add the ViewModels as a service (Main as singleton, others as transient)
 		services.AddSingleton<MainViewModel>();

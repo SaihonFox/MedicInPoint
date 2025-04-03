@@ -17,6 +17,8 @@
 				<CrossFade Duration="0:00:00.500" />
 			</TransitioningContentControl.PageTransition>
 		</TransitioningContentControl>
-		<TextBlock Text="{Binding Content.Title}" Foreground="Black" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" />
+		<Border HorizontalAlignment="Center" VerticalAlignment="Top" Height="30">
+			<TextBlock Text="{Binding Content.Title}" Foreground="Black" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+		</Border>
 	</Grid>
 </UserControl>

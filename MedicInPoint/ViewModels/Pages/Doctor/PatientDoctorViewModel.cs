@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.SimpleRouter;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,17 +10,20 @@ using CommunityToolkit.Mvvm.Input;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.Models;
+using MedicInPoint.Services;
 
 namespace MedicInPoint.ViewModels.Pages.Doctor;
 
 public partial class PatientDoctorViewModel() : ViewModelBase
 {
 	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router;
+	private readonly INotificationService _service;
 
-	public PatientDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router) : this()
+	public PatientDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService service) : this()
 	{
 		Title = "Пациенты";
 		_router = router;
+		_service = service;
 
 		FillPatients();
 	}
@@ -30,10 +34,12 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		{
 			Patients = [..await APIService.For<IPatient>().GetPatients()];
 			SelectedPatientIndex = 0;
+			Log("none", "PatientDoctor");
 		}
 		catch (Exception ex)
 		{
-			File.WriteAllText("c:/users/ilnar/desktop/error.txt", ex.Message);
+			_service.Show("Ошибка!", ex.Message, NotificationType.Error);
+			Log(ex.Message, "PatientDoctor");
 		}
 	}
 

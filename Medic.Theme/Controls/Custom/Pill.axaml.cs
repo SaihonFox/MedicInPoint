@@ -8,6 +8,10 @@ namespace Medic.Theme.Controls.Custom;
 
 public partial class Pill : TemplatedControl
 {
+#pragma warning disable IDE0044
+	[AvaStyledProperty]
+	private bool isEditable = false;
+
 	[AvaStyledProperty]
 	private string title = string.Empty;
 	/*public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<Pill, string>("Title", "");
@@ -83,4 +87,5 @@ public partial class Pill : TemplatedControl
 		get => GetValue(PillPaddingProperty);
 		set => SetValue(PillPaddingProperty, value);
 	}*/
+#pragma warning restore IDE0044
 }
