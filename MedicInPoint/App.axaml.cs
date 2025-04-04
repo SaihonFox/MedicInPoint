@@ -58,6 +58,9 @@ public partial class App : Application
 	private static ServiceProvider ConfigureServices()
 	{
 		var services = new ServiceCollection();
+
+		services.AddSingleton<IAppStateService, AppStateService>();
+
 		// Add the HistoryRouter as a service
 		services.AddSingleton(s => 
 			new NestedHistoryRouter<ViewModelBase, MainViewModel>(t => (ViewModelBase)s.GetRequiredService(t)));

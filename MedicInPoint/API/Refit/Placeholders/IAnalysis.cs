@@ -7,17 +7,17 @@ namespace MedicInPoint.API.Refit.Placeholders;
 public interface IAnalysis
 {
 	[Get("/analyses")]
-	Task<IList<Analysis>> GetAnalyses();
+	Task<IApiResponse<IList<Analysis>>> GetAnalyses();
 
 	[Get("/analyses/{id}")]
-	Task<Analysis?> GetAnalysis(int id);
+	Task<IApiResponse<Analysis?>> GetAnalysis(int id);
 
 	[Post("/analyses")]
-	Task AddAnalysis(Analysis analysis);
+	Task<IApiResponse<Analysis>> AddAnalysis(Analysis analysis);
 
 	[Put("/analyses")]
-	Task UpdateAnalysis(Analysis analysis);
+	Task<IApiResponse<Analysis>> UpdateAnalysis(Analysis analysis);
 	
 	[Delete("/analyses/{id}")]
-	Task DeleteAnalysis(int id);
+	Task<IApiResponse<Analysis>> DeleteAnalysis(int id);
 }

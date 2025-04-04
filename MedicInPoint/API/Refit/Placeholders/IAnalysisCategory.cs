@@ -7,17 +7,17 @@ namespace MedicInPoint.API.Refit.Placeholders;
 public interface IAnalysisCategory
 {
 	[Get("/analysis_categories")]
-	Task<IList<AnalysisCategory>> GetAnalysisCategories();
+	Task<IApiResponse<IList<AnalysisCategory>>> GetAnalysisCategories();
 
 	[Get("/analysis_categories/{id}")]
-	Task<AnalysisCategory?> GetAnalysisCategory(int id);
+	Task<IApiResponse<AnalysisCategory>> GetAnalysisCategory(int id);
 
 	[Post("/analysis_categories")]
-	Task AddAnalysisCategory(AnalysisCategory analysis);
+	Task<IApiResponse<AnalysisCategory>> AddAnalysisCategory(AnalysisCategory analysis);
 
 	[Put("/analysis_categories")]
-	Task UpdateAnalysisCategory(AnalysisCategory analysis);
+	Task<IApiResponse<AnalysisCategory>> UpdateAnalysisCategory(AnalysisCategory analysis);
 
 	[Delete("/analysis_categories/{id}")]
-	Task DeleteAnalysisCategory(int id);
+	Task<IApiResponse<AnalysisCategory>> DeleteAnalysisCategory(int id);
 }

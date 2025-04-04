@@ -4,8 +4,8 @@ using Refit;
 
 namespace MedicInPoint.API.Refit.Placeholders;
 
-public interface IUsers
+public interface IUser
 {
 	[Get("/users/login")]
-	Task<User?> Login([Query]string login, [Query]string password);
+	Task<IApiResponse<User>> Login([Query]string login, [Query]string password);
 }

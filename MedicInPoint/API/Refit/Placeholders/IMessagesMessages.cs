@@ -7,11 +7,11 @@ namespace MedicInPoint.API.Refit.Placeholders;
 public interface IMessagesMessages
 {
 	[Get("/messages_messages")]
-	Task<IList<Message>> GetMessagesMessages();
+	Task<IApiResponse<IList<MessagesMessage>>> GetMessagesMessages();
 
 	[Get("/messages_messages/{id}")]
-	Task<Message?> GetMessage(int id);
+	Task<IApiResponse<MessagesMessage>> GetMessagesMessage(int id);
 
 	[Post("/messages_messages")]
-	Task AddMessage(Message analysis);
+	Task<IApiResponse<MessagesMessage>> AddMessage(MessagesMessage analysis);
 }

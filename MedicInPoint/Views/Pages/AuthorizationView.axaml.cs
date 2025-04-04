@@ -51,7 +51,6 @@ public partial class AuthorizationView : UserControl
 
 			await Dispatcher.UIThread.InvokeAsync(() => slides.SelectedIndex = slides.SelectedIndex + 1 == 3 ? 0 : slides.SelectedIndex + 1);
 			await Dispatcher.UIThread.InvokeAsync(() => this.FindControl<RadioButton>("onboard" + (slides.SelectedIndex + 1))!.IsChecked = true);
-
 		};
 		timer.Start();
 	}
