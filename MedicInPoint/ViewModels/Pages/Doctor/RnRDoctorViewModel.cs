@@ -14,14 +14,14 @@ using MedicInPoint.Services;
 
 namespace MedicInPoint.ViewModels.Pages.Doctor;
 
-public partial class PatientDoctorViewModel() : ViewModelBase
+public partial class RnRDoctorViewModel() : ViewModelBase
 {
 	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router = null!;
 	private readonly INotificationService _service = null!;
 
-	public PatientDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService service) : this()
+	public RnRDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService service) : this()
 	{
-		Title = "Пациенты";
+		Title = "Запросы и запись";
 		_router = router;
 		_service = service;
 

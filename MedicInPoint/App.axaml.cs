@@ -87,8 +87,9 @@ public partial class App : Application
 		services.AddTransient<AnalysisAdminViewModel>();
 		services.AddTransient<AnalysisCategoriesAdminViewModel>();
 
-		// Patient
+		// Doctor
 		services.AddTransient<PatientDoctorViewModel>();
+		services.AddTransient<RnRDoctorViewModel>();
 		
 		return services.BuildServiceProvider();
 	}

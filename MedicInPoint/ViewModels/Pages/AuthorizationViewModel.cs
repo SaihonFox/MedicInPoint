@@ -33,17 +33,23 @@ public partial class AuthorizationViewModel() : ViewModelBase
 	[ObservableProperty]
 	private string _password = string.Empty;
 
+	[ObservableProperty]
+	private bool _isEnterEnabled = true;
+
 	async partial void OnLoginChanged(string value)
 	{
 		if (Login.IsNullOrWhiteSpace() || Password.IsNullOrWhiteSpace())
 			return;
 
-		var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
-		if (!response.IsSuccessStatusCode)
-			return;
+		await Task.Run(async () =>
+		{
+			var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
+			if (!response.IsSuccessStatusCode)
+				return;
 
-		var user = response.Content;
-		_service.CurrentUser = user;
+			var user = response.Content;
+			_service.CurrentUser = user;
+		});
 	}
 
 	async partial void OnPasswordChanged(string value)
@@ -51,24 +57,29 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		if (Login.IsNullOrWhiteSpace() || Password.IsNullOrWhiteSpace())
 			return;
 
-		var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
-		if (!response.IsSuccessStatusCode)
-			return;
+		await Task.Run(async () =>
+		{
+			var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
+			if (!response.IsSuccessStatusCode)
+				return;
 
-		var user = response.Content;
-		_service.CurrentUser = user;
+			var user = response.Content;
+			_service.CurrentUser = user;
+		});
 	}
 
 	[RelayCommand]
-	public async Task Enter()
+	private async Task Enter()
 	{
+		if (Login.IsNullOrWhiteSpace() || Password.IsNullOrWhiteSpace())
+		{
+			_notificationService.Show("Уведомление", "Поля не могут быть пустыми");
+			return;
+		}
+
 		if (_service.CurrentUser == null)
 		{
-			if (Login.IsNullOrWhiteSpace() || Password.IsNullOrWhiteSpace())
-			{
-				_notificationService.Show("Уведомление", "Поля не могут быть пустыми");
-				return;
-			}
+			IsEnterEnabled = false;
 
 			var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
 			if (!response.IsSuccessStatusCode)
@@ -77,13 +88,19 @@ public partial class AuthorizationViewModel() : ViewModelBase
 					_notificationService.Show("Уведомление", "Пользователь с такими данными не найден");
 				if(response.StatusCode >= HttpStatusCode.InternalServerError)
 					_notificationService.Show("Уведомление", "Ошибка на стороне сервера!", NotificationType.Warning);
+				IsEnterEnabled = true;
 				return;
 			}
 			_service.CurrentUser = response.Content;
 		}
+
 		_notificationService.Show("Вход", $"Добро пожаловать, {_service.CurrentUser!.FullName}!", NotificationType.Success);
 		await Task.Delay(1000);
 
+		Login = Password = string.Empty;
+
 		_router.GoTo<MenuViewModel>();
+
+		IsEnterEnabled = true;
 	}
 }

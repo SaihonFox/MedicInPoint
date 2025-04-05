@@ -16,18 +16,33 @@
 	</Design.DataContext>
 	
 	<Grid>
-		<ItemsControl ItemsSource="{CompiledBinding DoctorMenu}" ClipToBounds="False" Margin="40" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Vertical" Spacing="20" />
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-		</ItemsControl>
-		<!--<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto" SharedSizeGroup="Header_n_Footer" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="auto" SharedSizeGroup="Header_n_Footer" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Row="0" Text="Меню" FontSize="100" Foreground="#1A6FEE" Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" />
+
+			<ItemsControl Grid.Row="1" ItemsSource="{CompiledBinding Menu}" ClipToBounds="False" HorizontalAlignment="Center" VerticalAlignment="Center">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Vertical" Spacing="20" VerticalAlignment="Center" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+
+			<Grid Grid.Row="2" Margin="0,0,0,30" Height="{Binding $parent[Grid].Children[0].Bounds.Height}">
+				<Button Grid.Row="2" Classes="back" Command="{Binding BackCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+			</Grid>
+		</Grid>
+	</Grid>
+
+	<!--<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 			<medic:MenuItem Name="analyses" ImageSource="/Assets/Images/analyses_btn.png" Text="Список анализов" />
 			<medic:MenuItem Name="patients" ImageSource="/Assets/Images/patients_btn.png" Text="Список пациентов" />
 			<medic:MenuItem Name="users" ImageSource="/Assets/Images/users_btn.png" Text="Список сотрудников" />
 			<medic:MenuItem Name="categories" ImageSource="/Assets/Images/categories_btn.png" Text="Список категорий" />
 		</StackPanel>-->
-	</Grid>
 </UserControl>

@@ -15,8 +15,8 @@
 		<Setter Property="PillMinWidth" Value="100" />
 		<Setter Property="PillMaxWidth" Value="400" />
 		<Setter Property="PillPadding" Value="40, 6" />
-		<Setter Property="Value" Value="Value" />
-		<Setter Property="Title" Value="Title" />
+		<Setter Property="Value" Value="{Binding Value}" />
+		<Setter Property="Title" Value="{Binding Title}" />
 		<Setter Property="PillBackground" Value="#F5F5F9" />
 		<Setter Property="ValueForeground" Value="Black" />
 		<Setter Property="TitleForeground" Value="#939396" />
@@ -30,11 +30,19 @@
 								Background="{TemplateBinding PillBackground}"
 								Padding="{TemplateBinding PillPadding}"
 								MinWidth="{TemplateBinding PillMinWidth}" MaxWidth="{TemplateBinding PillMaxWidth}">
-							<TextBlock Name="value"
-									   Text="{TemplateBinding Value}" FontSize="{TemplateBinding ValueFontSize}"
-									   TextAlignment="Center" TextWrapping="WrapWithOverflow"
-									   Foreground="{TemplateBinding ValueForeground}"
-									   VerticalAlignment="Center" />
+							<Grid>
+								<TextBlock Name="PART_TextBlockValue" IsVisible="{Binding !IsEditable}"
+										   Text="{TemplateBinding Value, Mode=TwoWay}" FontSize="{TemplateBinding ValueFontSize}"
+										   TextAlignment="Center" TextWrapping="WrapWithOverflow"
+										   Foreground="{TemplateBinding ValueForeground}"
+										   VerticalAlignment="Center" />
+								<TextBox Name="PART_TextBoxValue" IsVisible="{Binding IsEditable}"
+										 Text="{Binding Value, Mode=TwoWay}" FontSize="{TemplateBinding ValueFontSize}"
+										 TextAlignment="Center" TextWrapping="WrapWithOverflow"
+										 Foreground="{TemplateBinding ValueForeground}"
+										 VerticalAlignment="Center"
+										 Width="{Binding #PART_TextBlockValue.Width}" Height="{Binding #PART_TextBlockValue.Height}" />
+							</Grid>
 						</Border>
 						<TextBlock Grid.Row="2" Name="title"
 								   Text="{TemplateBinding Title}" FontSize="{TemplateBinding TitleFontSize}"

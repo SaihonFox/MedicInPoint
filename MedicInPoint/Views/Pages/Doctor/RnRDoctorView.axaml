@@ -9,10 +9,10 @@
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
 			 mc:Ignorable="d"
 			 d:DesignWidth="1500" d:DesignHeight="1000"
-			 x:Class="MedicInPoint.Views.Pages.Doctor.PatientDoctorView"
-			 x:DataType="vm:PatientDoctorViewModel">
+			 x:Class="MedicInPoint.Views.Pages.Doctor.RnRDoctorView"
+			 x:DataType="vm:RnRDoctorViewModel">
 	<Design.DataContext>
-		<vm:PatientDoctorViewModel />
+		<vm:RnRDoctorViewModel />
 	</Design.DataContext>
 
 	<Grid>
@@ -29,12 +29,12 @@
 				<Grid Grid.Column="1" ColumnDefinitions="auto,20,auto" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50">
 					<RadioButton Classes="ac" Grid.Column="0" GroupName="a_c_group" Name="analyses_results_rb"
 								 IsChecked="True"
-								 Content="Результаты анализов"
+								 Content="Запросы"
 								 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
 								 HorizontalAlignment="Right"
 								 Height="50" />
 					<RadioButton Classes="ac" Grid.Column="2" GroupName="a_c_group" Name="chat_rb"
-								 Content="Чат"
+								 Content="Запись"
 								 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
 								 HorizontalAlignment="Left"
 								 Height="50" />

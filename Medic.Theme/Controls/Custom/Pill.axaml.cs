@@ -1,5 +1,7 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 
 using Lucdem.Avalonia.SourceGenerators.Attributes;
@@ -80,6 +82,7 @@ public partial class Pill : TemplatedControl
 
 	[AvaStyledProperty]
 	private Thickness pillPadding = new(40, 6);
+
 	/*public static readonly StyledProperty<Thickness> PillPaddingProperty = AvaloniaProperty.Register<Pill, Thickness>("PillPadding", new Thickness(45, 10));
 
 	public Thickness PillPadding
@@ -88,4 +91,17 @@ public partial class Pill : TemplatedControl
 		set => SetValue(PillPaddingProperty, value);
 	}*/
 #pragma warning restore IDE0044
+
+	public static readonly RoutedEvent<TextChangedEventArgs> TextChangedEvent = RoutedEvent.Register<TextBox, TextChangedEventArgs>(nameof(TextChanged), RoutingStrategies.Bubble);
+
+	public event EventHandler<TextChangedEventArgs>? TextChanged
+	{
+		add => AddHandler(TextChangedEvent, value);
+		remove => RemoveHandler(TextChangedEvent, value);
+	}
+
+	public Pill()
+	{
+		
+	}
 }

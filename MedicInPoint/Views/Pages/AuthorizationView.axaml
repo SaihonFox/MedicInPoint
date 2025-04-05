@@ -32,17 +32,17 @@
 							<Grid RowDefinitions="auto,10,auto,20,auto" VerticalAlignment="Center">
 								<TextBlock Name="title1" Grid.Row="0" Text="Анализы" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#00B712" HorizontalAlignment="Center" />
 								<TextBlock Name="description1" Grid.Row="2" Text="Экспресс сбор и получение проб" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#939396" HorizontalAlignment="Center" />
-								<Image Name="img1" Grid.Row="4" Source="/Assets/Images/Illustration1.png" Stretch="Uniform" Margin="50,0" />
+								<Image Name="img1" Grid.Row="4" Source="/Assets/Images/illustration/Illustration1.png" Stretch="Uniform" Margin="50,0" />
 							</Grid>
 							<Grid RowDefinitions="auto,10,auto,20,auto" VerticalAlignment="Center">
 								<TextBlock Name="title2" Grid.Row="0" Text="Уведомления" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#00B712" HorizontalAlignment="Center" />
 								<TextBlock Name="description2" Grid.Row="2" Text="Вы быстро узнаете о результатах" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#939396" HorizontalAlignment="Center" />
-								<Image Name="img2" Grid.Row="4" Source="/Assets/Images/Illustration2.png" Stretch="Uniform" />
+								<Image Name="img2" Grid.Row="4" Source="/Assets/Images/illustration/Illustration2.png" Stretch="Uniform" />
 							</Grid>
 							<Grid RowDefinitions="auto,10,auto,20,auto" VerticalAlignment="Center">
 								<TextBlock Name="title3" Grid.Row="0" Text="Мониторинг" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#00B712" HorizontalAlignment="Center" />
 								<TextBlock Name="description3" Grid.Row="2" Text="Наши врачи всегда наблюдают за вашими показателями здоровья" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="#939396" HorizontalAlignment="Center" />
-								<Image Name="img3" Grid.Row="4" Source="/Assets/Images/Illustration3.png" Stretch="Uniform" Margin="10,0" />
+								<Image Name="img3" Grid.Row="4" Source="/Assets/Images/illustration/Illustration3.png" Stretch="Uniform" Margin="10,0" />
 							</Grid>
 						</Carousel.Items>
 					</Carousel>
@@ -74,15 +74,27 @@
 					<TextBlock Text="Пароль" FontSize="22" />
 					<TextBox Name="password" Classes="password" Text="{Binding Password, Mode=TwoWay}" MaxLength="20" Width="475" Height="60" />
 				</StackPanel>
-				<Button Name="enter"
-						Content="{DynamicResource ENTER}" FontSize="28"
+				<Button Name="enter" IsEnabled="{CompiledBinding IsEnterEnabled}"
+						Content="{DynamicResource ENTER}" FontSize="28" TextBlock.LineHeight="28"
 						CornerRadius="10"
-						Command="{Binding Enter}"
+						Command="{Binding EnterCommand}"
 						Background="#1A6FEE" Foreground="White"
 						Margin="0,570,0,0" Padding="0"
 						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
 						HorizontalAlignment="Center" VerticalAlignment="Top"
-						Width="300" Height="60" />
+						Width="300" Height="60">
+					<Button.Styles>
+						<Styles>
+							<Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="Background" Value="White" />
+								<Setter Property="Foreground" Value="Gray" />
+								<Setter Property="BorderBrush" Value="Gray" />
+								<Setter Property="BorderThickness" Value="2" />
+								<Setter Property="Padding" Value="0" />
+							</Style>
+						</Styles>
+					</Button.Styles>
+				</Button>
 			</Panel>
 		</Grid>
 	</Panel>

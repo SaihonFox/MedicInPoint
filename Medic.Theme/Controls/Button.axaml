@@ -12,7 +12,9 @@
 		<Setter Property="CornerRadius" Value="{DynamicResource ButtonCornerRadius}" />
 
 		<Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+		<Setter Property="Foreground" Value="Black" />
 
+		<Setter Property="Margin" Value="0" />
 		<Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
 
 		<Setter Property="HorizontalAlignment" Value="Left" />
