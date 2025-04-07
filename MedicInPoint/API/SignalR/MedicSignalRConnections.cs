@@ -5,47 +5,64 @@ namespace MedicInPoint.API.SignalR;
 
 public class MedicSignalRConnections : IAsyncDisposable
 {
-	private readonly HubConnection _analysisConnection;
-	private readonly HubConnection _analysisCategoryConnection;
-	private readonly HubConnection _messageConnection;
-	private readonly HubConnection _messagesMessageConnection;
-	private readonly HubConnection _requestConnection;
+	public readonly HubConnection AnalysisConnection;
+	public readonly HubConnection AnalysisCategoryConnection;
+	public readonly HubConnection MessageConnection;
+	public readonly HubConnection MessagesMessageConnection;
+	public readonly HubConnection PatientConnection;
+	public readonly HubConnection RequestConnection;
 
 	public MedicSignalRConnections()
 	{
-		_analysisConnection = new HubConnectionBuilder()
+		AnalysisConnection = new HubConnectionBuilder()
 			.WithUrl(MedicConfiguration.URL + "hub/analysis")
 			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
 			.Build();
-		_analysisCategoryConnection = new HubConnectionBuilder()
+		AnalysisCategoryConnection = new HubConnectionBuilder()
 			.WithUrl(MedicConfiguration.URL + "hub/analysis_category")
 			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
 			.Build();
-		_messageConnection = new HubConnectionBuilder()
+		MessageConnection = new HubConnectionBuilder()
 			.WithUrl(MedicConfiguration.URL + "hub/message")
 			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
 			.Build();
-		_messagesMessageConnection = new HubConnectionBuilder()
+		MessagesMessageConnection = new HubConnectionBuilder()
 			.WithUrl(MedicConfiguration.URL + "hub/messages_message")
 			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
 			.Build();
-		_requestConnection = new HubConnectionBuilder()
+		PatientConnection = new HubConnectionBuilder()
+			.WithUrl(MedicConfiguration.URL + "hub/patient")
+			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
+			.Build();
+		RequestConnection = new HubConnectionBuilder()
 			.WithUrl(MedicConfiguration.URL + "hub/request")
 			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
 			.Build();
+
+		Task.WhenAll([
+			AnalysisConnection.StartAsync(),
+			AnalysisCategoryConnection.StartAsync(),
+			MessageConnection.StartAsync(),
+			MessagesMessageConnection.StartAsync(),
+			PatientConnection.StartAsync(),
+			RequestConnection.StartAsync()
+		]);
 	}
 
 	public async ValueTask DisposeAsync()
 	{
-		if(_analysisConnection != null)
-			await _analysisConnection.DisposeAsync();
-		if (_analysisCategoryConnection != null)
-			await _analysisCategoryConnection.DisposeAsync();
-		if (_messageConnection != null)
-			await _messageConnection.DisposeAsync();
-		if (_messagesMessageConnection != null)
-			await _messagesMessageConnection.DisposeAsync();
-		if (_requestConnection != null)
-			await _requestConnection.DisposeAsync();
+		if(AnalysisConnection != null)
+			await AnalysisConnection.DisposeAsync();
+		if (AnalysisCategoryConnection != null)
+			await AnalysisCategoryConnection.DisposeAsync();
+		if (MessageConnection != null)
+			await MessageConnection.DisposeAsync();
+		if (MessagesMessageConnection != null)
+			await MessagesMessageConnection.DisposeAsync();
+		if (PatientConnection != null)
+			await PatientConnection.DisposeAsync();
+		if (RequestConnection != null)
+			await RequestConnection.DisposeAsync();
+		GC.SuppressFinalize(this);
 	}
 }

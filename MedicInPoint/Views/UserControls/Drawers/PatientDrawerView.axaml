@@ -2,15 +2,34 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:vm="using:MedicInPoint.Models"
+			 xmlns:model="using:MedicInPoint.Models"
 			 xmlns:btn="using:MedicInPoint.Views.UserControls.Drawers.Buttons"
+			 xmlns:converter="using:MedicInPoint.Converters"
 			 xmlns:medic="https://github.com/saihonfox"
 			 mc:Ignorable="d"
 			 d:DesignWidth="300" d:DesignHeight="750"
 			 ClipToBounds="False"
 			 Width="300" Height="750"
 			 x:Class="MedicInPoint.Views.UserControls.Drawers.PatientDrawerView"
-			 x:DataType="vm:Patient">
+			 x:DataType="model:Patient">
+	<UserControl.Transitions>
+		<Transitions>
+			<DoubleTransition Property="Width" Duration="00:00:00.45" Easing="QuadraticEaseInOut" />
+			<DoubleTransition Property="Height" Duration="00:00:00.45" Easing="QuadraticEaseInOut" />
+			<DoubleTransition Property="Opacity" Duration="00:00:00.45" Easing="QuadraticEaseInOut" />
+		</Transitions>
+	</UserControl.Transitions>
+	<UserControl.Resources>
+		<converter:OpacityByWidthConverter x:Key="OpacityByWidthConverter" />
+		<converter:WidthByObjectNullableConverter x:Key="WidthByObjectNullableConverter" />
+	</UserControl.Resources>
+	<UserControl.Width>
+		<Binding Path="$self.DataContext" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="300" />
+	</UserControl.Width>
+	<UserControl.Opacity>
+		<Binding Path="$self.Width" Converter="{StaticResource OpacityByWidthConverter}" ConverterParameter="300" />
+	</UserControl.Opacity>
+
 	<Border Classes="drawerbg" Padding="16">
 		<Grid RowDefinitions="auto,10,auto,10,*">
 			<TextBlock Grid.Row="0" IsVisible="{Binding !., Converter={x:Static ObjectConverters.IsNull}}" Text="{CompiledBinding FullName}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
@@ -19,8 +38,8 @@
 
 			<StackPanel Grid.Row="4" IsVisible="{Binding !., Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="10">
 				<medic:Pill Value="{CompiledBinding Sex}" Title="Пол" />
-				<medic:Pill Value="{CompiledBinding Phone}" Title="Номер телефона" />
-				<medic:Pill Value="{CompiledBinding Passport}" Title="Паспорт" />
+				<medic:Pill IsVisible="{CompiledBinding !Phone, Converter={x:Static ObjectConverters.IsNull}}" Value="{CompiledBinding Phone}" Title="Номер телефона" />
+				<medic:Pill IsVisible="{CompiledBinding !Passport, Converter={x:Static ObjectConverters.IsNull}}" Value="{CompiledBinding Passport}" Title="Паспорт" />
 				<medic:Pill Value="{CompiledBinding Birthday}" Title="Дата рождения" />
 			</StackPanel>
 			<TextBlock Grid.Row="4" IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />

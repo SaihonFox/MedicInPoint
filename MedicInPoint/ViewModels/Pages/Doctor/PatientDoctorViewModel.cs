@@ -1,31 +1,51 @@
 ﻿using System.Collections.ObjectModel;
 
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
 using Avalonia.SimpleRouter;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using Libsql.Client;
+
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
+using MedicInPoint.API.SignalR;
+using MedicInPoint.Extensions;
 using MedicInPoint.Models;
 using MedicInPoint.Services;
+
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace MedicInPoint.ViewModels.Pages.Doctor;
 
 public partial class PatientDoctorViewModel() : ViewModelBase
 {
 	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router = null!;
-	private readonly INotificationService _service = null!;
+	private readonly INotificationService _notificationService = null!;
+	private readonly IAppStateService _appService = null!;
 
-	public PatientDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService service) : this()
+	public PatientDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService notificationService, IAppStateService appService, MedicSignalRConnections connections) : this()
 	{
 		Title = "Пациенты";
 		_router = router;
-		_service = service;
+		_notificationService = notificationService;
+		_appService = appService;
 
 		FillPatients();
+
+		connections.PatientConnection.On<Patient>("PatientAdded", patient =>
+		{
+			if(patient.AnalysisOrders.FirstOrDefault(o => o.User == appService.CurrentUser) != null)
+				AllPatients.Add(patient);
+			Search();
+		});
+		connections.PatientConnection.On<Patient>("PatientDeleted", patient =>
+		{
+			if (patient.AnalysisOrders.FirstOrDefault(o => o.User == appService.CurrentUser) != null)
+				AllPatients.Remove(patient);
+			Search();
+		});
 	}
 
 	async void FillPatients()
@@ -34,19 +54,43 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		if (!response.IsSuccessStatusCode)
 			return;
 
-		Patients = [.. response.Content!];
-		//SelectedPatientIndex = 0;
-		Log("none", "PatientDoctor");
+		AllPatients = [.. response.Content!];// [.. response.Content!.Where(p => p.AnalysisOrders.Select(o => o.User).ToList().Contains(_appService.CurrentUser))!];
+		Patients = [.. SearchPatientsText()];
+	}
+
+	[ObservableProperty]
+	private string _searchText = string.Empty;
+
+	partial void OnSearchTextChanged(string value)
+	{
+		var selectedPatient = SelectedPatient;
+		if (value.IsNullOrWhiteSpace())
+			Patients = [.. AllPatients];
+		var patients = SearchPatientsText();
+		if(!patients.SequenceEqual(Patients))
+			Patients = [.. patients];
+
+		if (Patients.Contains(selectedPatient))
+			SelectedPatient = selectedPatient;
+	}
+
+	IEnumerable<Patient> SearchPatientsText() => AllPatients.Where(p => p.FullName.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase));
+
+	void Search()
+	{
+
 	}
 
 	[RelayCommand]
 	private void Back() => _router.Back();
 
 	[ObservableProperty]
-	private ObservableCollection<Patient> _patients = !Design.IsDesignMode ? [] : [
+	private ObservableCollection<Patient> _allPatients = !Design.IsDesignMode ? [] : [
 			new Patient { Surname = "Тулькубаев", Name = "Ильнар", Sex = "Мужской", Phone = "89123456789", Birthday = new(2005, 04, 22), Passport = "8019123456" },
 			new Patient { Surname = "Набиева", Name = "Лиана", Patronym = "Рамилевна", Sex = "Женский", Phone = "89098765432", Birthday = new(1999, 05, 25), Passport = "8020123456" },
 		];
+	[ObservableProperty]
+	private ObservableCollection<Patient> _patients = [];
 
 	[ObservableProperty]
 	private Patient? _selectedPatient = null;

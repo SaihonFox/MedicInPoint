@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MedicInPoint.Models;
+﻿namespace MedicInPoint.Models;
 
 public partial class PatientAnalysisCartItem
 {
     public int Id { get; set; }
-
-    public uint Count { get; set; }
 
     public int AnalysisId { get; set; }
 

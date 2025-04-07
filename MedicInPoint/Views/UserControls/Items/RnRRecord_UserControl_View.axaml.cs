@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace MedicInPoint.Views.UserControls.Items;
 
-public partial class PatientItem_UserControl_View : UserControl
+public partial class RnRRecord_UserControl_View : UserControl
 {
-    public PatientItem_UserControl_View()
+    public RnRRecord_UserControl_View()
     {
         InitializeComponent();
     }

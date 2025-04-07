@@ -7,6 +7,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.SimpleRouter;
 
+using MedicInPoint.API.SignalR;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels;
 using MedicInPoint.ViewModels.Pages;
@@ -19,15 +20,19 @@ using MedicInPoint.Views;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using MIP.LocalDB;
+
 namespace MedicInPoint;
 
 public partial class App : Application
 {
-	public static IServiceProvider services = null!;
+	private static IServiceProvider services = null!;
 
 	public override void Initialize()
 	{
 		//this.EnableHotReload();
+		_ = LocalStorage.context;
+
 		AvaloniaXamlLoader.Load(this);
 	}
 
@@ -60,6 +65,7 @@ public partial class App : Application
 		var services = new ServiceCollection();
 
 		services.AddSingleton<IAppStateService, AppStateService>();
+		services.AddSingleton<MedicSignalRConnections>();
 
 		// Add the HistoryRouter as a service
 		services.AddSingleton(s => 

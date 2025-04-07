@@ -95,6 +95,7 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		}
 
 		_notificationService.Show("Вход", $"Добро пожаловать, {_service.CurrentUser!.FullName}!", NotificationType.Success);
+		await APIService.For<IUserLastEnter>().SetLastEnter(_service.CurrentUser!.Id, DateTime.Now);
 		await Task.Delay(1000);
 
 		Login = Password = string.Empty;

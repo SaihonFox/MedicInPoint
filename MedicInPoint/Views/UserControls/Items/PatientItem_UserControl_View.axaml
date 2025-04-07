@@ -6,7 +6,7 @@
 			 mc:Ignorable="d"
 			 d:DesignWidth="335" d:DesignHeight="135"
 			 MinWidth="335" MinHeight="135"
-			 x:Class="MedicInPoint.PatientItem_UserControl_View"
+			 x:Class="MedicInPoint.Views.UserControls.Items.PatientItem_UserControl_View"
 			 x:DataType="vm:PatientItem_UserControl_ViewModel">
 	<Design.DataContext>
 		<vm:PatientItem_UserControl_ViewModel />

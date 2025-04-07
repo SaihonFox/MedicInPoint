@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MedicInPoint.Extensions;
+﻿namespace MedicInPoint.Extensions;
 
 public static class ObjectExtensions
 {

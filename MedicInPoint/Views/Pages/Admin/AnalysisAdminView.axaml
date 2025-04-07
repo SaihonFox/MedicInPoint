@@ -5,7 +5,9 @@
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
 			 xmlns:dialog="using:MedicInPoint.Views.Pages"
+			 xmlns:item="using:MedicInPoint.Views.UserControls.Items"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:converter="using:MedicInPoint.Converters"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
 			 mc:Ignorable="d"
 			 d:DesignWidth="1500" d:DesignHeight="1000"
@@ -14,11 +16,14 @@
 	<Design.DataContext>
 		<vm:AnalysisAdminViewModel />
 	</Design.DataContext>
+	<UserControl.Resources>
+		<converter:AnalysisToggleButtonConverter x:Key="AnalysisToggleButtonConverter" />
+	</UserControl.Resources>
 
 	<Panel>
 		<Grid>
-			<Button Classes="back" Command="{CompiledBinding Back}" Margin="30,50,0,0" HorizontalAlignment="Left" />
-			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Watermark="Искать анализ" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
+			<Button Classes="back" Command="{CompiledBinding BackCommand}" Margin="30,50,0,0" HorizontalAlignment="Left" />
+			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Text="{Binding SearchText}" Watermark="Искать анализ" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
 				<i:Interaction.Behaviors>
 					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
 				</i:Interaction.Behaviors>
@@ -27,9 +32,19 @@
 
 			<Grid ColumnDefinitions="*,auto" Margin="30,125">
 				<Grid Grid.Column="0" RowDefinitions="auto,*">
+					<TextBlock Grid.Row="1" IsVisible="{Binding Path=AnalysesList.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}" Text="Данных нет" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Padding="5" HorizontalContentAlignment="Center">
+						<ItemsControl Name="analyses_list" ClipToBounds="False">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel HorizontalAlignment="Center" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
+					</ScrollViewer>
 				</Grid>
 
-				<drawer:AnalysisDrawerView Grid.Column="1" />
+				<drawer:AnalysisDrawerView Grid.Column="1" DataContext="{Binding Analysis}" />
 			</Grid>
 		</Grid>
 	</Panel>

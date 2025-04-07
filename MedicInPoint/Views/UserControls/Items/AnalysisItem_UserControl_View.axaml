@@ -2,16 +2,32 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Items"
+			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
+			 xmlns:view="using:MedicInPoint.Views.Pages.Admin"
 			 mc:Ignorable="d"
 			 d:DesignWidth="335" d:DesignHeight="135"
 			 MinWidth="335" MinHeight="135"
-			 x:Class="MedicInPoint.AnalysisItem_UserControl_View"
-			 x:DataType="vm:AnalysisItem_UserControl_ViewModel">
-	<Design.DataContext>
-		<vm:AnalysisItem_UserControl_ViewModel />
-	</Design.DataContext>
-
+			 x:Class="MedicInPoint.Views.UserControls.Items.AnalysisItem_UserControl_View"
+			 x:DataType="model:Analysis">
 	<Border>
+		<Grid>
+			<Border ClipToBounds="False" CornerRadius="12" Background="White" Padding="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="335" MinHeight="135">
+				<Border.Effect>
+					<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
+				</Border.Effect>
+				<Grid RowDefinitions="*,5,*">
+					<TextBlock Grid.Row="0" Text="{CompiledBinding Name}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
+					<Grid Grid.Row="2" ColumnDefinitions="*,*" VerticalAlignment="Bottom">
+						<Grid Grid.Column="0" RowDefinitions="*,*" VerticalAlignment="Center">
+							<TextBlock Grid.Row="0" Text="{Binding ResultsAfter}" FontSize="14" Foreground="#939396" />
+							<TextBlock Grid.Row="1" Text="{Binding Price, StringFormat=#.## руб\\.}" FontSize="17" />
+						</Grid>
+						<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding $parent[view:AnalysisAdminView].((vm:AnalysisAdminViewModel)DataContext).IsSelected}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+					</Grid>
+				</Grid>
+			</Border>
+		</Grid>
+
 	</Border>
 </UserControl>

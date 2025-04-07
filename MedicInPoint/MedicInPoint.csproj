@@ -7,6 +7,7 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DebugType>none</DebugType>
@@ -21,7 +22,6 @@
 		<Folder Include="AI\**" />
 		<AvaloniaResource Include="Assets\**" />
 		<Folder Include="API\AIMLAPI\" />
-		<Folder Include="Converters\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -68,6 +68,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Medic.Theme\Medic.Theme.csproj" />
+		<ProjectReference Include="..\MIP.LocalDB\MIP.LocalDB.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -8,6 +8,7 @@
 		ExtendClientAreaTitleBarHeightHint="30"
 		ExtendClientAreaToDecorationsHint="True"
 		WindowStartupLocation="CenterScreen"
+		Title="{Binding Content.Title}"
 		d:DesignWidth="1500" d:DesignHeight="1000"
 		MinWidth="1500" MinHeight="1000"
 		x:Class="MedicInPoint.Views.MainWindow"

@@ -65,7 +65,7 @@ class MedicLogSink(LogEventLevel level, params string[] areas) : ILogSink
 		result.Append(area);
 		result.Append("]-");
 
-		if (source is object)
+		if (source is not null)
 		{
 			result.Append('{');
 			result.Append(source.GetType().Name);
@@ -79,15 +79,13 @@ class MedicLogSink(LogEventLevel level, params string[] areas) : ILogSink
 			var c = r.Take();
 
 			if (c != '{')
-			{
 				result.Append(c);
-			}
 			else
 			{
 				if (r.Peek != '{')
 				{
 					result.Append('\'');
-					result.Append(i < v.Length ? v[i++] : null);
+					result.Append(i < v?.Length ? v[i++] : null);
 					result.Append('\'');
 					r.TakeUntil('}');
 					r.Take();
