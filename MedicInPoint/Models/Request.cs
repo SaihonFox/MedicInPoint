@@ -18,7 +18,7 @@ public partial class Request
 
 	public int? RequestStateId { get; set; }
 
-	public DateTime RequestSended { get; set; }
+	public DateTime RequestSended { get; set; } = null!;
 
 	public DateTime? RequestChanged { get; set; }
 
