@@ -12,7 +12,7 @@ public class ColorByNameConverter : IValueConverter
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		// Преобразуем текст в массив байтов
-		byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(parameter!.ToString()!));
+		byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(value?.ToString() ?? "empty"));
 
 		// Преобразуем первые 6 байтов в шестнадцатеричную строку
 		string textHash = System.Convert.ToHexStringLower(bytes);

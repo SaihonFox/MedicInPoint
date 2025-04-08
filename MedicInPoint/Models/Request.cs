@@ -1,4 +1,6 @@
-﻿namespace MedicInPoint.Models;
+﻿using Newtonsoft.Json;
+
+namespace MedicInPoint.Models;
 
 public partial class Request
 {
@@ -8,27 +10,35 @@ public partial class Request
 
 	public int PatientId { get; set; }
 
-	public int? PatientAnalysisCartId { get; set; }
-
 	public DateTime AnalysisDatetime { get; set; }
 
 	public string? Comment { get; set; }
 
 	public int PatientAnalysisAddressId { get; set; }
 
+	/// <summary>
+	/// true - request accepted
+	/// false - request declined
+	/// </summary>
 	public int? RequestStateId { get; set; }
 
+	/// <summary>
+	/// Время создания запроса на запись
+	/// </summary>
 	public DateTime RequestSended { get; set; }
 
+	/// <summary>
+	/// Время изменения запроса на запись
+	/// </summary>
 	public DateTime? RequestChanged { get; set; }
 
-	public User Doctor { get; set; } = null!;
+	public virtual User Doctor { get; set; } = null!;
 
-	public Patient Patient { get; set; } = null!;
+	public virtual Patient Patient { get; set; } = null!;
 
-	public PatientAnalysisAddress PatientAnalysisAddress { get; set; } = null!;
+	public virtual PatientAnalysisAddress PatientAnalysisAddress { get; set; } = null!;
 
-	public PatientAnalysisCart? PatientAnalysisCart { get; set; }
+	public virtual ICollection<RequestAnalysis> RequestAnalyses { get; set; } = [];
 
-	public RequestState? RequestState { get; set; }
+	public virtual RequestState? RequestState { get; set; }
 }

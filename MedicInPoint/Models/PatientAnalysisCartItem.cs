@@ -2,13 +2,13 @@
 
 public partial class PatientAnalysisCartItem
 {
-    public int Id { get; set; }
+	public int Id { get; set; }
 
-    public int AnalysisId { get; set; }
+	public int AnalysisId { get; set; }
 
-    public int PatientAnalysisCartId { get; set; }
+	public int PatientAnalysisCartId { get; set; }
 
-    public Analysis Analysis { get; set; } = null!;
+	public Analysis Analysis { get; set; } = null!;
 
-    public PatientAnalysisCart PatientAnalysisCart { get; set; } = null!;
+	public PatientAnalysisCart PatientAnalysisCart { get; set; } = null!;
 }

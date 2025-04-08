@@ -1,5 +1,3 @@
-using System;
-
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
@@ -8,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.SimpleRouter;
 
 using MedicInPoint.API.SignalR;
+using MedicInPoint.Converters.Json;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels;
 using MedicInPoint.ViewModels.Pages;
@@ -22,6 +21,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 using MIP.LocalDB;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
 namespace MedicInPoint;
 
 public partial class App : Application
@@ -32,6 +34,18 @@ public partial class App : Application
 	{
 		//this.EnableHotReload();
 		_ = LocalStorage.context;
+		JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+		{
+			ContractResolver = new CamelCasePropertyNamesContractResolver(),
+			ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+			DateFormatHandling = DateFormatHandling.IsoDateFormat,
+			DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+			Converters = [
+				new DateOnlyConverter(),
+				new TimeOnlyConverter(),
+				new DateTimeConverter()
+			],
+		};
 
 		AvaloniaXamlLoader.Load(this);
 	}

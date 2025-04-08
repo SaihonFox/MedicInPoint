@@ -41,7 +41,7 @@
 				</Grid>
 			</Grid>
 
-			<Grid ColumnDefinitions="300,25,*,25,300" Margin="25,175,25,25">
+			<Grid ColumnDefinitions="300,25,*,25,300" ClipToBounds="False" Margin="25,175,25,25">
 				<Border Grid.Column="0" Classes="drawerbg" ClipToBounds="False" Padding="6">
 					<ListBox ClipToBounds="False" ItemsSource="{CompiledBinding Patients}" Background="Transparent" SelectionMode="Single" SelectedIndex="{CompiledBinding SelectedPatientIndex, Mode=TwoWay}" SelectedItem="{CompiledBinding SelectedPatient, Mode=TwoWay}" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 						<ListBox.ItemsPanel>
@@ -93,7 +93,8 @@
 					</ListBox>
 				</Border>
 
-				
+				<ItemsControl Grid.Column="2" ClipToBounds="False" Name="requests_ic" />
+				<ItemsControl Grid.Column="2" Name="record_ic" IsVisible="False" />
 
 				<drawer:PatientDrawerView Grid.Column="4" DataContext="{CompiledBinding SelectedPatient}" />
 			</Grid>

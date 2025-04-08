@@ -11,6 +11,8 @@ using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.Extensions;
 using MedicInPoint.Services;
 
+using Newtonsoft.Json;
+
 namespace MedicInPoint.ViewModels.Pages;
 
 public partial class AuthorizationViewModel() : ViewModelBase
@@ -43,7 +45,7 @@ public partial class AuthorizationViewModel() : ViewModelBase
 
 		await Task.Run(async () =>
 		{
-			var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
+			using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
 			if (!response.IsSuccessStatusCode)
 				return;
 
@@ -59,7 +61,7 @@ public partial class AuthorizationViewModel() : ViewModelBase
 
 		await Task.Run(async () =>
 		{
-			var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
+			using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
 			if (!response.IsSuccessStatusCode)
 				return;
 
@@ -81,7 +83,7 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		{
 			IsEnterEnabled = false;
 
-			var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
+			using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
 			if (!response.IsSuccessStatusCode)
 			{
 				if(response.StatusCode == HttpStatusCode.NotFound)
