@@ -17,14 +17,11 @@ public partial class Request
 	public int PatientAnalysisAddressId { get; set; }
 
 	/// <summary>
-	/// true - request accepted
+	/// 1 - request in 
 	/// false - request declined
 	/// </summary>
 	public int? RequestStateId { get; set; }
 
-	/// <summary>
-	/// Время создания запроса на запись
-	/// </summary>
 	public DateTime RequestSended { get; set; }
 
 	/// <summary>
