@@ -16,7 +16,7 @@
 
 	<ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
 		<Style Selector="^.onboardrb">
-			<Setter Property="Padding" Value="5,0,5,0" />
+			<Setter Property="Padding" Value="5,0" />
 			<Setter Property="Margin" Value="0" />
 			<Setter Property="MinWidth" Value="15" />
 			<Setter Property="Height" Value="15" />
@@ -41,7 +41,7 @@
 								 Opacity="0" />
 
 						<ContentPresenter Grid.Column="1" Name="PART_ContentPresenter"
-										  IsVisible="{Binding ., Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+										  IsVisible="{Binding $self.Content, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
 										  Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
 										  LineHeight="{TemplateBinding FontSize}"
 										  Foreground="{TemplateBinding Foreground}"
@@ -81,10 +81,21 @@
 			<Setter Property="Template">
 				<ControlTemplate>
 					<Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="{TemplateBinding MinWidth}" Height="{TemplateBinding Height}">
+						<Border.Transitions>
+							<Transitions>
+								<BrushTransition Property="Background" Duration="0:0:.2" Easing="QuadraticEaseIn" />
+							</Transitions>
+						</Border.Transitions>
 						<TextBlock Text="{TemplateBinding Content}" FontSize="{TemplateBinding FontSize}"
 								   Foreground="{TemplateBinding Foreground}"
 								   Padding="{TemplateBinding Padding}"
-								   HorizontalAlignment="Center" VerticalAlignment="Center" />
+								   HorizontalAlignment="Center" VerticalAlignment="Center">
+							<TextBlock.Transitions>
+								<Transitions>
+									<BrushTransition Property="Foreground" Duration="0:0:.2" Easing="QuadraticEaseIn" />
+								</Transitions>
+							</TextBlock.Transitions>
+						</TextBlock>
 					</Border>
 				</ControlTemplate>
 			</Setter>

@@ -1,0 +1,707 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MedicInPoint.API.Refit.APIService" Collapsed="true">
+    <Position X="51" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>API\Refit\APIService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.API.SignalR.MedicSignalRConnections" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="49.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAIAAAAAEAAAAAAAAAQAAAIBAAEAAAAA=</HashCode>
+      <FileName>API\SignalR\MedicSignalRConnections.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.API.MedicConfiguration" Collapsed="true">
+    <Position X="45.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAEAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>API\MedicConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Converters.Json.DateOnlyConverter" Collapsed="true">
+    <Position X="47.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\Json\DateOnlyConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Converters.Json.DateTimeConverter" Collapsed="true">
+    <Position X="49.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\Json\DateTimeConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Converters.Json.TimeOnlyConverter" Collapsed="true">
+    <Position X="49.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\Json\TimeOnlyConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Converters.AnalysisToggleButtonConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="49.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\AnalysisToggleButtonConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.Converters.ColorByNameConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="45.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\ColorByNameConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.Converters.OpacityByWidthConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="49.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\OpacityByWidthConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.Converters.WidthByObjectNullableConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="47.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\WidthByObjectNullableConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.Extensions.HttpResponseMessageExtensions" Collapsed="true">
+    <Position X="52.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\HttpResponseMessageExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Extensions.IEnumerableExtension" Collapsed="true">
+    <Position X="54.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\IEnumerableExtension.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Extensions.ObjectExtensions" Collapsed="true">
+    <Position X="47.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\ObjectExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Extensions.StringExtensions" Collapsed="true">
+    <Position X="47.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Extensions\StringExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Extensions.WindowExtensions" Collapsed="true">
+    <Position X="49.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\WindowExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.Patient" Collapsed="true">
+    <Position X="51" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAEAASAABIIAgBAAMAQABAAIABACAAAQIRAAAAA=</HashCode>
+      <FileName>Models\Partial\Patient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.User" Collapsed="true">
+    <Position X="51" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAIIAgBAAEAQADAAIAhACAAAQJBAAAAA=</HashCode>
+      <FileName>Models\Partial\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.AdBlock" Collapsed="true">
+    <Position X="42.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACCAAAAQAgBAAAAAAAAAQAAAAABAAAAAAABAAAAAA=</HashCode>
+      <FileName>Models\AdBlock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.Analysis" Collapsed="true">
+    <Position X="45.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAACAAAACQAgAAAAAAAAAAQQAAAAAAAAAAAAAQAgAgI=</HashCode>
+      <FileName>Models\Analysis.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.AnalysisCategoriesList" Collapsed="true">
+    <Position X="51" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAABAAAAAAAAAAAAAAAABAAAAAAABAAAACA=</HashCode>
+      <FileName>Models\AnalysisCategoriesList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.AnalysisCategory" Collapsed="true">
+    <Position X="52.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Models\AnalysisCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.AnalysisOrder" Collapsed="true">
+    <Position X="47.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAEAQAAQAAAIAAEAAgAAQAIAAAAAgAAAAAACAA=</HashCode>
+      <FileName>Models\AnalysisOrder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.Message" Collapsed="true">
+    <Position X="52.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAQAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Models\Message.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.MessagesMessage" Collapsed="true">
+    <Position X="54.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAQAAAAAAAAAAAEgQAAAAAAAAAAAAIQAACQA=</HashCode>
+      <FileName>Models\MessagesMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.MmFile" Collapsed="true">
+    <Position X="56.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABACAAAAAAAAAAAACAAAAAAAAAAGAAAAAAEAAABBAAA=</HashCode>
+      <FileName>Models\MmFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.MmFileType" Collapsed="true">
+    <Position X="42.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MmFileType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.PatientAnalysisAddress" Collapsed="true">
+    <Position X="52.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAAoAABAAAAAAAAAAAAACAAAAABAAABA=</HashCode>
+      <FileName>Models\PatientAnalysisAddress.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.PatientAnalysisCart" Collapsed="true">
+    <Position X="54.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAQAACAA=</HashCode>
+      <FileName>Models\PatientAnalysisCart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.PatientAnalysisCartItem" Collapsed="true">
+    <Position X="56.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAEAAAAAAAABAAAAgAABAAAAAA=</HashCode>
+      <FileName>Models\PatientAnalysisCartItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.PatientDatum" Collapsed="true">
+    <Position X="42.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAABQAAAAAAAAAAAAAAACAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Models\PatientDatum.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.PatientsDataList" Collapsed="true">
+    <Position X="49.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAAABSAAAAAAABAgEAQABCAAAAAAAAAQIAAACAA=</HashCode>
+      <FileName>Models\PatientsDataList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.Request" Collapsed="true">
+    <Position X="52.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAACAAIAARAAQAAAIAQAAAAAAAAKAAQAAAAAAABADAA=</HashCode>
+      <FileName>Models\Request.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.RequestAnalysis" Collapsed="true">
+    <Position X="54.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAQAAAAAAAAAAAAAhAAAAAAABAAAAAA=</HashCode>
+      <FileName>Models\RequestAnalysis.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.RequestState" Collapsed="true">
+    <Position X="56.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Models\RequestState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Models.UserLastEnter" Collapsed="true">
+    <Position X="42.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAIAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\UserLastEnter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Services.AppStateService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="54.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\AppStateService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.Services.NotificationService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="45.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\NotificationService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.Pages.Admin.AnalysisAdminViewModel" Collapsed="true">
+    <Position X="37" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAACAAEAAAASACABCAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>ViewModels\Pages\Admin\AnalysisAdminViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.Pages.Admin.AnalysisCategoriesAdminViewModel" Collapsed="true">
+    <Position X="34.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAEAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Pages\Admin\AnalysisCategoriesAdminViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.Pages.Doctor.PatientDoctorViewModel" Collapsed="true">
+    <Position X="32.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAEAEAEAAAAAAABAAAAAACAAACAAAAAAKjAAA=</HashCode>
+      <FileName>ViewModels\Pages\Doctor\PatientDoctorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.Pages.Doctor.RnRDoctorViewModel" Collapsed="true">
+    <Position X="30" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAEAEAEAAAAAAABAAAAAACAAACAAAAAAKjAAA=</HashCode>
+      <FileName>ViewModels\Pages\Doctor\RnRDoctorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.Pages.AuthorizationViewModel" Collapsed="true">
+    <Position X="30" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAEAAAEAAQAAAAAAAAAAAEAAAAEAAAIAAAAAA=</HashCode>
+      <FileName>ViewModels\Pages\AuthorizationViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.Pages.FlyoutMenuViewModel" Collapsed="true">
+    <Position X="27.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Pages\FlyoutMenuViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.Pages.MenuViewModel" Collapsed="true">
+    <Position X="30" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASAAAAIAAAAAEAQAAAAAJIQAAAAIAAAAAAAIAACAAAA=</HashCode>
+      <FileName>ViewModels\Pages\MenuViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Drawers.AnalysisDrawerViewModel" Collapsed="true">
+    <Position X="34.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Drawers\AnalysisDrawerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Drawers.PatientDrawerViewModel" Collapsed="true">
+    <Position X="39.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Drawers\PatientDrawerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Drawers.UserDrawerViewModel" Collapsed="true">
+    <Position X="39.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Drawers\UserDrawerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.Adder_UserControl_ViewModel" Collapsed="true">
+    <Position X="37" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\Adder_UserControl_ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.AnalysisCategoryItem_UserControl_ViewModel" Collapsed="true">
+    <Position X="34.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\AnalysisCategoryItem_UserControl_ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.AnalysisItem_UserControl_ViewModel" Collapsed="true">
+    <Position X="32.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\AnalysisItem_UserControl_ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.IItemUserControl" Collapsed="true">
+    <Position X="56.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\IItemUserControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.PatientItem_UserControl_ViewModel" Collapsed="true">
+    <Position X="27.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\PatientItem_UserControl_ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.RnRRecord_UserControl_ViewModel" Collapsed="true">
+    <Position X="27.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\RnRRecord_UserControl_ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.RnRRequest_UserControl_ViewModel" Collapsed="true">
+    <Position X="32.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAEAQAAAAAQAAAAACAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\RnRRequest_UserControl_ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.UserControls.Items.UserItem_UserControl_ViewModel" Collapsed="true">
+    <Position X="37" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\UserControls\Items\UserItem_UserControl_ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.MainViewModel" Collapsed="true">
+    <Position X="39.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.ViewModels.ViewModelBase" Collapsed="true">
+    <Position X="33.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAABAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ViewModelBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MedicInPoint.Views.Pages.Admin.AnalysisAdminView" Collapsed="true">
+    <Position X="47.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Views\Pages\Admin\AnalysisAdminView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.Pages.Admin.AnalysisCategoriesAdminView" Collapsed="true">
+    <Position X="49.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Pages\Admin\AnalysisCategoriesAdminView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.Pages.Doctor.PatientDoctorView" Collapsed="true">
+    <Position X="44" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Pages\Doctor\PatientDoctorView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.Pages.Doctor.RnRDoctorView" Collapsed="true">
+    <Position X="42.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAACAEAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Pages\Doctor\RnRDoctorView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.Pages.AuthorizationView" Collapsed="true">
+    <Position X="56.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Views\Pages\AuthorizationView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.Pages.FlyoutMenuView" Collapsed="true">
+    <Position X="51" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Views\Pages\FlyoutMenuView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.Pages.MenuView" Collapsed="true">
+    <Position X="51" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Pages\MenuView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Drawers.Buttons.AnalysisDeleteBtn" Collapsed="true">
+    <Position X="56.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Drawers\Buttons\AnalysisDeleteBtn.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Drawers.Buttons.AnalysisEditBtn" Collapsed="true">
+    <Position X="44" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Drawers\Buttons\AnalysisEditBtn.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Drawers.Buttons.UserFireBtn" Collapsed="true">
+    <Position X="54.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Drawers\Buttons\UserFireBtn.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Drawers.Buttons.UserReturnBtn" Collapsed="true">
+    <Position X="44" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Drawers\Buttons\UserReturnBtn.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Drawers.AnalysisDrawerView" Collapsed="true">
+    <Position X="42.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Drawers\AnalysisDrawerView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Drawers.PatientDrawerView" Collapsed="true">
+    <Position X="45.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Drawers\PatientDrawerView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Drawers.UserDrawerView" Collapsed="true">
+    <Position X="52.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Drawers\UserDrawerView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Items.Adder_UserControl_View" Collapsed="true">
+    <Position X="44" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Items\Adder_UserControl_View.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Items.AnalysisCategoryItemAdminUserControl" Collapsed="true">
+    <Position X="54.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAIAQAAIAAAAAAAAAAAgEAAAAAAAAABAAIAABAA=</HashCode>
+      <FileName>Views\UserControls\Items\AnalysisCategoryItemAdmin_UserControl_View.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Items.AnalysisItem_UserControl_View" Collapsed="true">
+    <Position X="45.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Items\AnalysisItem_UserControl_View.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Items.PatientItem_UserControl_View" Collapsed="true">
+    <Position X="47.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Items\PatientItem_UserControl_View.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Items.RnRRecord_UserControl_View" Collapsed="true">
+    <Position X="44" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Items\RnRRecord_UserControl_View.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.Items.RnRRequest_UserControl_View" Collapsed="true">
+    <Position X="45.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Items\RnRRequest_UserControl_View.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.UserItem_UserControl_View" Collapsed="true">
+    <Position X="56.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\Items\UserItem_UserControl_View.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.App" Collapsed="true">
+    <Position X="52.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAACIAAEAA=</HashCode>
+      <FileName>App.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Program" Collapsed="true">
+    <Position X="51" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.MyLogExtensions" Collapsed="true">
+    <Position X="44" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.MedicLogSink" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="47.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.ViewLocator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="45.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewLocator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MedicInPoint.Views.UserControls.BackdropBlurControl" Collapsed="true">
+    <Position X="44" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAIIAAAAAAAAAAAAAAABAAAAIAAAA=</HashCode>
+      <FileName>Views\UserControls\BackdropBlurControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.MainView" Collapsed="true">
+    <Position X="42.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\MainView.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicInPoint.Views.MainWindow" Collapsed="true">
+    <Position X="44" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\MainWindow.axaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestAutoCompleteBehavior.Behaviors.AutoCompleteZeroMinimumPrefixLengthDropdownBehavior" Collapsed="true">
+    <Position X="42.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAFACAAAAAAAAAAAAACAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IAnalysis" Collapsed="true">
+    <Position X="39.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RAABAAAAAAAAAAAAAAAAAAAAAAAAAAQCAAAAAAAAAAA=</HashCode>
+      <FileName>API\Refit\Placeholders\IAnalysis.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IAnalysisCategory" Collapsed="true">
+    <Position X="27.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAABAAAAAAgAAAAAAAAAACAAAAQAAAAAAAA=</HashCode>
+      <FileName>API\Refit\Placeholders\IAnalysisCategory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IMessage" Collapsed="true">
+    <Position X="32.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACEAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>API\Refit\Placeholders\IMessage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IMessagesMessages" Collapsed="true">
+    <Position X="34.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAEAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>API\Refit\Placeholders\IMessagesMessages.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IPatient" Collapsed="true">
+    <Position X="39.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAEAEAAAAAAAAAAAAACA=</HashCode>
+      <FileName>API\Refit\Placeholders\IPatient.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IRequest" Collapsed="true">
+    <Position X="34.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAQAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>API\Refit\Placeholders\IRequest.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IUser" Collapsed="true">
+    <Position X="36" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>API\Refit\Placeholders\IUser.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.API.Refit.Placeholders.IUserLastEnter" Collapsed="true">
+    <Position X="37.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>API\Refit\Placeholders\IUserLastEnter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Medic.API.Refit.Placeholders.IAnalysisOrder" Collapsed="true">
+    <Position X="29" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>API\Refit\Placeholders\IAnalysisOrder.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.Services.IAppStateService" Collapsed="true">
+    <Position X="30.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\IAppStateService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.Services.INotificationService" Collapsed="true">
+    <Position X="36" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\INotificationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MedicInPoint.Views.Pages.IPage&lt;TWindowOwner&gt;" Collapsed="true">
+    <Position X="37.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Pages\IPage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -8,20 +8,26 @@ internal class DateOnlyConverter : JsonConverter<DateOnly>
 {
 	private static readonly string[] formats = [
 		"yyyy-MM-dd",
-		"yyyy/MM/dd",
-		"yyyy.MM.dd",
-		"yyyy MM dd",
-		"yyyy MMMM dd",
+		"yyyy-M-dd",
+		"yyyy-MM-d",
+		"yyyy-M-d",
 		"dd-MM-yyyy",
-		"dd/MM/yyyy",
+		"dd-M-yyyy",
+		"d-MM-yyyy",
+		"d-M-yyyy",
+		"yyyy.MM.dd",
+		"yyyy.M.dd",
+		"yyyy.MM.d",
+		"yyyy.M.d",
 		"dd.MM.yyyy",
-		"dd MM yyyy",
-		"dd MMMM yyyy"
+		"dd.M.yyyy",
+		"d.MM.yyyy",
+		"d.M.yyyy"
 	];
 
 	public override DateOnly ReadJson(JsonReader reader, Type objectType, DateOnly existingValue, bool hasExistingValue, JsonSerializer serializer)
 	{
-		if (reader.TokenType == JsonToken.String)
+		if (reader.TokenType == JsonToken.String || reader.TokenType == JsonToken.Date)
 		{
 			var dateString = reader.Value?.ToString();
 			if (
@@ -30,9 +36,9 @@ internal class DateOnlyConverter : JsonConverter<DateOnly>
 				return dateOnly;
 		}
 
-		throw new JsonSerializationException($"Unexpected token or cannot parse date. Avaliable formats: {string.Join(", ", formats)}");
+		throw new JsonSerializationException($"Unexpected token or cannot parse date of value: {reader.Value}. Avaliable formats: {string.Join(", ", formats)}");
 	}
 
 	public override async void WriteJson(JsonWriter writer, DateOnly value, JsonSerializer serializer) =>
-		await writer.WriteValueAsync(value.ToString("dd-MM-yyyy", CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat));
+		await writer.WriteValueAsync(value.ToString("dd.MM.yyyy", CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat));
 }

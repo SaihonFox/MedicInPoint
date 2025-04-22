@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 
 using Avalonia.Controls;
+using Avalonia.Logging;
 using Avalonia.SimpleRouter;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -20,7 +21,7 @@ namespace MedicInPoint.ViewModels.Pages.Doctor;
 public partial class RnRDoctorViewModel() : ViewModelBase
 {
 	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router = null!;
-	private readonly INotificationService _notificationService = null!;
+	public readonly INotificationService _notificationService = null!;
 	private readonly IAppStateService _appService = null!;
 
 	public RnRDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService notificationService, IAppStateService appService, MedicSignalRConnections connections) : this()
@@ -48,13 +49,24 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 	async void FillPatients()
 	{
-		var response = await APIService.For<IPatient>().GetPatients();
-		if (!response.IsSuccessStatusCode)
-			return;
+		try
+		{
+			var response = await APIService.For<IPatient>().GetPatients();
+			if (!response.IsSuccessful)
+				return;
 
-		Patients = [.. response.Content!];
-		//SelectedPatientIndex = 0;
-		Log("none", "PatientDoctor");
+			Patients = [.. response.Content.Reverse()!];
+			//SelectedPatientIndex = 0;
+			Log("none", "PatientDoctor");
+		}
+		catch (HttpRequestException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+		}
+		catch (Exception ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
+		}
 	}
 
 	[ObservableProperty]
@@ -77,7 +89,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 	void Search()
 	{
-
+		
 	}
 
 	[RelayCommand]

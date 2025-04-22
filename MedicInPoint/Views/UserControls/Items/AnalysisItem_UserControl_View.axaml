@@ -23,7 +23,7 @@
 							<TextBlock Grid.Row="0" Text="{Binding ResultsAfter}" FontSize="14" Foreground="#939396" />
 							<TextBlock Grid.Row="1" Text="{Binding Price, StringFormat=#.## руб\\.}" FontSize="17" />
 						</Grid>
-						<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding $parent[view:AnalysisAdminView].((vm:AnalysisAdminViewModel)DataContext).IsSelected}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+						<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding $parent[view:AnalysesAdminView].((vm:AnalysesAdminViewModel)DataContext).IsSelected}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
 					</Grid>
 				</Grid>
 			</Border>

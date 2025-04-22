@@ -11,13 +11,12 @@ using MedicInPoint.API.SignalR;
 using MedicInPoint.Models;
 
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicInPoint.ViewModels.Pages.Admin;
 
-public partial class AnalysisAdminViewModel() : ViewModelBase
+public partial class AnalysesAdminViewModel() : ViewModelBase
 {
-	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router;
+	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router = null!;
 
 	[ObservableProperty]
 	private ObservableCollection<Analysis> _allAnalyses = [];
@@ -25,7 +24,7 @@ public partial class AnalysisAdminViewModel() : ViewModelBase
 	[ObservableProperty]
 	private ObservableCollection<Analysis> _analysesList = [];
 	
-	public AnalysisAdminViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, MedicSignalRConnections connections) : this()
+	public AnalysesAdminViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, MedicSignalRConnections connections) : this()
 	{
 		Title = "Список анализов";
 		_router = router;

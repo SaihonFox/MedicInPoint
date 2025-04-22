@@ -13,10 +13,10 @@ public interface IAnalysis
 	Task<IApiResponse<Analysis?>> GetAnalysis(int id);
 
 	[Post("/analyses")]
-	Task<IApiResponse<Analysis>> AddAnalysis(Analysis analysis);
+	Task<IApiResponse<Analysis>> AddAnalysis(Analysis analysis, CancellationToken? token = null);
 
 	[Put("/analyses")]
-	Task<IApiResponse<Analysis>> UpdateAnalysis(Analysis analysis);
+	Task<IApiResponse<Analysis>> UpdateAnalysis(Analysis analysis, CancellationToken? token = null);
 	
 	[Delete("/analyses/{id}")]
 	Task<IApiResponse<Analysis>> DeleteAnalysis(int id);

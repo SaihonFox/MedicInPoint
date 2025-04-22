@@ -16,8 +16,8 @@
 		<converter:ColorByNameConverter x:Key="ColorByNameConverter" />
 	</UserControl.Resources>
 
-	<Grid ClipToBounds="False">
-		<Border Classes="drawerbg" Padding="16">
+	<Grid ClipToBounds="False" HorizontalAlignment="Center">
+		<Border Classes="drawerbg" Padding="16" HorizontalAlignment="Center">
 			<StackPanel Orientation="Vertical" Spacing="10">
 				<Grid ColumnDefinitions="*,20,*" IsVisible="{CompiledBinding Request.RequestStateId, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=1}">
 					<Button Grid.Column="0" Command="{CompiledBinding AcceptRequestCommand}" Content="Одобрить" CornerRadius="12" Background="#00B712" Foreground="White" FontWeight="SemiBold" FontSize="24" TextBlock.LineHeight="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="40">
@@ -69,7 +69,7 @@
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Комментарий" FontSize="14" LineHeight="14" Foreground="#7E7E9A" />
 					<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-						<TextBlock Text="{CompiledBinding Request.Comment, TargetNullValue=Без комментария}" FontSize="20" LineHeight="20" />
+						<TextBlock Text="{CompiledBinding Request.PatientComment, TargetNullValue=Без комментария}" FontSize="20" LineHeight="20" />
 					</Border>
 				</StackPanel>
 				<Border Background="#DBDBDC" CornerRadius="100" Height="1" />

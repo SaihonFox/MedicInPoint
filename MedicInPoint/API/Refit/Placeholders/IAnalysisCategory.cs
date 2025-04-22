@@ -13,10 +13,10 @@ public interface IAnalysisCategory
 	Task<IApiResponse<AnalysisCategory>> GetAnalysisCategory(int id);
 
 	[Post("/analysis_categories")]
-	Task<IApiResponse<AnalysisCategory>> AddAnalysisCategory(AnalysisCategory analysis);
+	Task<IApiResponse<AnalysisCategory>> AddAnalysisCategory(AnalysisCategory analysis, CancellationToken? token = null);
 
 	[Put("/analysis_categories")]
-	Task<IApiResponse<AnalysisCategory>> UpdateAnalysisCategory(AnalysisCategory analysis);
+	Task<IApiResponse<AnalysisCategory>> UpdateAnalysisCategory(AnalysisCategory analysis, CancellationToken? token = null);
 
 	[Delete("/analysis_categories/{id}")]
 	Task<IApiResponse<AnalysisCategory>> DeleteAnalysisCategory(int id);

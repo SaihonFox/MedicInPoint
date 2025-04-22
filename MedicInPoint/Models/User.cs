@@ -21,7 +21,7 @@ public partial class User
 
     public bool? IsBlocked { get; set; }
 
-    public sbyte? Post { get; set; }
+    public short? Post { get; set; }
 
     public string Login { get; set; } = null!;
 

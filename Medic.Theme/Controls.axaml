@@ -21,6 +21,8 @@
 			<medic:MenuItem Text="da" />
 			<Separator />
 			<medic:ImageButton />
+			<Separator />
+			<medic:ProgressRing Width="75" Height="75" />
 		</StackPanel>
 	</Design.PreviewWith>
 
@@ -29,14 +31,15 @@
 		<ResourceInclude Source="Controls/Border.axaml" />
 		<ResourceInclude Source="Controls/Button.axaml" />
 		<ResourceInclude Source="Controls/RadioButton.axaml" />
-		<ResourceInclude Source="Controls/Scrollbar.axaml" />
+		<!-- <ResourceInclude Source="Controls/Scrollbar.axaml" /> -->
 		<ResourceInclude Source="Controls/Separator.axaml" />
 		<ResourceInclude Source="Controls/TextBox.axaml" />
-		<ResourceInclude Source="Controls/Thumb.axaml" />
+		<!-- <ResourceInclude Source="Controls/Thumb.axaml" /> -->
 		<ResourceInclude Source="Controls/ToggleButton.axaml" />
 
 		<ResourceInclude Source="Controls/Custom/ImageButton.axaml" />
 		<ResourceInclude Source="Controls/Custom/MenuItem.axaml" />
 		<ResourceInclude Source="Controls/Custom/Pill.axaml" />
+		<ResourceInclude Source="Controls/Custom/ProgressRing/ProgressRing.axaml" />
 	</ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

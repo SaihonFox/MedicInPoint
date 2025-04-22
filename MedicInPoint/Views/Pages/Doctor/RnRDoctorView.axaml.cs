@@ -2,63 +2,58 @@ using Avalonia.Controls;
 
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
-using MedicInPoint.Converters.Json;
 using MedicInPoint.Models;
+using MedicInPoint.ViewModels.Pages.Doctor;
 using MedicInPoint.ViewModels.UserControls.Items;
 using MedicInPoint.Views.UserControls.Items;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace MedicInPoint.Views.Pages.Doctor;
 
 public partial class RnRDoctorView : UserControl
 {
+	private readonly RnRDoctorViewModel ViewModel = null!;
+
 	public RnRDoctorView()
 	{
+		ViewModel = (RnRDoctorViewModel)DataContext!;
+
 		InitializeComponent();
 
-		FillRequests();
+		if(!Design.IsDesignMode)
+			FillRequests();
 	}
 
 	async void FillRequests()
 	{
 		using var response = await APIService.For<IRequest>().GetRequests();
-		if (!response.IsSuccessStatusCode)
+		if (!response.IsSuccessful)
 			return;
 
-		using var client = new HttpClient();
-		try
-		{
-			await File.WriteAllTextAsync(@"C:\Users\ILNAR\Desktop\request.json", JsonConvert.SerializeObject(System.Text.Json.JsonSerializer.Deserialize<Request>(await client.GetStringAsync(@"https://medicapi.onrender.com/api/requests"), new System.Text.Json.JsonSerializerOptions
-			{
-				PropertyNameCaseInsensitive = true,
-				PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
-			})));
-		}
-		catch (System.Text.Json.JsonException ex)
-		{
-			await File.WriteAllTextAsync(@"C:\Users\ILNAR\Desktop\request.json", ex.Message + "\nStack Trace: " + ex.StackTrace + "\nLineNumber: " + ex.LineNumber + "\nPath: " + ex.Path);
-		}
-		catch (Exception ex)
-		{
-			
-		}
 		foreach (var request in response.Content!)
-			requests_ic.Items.Add(new RnRRequest_UserControl_View {
-				DataContext = new RnRRequest_UserControl_ViewModel {
+		{
+			//File.WriteAllText(@$"C:\Users\ILNAR\Desktop\r-{request?.Id}.txt", (request == null).ToString());
+			requests_ic.Items.Add(new RnRRequest_UserControl_View
+			{
+				DataContext = new RnRRequest_UserControl_ViewModel
+				{
 					Request = request,
 					OnAcceptRequest = RequestAccepted,
 					OnDeclineequest = RequestDeclined
 				}
 			});
+		}
 	}
 
-	async void RequestAccepted(Request request)
+	async Task<Request?> RequestAccepted(Request request)
 	{
 		request.RequestStateId = 3;
 		request.RequestChanged = DateTime.Now;
-		await APIService.For<IRequest>().UpdateRequest(request);
+		using var response = await APIService.For<IRequest>().UpdateRequest(request);
+		await File.WriteAllTextAsync(@$"C:\Users\ILNAR\Desktop\r-n.txt", response.IsSuccessful.ToString() + "\n");
+		if (!response.IsSuccessful)
+			return null;
+		await File.AppendAllTextAsync(@$"C:\Users\ILNAR\Desktop\r-n.txt", response.StatusCode.ToString());
+		return response.Content!;
 	}
 
 	async void RequestDeclined(Request request)

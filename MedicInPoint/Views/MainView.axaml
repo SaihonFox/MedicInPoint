@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:MedicInPoint.ViewModels"
 			 mc:Ignorable="d"
-			 d:DesignWidth="800" d:DesignHeight="450"
+			 d:DesignWidth="1500" d:DesignHeight="1000"
 			 x:Class="MedicInPoint.Views.MainView"
 			 x:DataType="vm:MainViewModel">
 	<Design.DataContext>
@@ -17,6 +17,13 @@
 				<CrossFade Duration="0:00:00.500" />
 			</TransitioningContentControl.PageTransition>
 		</TransitioningContentControl>
+
+		<Menu Height="30" VerticalAlignment="Top">
+			<MenuItem Header="Меню">
+				
+			</MenuItem>
+		</Menu>
+
 		<Border HorizontalAlignment="Center" VerticalAlignment="Top" Height="30">
 			<TextBlock Text="{Binding Content.Title}" Foreground="Black" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
 		</Border>

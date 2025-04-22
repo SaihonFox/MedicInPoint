@@ -21,7 +21,7 @@ public partial class FlyoutMenuViewModel() : ViewModelBase
 		switch (destination)
 		{
 			case "AnalysesAdmin":
-				var @goto = _router.GoTo<MenuViewModel, AnalysisAdminViewModel>();
+				var @goto = _router.GoTo<MenuViewModel, AnalysesAdminViewModel>();
 				Logger.Sink?.Log(LogEventLevel.Debug, "FlyoutAREA", @goto.Length, "MSG-TEMPLATE");
 				break;
 			case "PatientsAdmin":

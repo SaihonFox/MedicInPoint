@@ -17,7 +17,7 @@ public partial class MmFile
 
     public string? FileExtension { get; set; }
 
-    public virtual MessagesMessage MessagesMessage { get; set; } = null!;
+    public MessagesMessage MessagesMessage { get; set; } = null!;
 
-    public virtual MmFileType MmFileType { get; set; } = null!;
+    public MmFileType MmFileType { get; set; } = null!;
 }

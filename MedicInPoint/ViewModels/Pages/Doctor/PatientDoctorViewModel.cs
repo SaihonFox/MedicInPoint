@@ -6,8 +6,6 @@ using Avalonia.SimpleRouter;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using Libsql.Client;
-
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;

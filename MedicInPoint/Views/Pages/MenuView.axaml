@@ -34,7 +34,7 @@
 			</ItemsControl>
 
 			<Grid Grid.Row="2" Margin="0,0,0,30" Height="{Binding $parent[Grid].Children[0].Bounds.Height}">
-				<Button Grid.Row="2" Classes="back" Command="{Binding BackCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+				<Button Grid.Row="2" Classes="back" Command="{Binding BackCommand}" HotKey="Escape" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
 			</Grid>
 		</Grid>
 	</Grid>

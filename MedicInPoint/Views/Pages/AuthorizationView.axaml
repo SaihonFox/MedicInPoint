@@ -6,6 +6,7 @@
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
 			 xmlns:med="https://github.com/saihonfox"
+			 xmlns:labs="using:Avalonia.Labs.Controls"
 			 xmlns:suki="using:FluentAvalonia.UI.Controls"
 			 xmlns:local="using:MedicInPoint.Views.Pages"
 			 mc:Ignorable="d"
@@ -74,7 +75,7 @@
 					<TextBlock Text="Пароль" FontSize="22" />
 					<TextBox Name="password" Classes="password" Text="{Binding Password, Mode=TwoWay}" MaxLength="20" Width="475" Height="60" />
 				</StackPanel>
-				<Button Name="enter" IsEnabled="{CompiledBinding IsEnterEnabled}"
+				<Button Name="enter" IsEnabled="{CompiledBinding IsEnterEnabled}" HotKey="Enter"
 						Content="{DynamicResource ENTER}" FontSize="28" TextBlock.LineHeight="28"
 						CornerRadius="10"
 						Command="{Binding EnterCommand}"
@@ -97,5 +98,6 @@
 				</Button>
 			</Panel>
 		</Grid>
+		<labs:ContentDialog Name="cd" FullSizeDesired="True" Title="titel1" Content="some once" PrimaryButtonText="pri" SecondaryButtonText="sec" CloseButtonText="clo" />
 	</Panel>
 </UserControl>

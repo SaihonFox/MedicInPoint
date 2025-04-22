@@ -9,5 +9,5 @@ public partial class MmFileType
 
     public string Name { get; set; } = null!;
 
-    public virtual ICollection<MmFile> MmFiles { get; set; } = new List<MmFile>();
+    public ICollection<MmFile> MmFiles { get; set; } = [];
 }

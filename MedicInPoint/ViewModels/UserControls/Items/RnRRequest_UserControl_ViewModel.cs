@@ -14,11 +14,11 @@ namespace MedicInPoint.ViewModels.UserControls.Items;
 
 public partial class RnRRequest_UserControl_ViewModel() : ViewModelBase
 {
-	public required Action<Request> OnAcceptRequest { get; set; }
+	public required Func<Request, Task<Request?>> OnAcceptRequest { get; set; }
 
 	public required Action<Request> OnDeclineequest { get; set; }
 
-	private readonly INotificationService _notificationService = null!;
+	private readonly INotificationService? _notificationService = null;
 
 	public RnRRequest_UserControl_ViewModel(INotificationService notificationService) : this()
 	{
@@ -26,28 +26,36 @@ public partial class RnRRequest_UserControl_ViewModel() : ViewModelBase
 	}
 
 	[ObservableProperty]
-	private Request _request = null!;
+	private Request? _request = null;
 
 	[RelayCommand]
 	private async Task AcceptRequest()
 	{
-		//OnAcceptRequest?.Invoke(Request);
-		Request.RequestStateId = 3;
+		_notificationService?.Show("Запрос", "Одобрение");
+		var request = await OnAcceptRequest?.Invoke(Request)!;
+		if (request == null)
+			return;
+		_notificationService?.Show("Запрос", "Запрос одобрен");
+		Request = request;
+		/*Request.RequestStateId = 3;
 		Request.RequestChanged = DateTime.Now;
 		_notificationService.Show("Запрос", "Одобрение");
 		File.WriteAllText(@"C:\Users\ILNAR\Desktop\r.json", JsonConvert.SerializeObject(Request, Formatting.Indented, new JsonSerializerSettings
 		{
 			ContractResolver = new CamelCasePropertyNamesContractResolver(),
-			NullValueHandling = NullValueHandling.Ignore,
-			ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+			NullValueHandling = NullValueHandling.Include,
+			Formatting = Formatting.Indented,
+			DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+			MissingMemberHandling = MissingMemberHandling.Ignore,
+			ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
 			DateFormatHandling = DateFormatHandling.IsoDateFormat,
-			DateFormatString = "dd'-'MM'-'yyyy'T'HH':'mm':'ss.FFFFFFF",
+			DateFormatString = "dd'.'MM'.'yyyy' 'HH':'mm':'ss",
 			DateTimeZoneHandling = DateTimeZoneHandling.Utc,
 			Converters = [
 				new DateOnlyConverter(),
 				new TimeOnlyConverter(),
 				new DateTimeConverter()
-			],
+			]
 		}));
 		return;
 		using var response = await APIService.For<IRequest>().UpdateRequest(Request);
@@ -55,7 +63,7 @@ public partial class RnRRequest_UserControl_ViewModel() : ViewModelBase
 			return;
 
 		_notificationService.Show("Запрос", "Запрос одобрен");
-		Request = response.Content!;
+		Request = response.Content!;*/
 	}
 
 	[RelayCommand]

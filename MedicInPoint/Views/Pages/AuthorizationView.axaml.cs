@@ -1,16 +1,6 @@
-using System.Net;
-
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-//using Avalonia.ReactiveUI;
 using Avalonia.Threading;
-
-using MedicInPoint.Extensions;
-using MedicInPoint.ViewModels.Pages;
-
-//using ReactiveUI;
-
-using Refit;
 
 namespace MedicInPoint.Views.Pages;
 
@@ -28,11 +18,7 @@ public partial class AuthorizationView : UserControl
 		onboard1.Click += Onboard_Click;
 		onboard2.Click += Onboard_Click;
 		onboard3.Click += Onboard_Click;
-
-		//enter.Click += enter_Click;
 	}
-
-	//public MainWindow TOwner { get => default!; init => TOwner = (MainWindow)Parent!; }
 
 	private void Onboard_Click(object? sender, RoutedEventArgs e)
 	{
@@ -54,46 +40,4 @@ public partial class AuthorizationView : UserControl
 		};
 		timer.Start();
 	}
-
-	async void enter_Click(object? sender, RoutedEventArgs e)
-	{
-		if (login.Text.IsNullOrWhiteSpace() || password.Text.IsNullOrWhiteSpace())
-		{
-			//TOwner.ErrorNotification("������", "���� ������!");
-			return;
-		}
-
-		enter.IsEnabled = false;
-		//User? user = null;
-		try
-		{
-			//user = await APIService.For<IUsers>().GetUser(login.Text, password.Text);
-		}
-		catch (ValidationApiException ex)
-		{
-			if (ex.StatusCode != HttpStatusCode.NotFound)
-			{
-				//TOwner.ErrorNotification("������", ex.StatusCode.ToString());
-				enter.IsEnabled = true;
-				return;
-			}
-		}
-		catch (Exception ex)
-		{
-			//TOwner.ErrorNotification("������", ex.StackTrace!);
-			enter.IsEnabled = true;
-			return;
-		}
-		/*if (user == null)
-		{
-			new WindowNotificationManager(this) { Position = NotificationPosition.BottomRight }
-				.Show(new Notification("������", "������������ �� ������", NotificationType.Error));
-			enter.IsEnabled = true;
-			return;
-		}*/
-		enter.IsEnabled = true;
-		//new UserMenuWindow(user).Show();
-		//Close();
-	}
-
 }

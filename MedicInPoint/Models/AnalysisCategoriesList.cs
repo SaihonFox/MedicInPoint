@@ -11,7 +11,7 @@ public partial class AnalysisCategoriesList
 
     public int AnalysisCategoryId { get; set; }
 
-    public virtual Analysis Analysis { get; set; } = null!;
+    public Analysis Analysis { get; set; } = null!;
 
-    public virtual AnalysisCategory AnalysisCategory { get; set; } = null!;
+    public AnalysisCategory AnalysisCategory { get; set; } = null!;
 }

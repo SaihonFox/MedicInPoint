@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:ring="using:Medic.Theme.Controls.Custom.ProgressRing">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<ring:ProgressRing />
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme TargetType="ring:ProgressRing" x:Key="{x:Type ring:ProgressRing}">
+		<Setter Property="Foreground" Value="{DynamicResource ProgressRingForeground}" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="MinHeight" Value="16" />
+		<Setter Property="MinWidth" Value="16" />
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Width" Value="32" />
+		<Setter Property="Height" Value="32" />
+		<Setter Property="Maximum" Value="100" />
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel Background="Transparent">
+					<ring:ProgressRingAnimatedVisual Name="AnimatedVisual" />
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+</ResourceDictionary>

@@ -104,6 +104,8 @@
 
 		<Style Selector="^.field">
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="SelectionBrush" Value="#1A6FEE" />
+			<Setter Property="SelectionForegroundBrush" Value="White" />
 			<Setter Property="Template">
 				<ControlTemplate>
 					<DataValidationErrors>

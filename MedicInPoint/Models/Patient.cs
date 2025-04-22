@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MedicInPoint.Models;
 
@@ -28,17 +29,17 @@ public partial class Patient
 
     public byte[]? Image { get; set; }
 
-	public ICollection<AnalysisOrder> AnalysisOrders { get; set; } = [];
+    public ICollection<AnalysisOrder> AnalysisOrders { get; set; } = [];
 
-	public ICollection<Message> Messages { get; set; } = [];
+    public ICollection<Message> Messages { get; set; } = [];
 
-	public ICollection<MessagesMessage> MessagesMessages { get; set; } = [];
+    public ICollection<MessagesMessage> MessagesMessages { get; set; } = [];
 
-	public ICollection<PatientAnalysisCart> PatientAnalysisCarts { get; set; } = [];
+    public ICollection<PatientAnalysisCart> PatientAnalysisCarts { get; set; } = [];
 
-	public ICollection<PatientDatum> PatientData { get; set; } = [];
+    public ICollection<PatientDatum> PatientData { get; set; } = [];
 
-	public ICollection<PatientsDataList> PatientsDataLists { get; set; } = [];
+    public ICollection<PatientsDataList> PatientsDataLists { get; set; } = [];
 
     public ICollection<Request> Requests { get; set; } = [];
 }

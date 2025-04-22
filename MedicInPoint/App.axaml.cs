@@ -2,11 +2,12 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
+using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using Avalonia.SimpleRouter;
 
+using MedicInPoint.API;
 using MedicInPoint.API.SignalR;
-using MedicInPoint.Converters.Json;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels;
 using MedicInPoint.ViewModels.Pages;
@@ -19,10 +20,7 @@ using MedicInPoint.Views;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using MIP.LocalDB;
-
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace MedicInPoint;
 
@@ -33,19 +31,8 @@ public partial class App : Application
 	public override void Initialize()
 	{
 		//this.EnableHotReload();
-		_ = LocalStorage.context;
-		JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-		{
-			ContractResolver = new CamelCasePropertyNamesContractResolver(),
-			ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-			DateFormatHandling = DateFormatHandling.IsoDateFormat,
-			DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-			Converters = [
-				new DateOnlyConverter(),
-				new TimeOnlyConverter(),
-				new DateTimeConverter()
-			],
-		};
+
+		JsonConvert.DefaultSettings = () => JsonSettings.Settings;
 
 		AvaloniaXamlLoader.Load(this);
 	}
@@ -93,23 +80,32 @@ public partial class App : Application
 			return new WindowNotificationManager(mainWindow)
 			{
 				Position = NotificationPosition.BottomRight,
-				MaxItems = 2,
+				MaxItems = 2
 			};
 		});
 
 		// Add the ViewModels as a service (Main as singleton, others as transient)
 		services.AddSingleton<MainViewModel>();
-		services.AddTransient<AuthorizationViewModel>();
+
+		services.AddSingleton<LoadingViewModel>();
+		services.AddSingleton<LogViewModel>();
+
+		services.AddScoped<AuthorizationViewModel>();
 		services.AddTransient<FlyoutMenuViewModel>();
 		services.AddTransient<MenuViewModel>();
 
 		// Admin
-		services.AddTransient<AnalysisAdminViewModel>();
+		services.AddTransient<AnalysesAdminViewModel>();
+		services.AddTransient<UsersAdminViewModel>();
+		services.AddTransient<PatientsAdminViewModel>();
 		services.AddTransient<AnalysisCategoriesAdminViewModel>();
 
 		// Doctor
 		services.AddTransient<PatientDoctorViewModel>();
 		services.AddTransient<RnRDoctorViewModel>();
+
+		// UserControls
+		// Items
 		
 		return services.BuildServiceProvider();
 	}

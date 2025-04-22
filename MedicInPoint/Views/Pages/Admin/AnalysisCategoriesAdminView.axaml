@@ -3,7 +3,10 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
-			 xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
+			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
 			 mc:Ignorable="d"
 			 d:DesignWidth="1500" d:DesignHeight="1000"
 			 x:Class="MedicInPoint.Views.Pages.Admin.AnalysisCategoriesAdminView"
@@ -14,8 +17,12 @@
 
 	<Panel>
 		<Grid>
-			<Button Classes="back" Command="{CompiledBinding Back}" Margin="30,50,0,0" HorizontalAlignment="Left" />
-			<TextBox Classes="search" Watermark="Искать категорию" Margin="0,40,0,0" VerticalAlignment="Top" Width="500" Height="50" />
+			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
+			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Text="{Binding SearchText, Mode=TwoWay}" Watermark="Искать пациента" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
+				<i:Interaction.Behaviors>
+					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
+				</i:Interaction.Behaviors>
+			</AutoCompleteBox>
 
 			
 		</Grid>

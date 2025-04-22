@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
+			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
+			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
+			 mc:Ignorable="d"
+			 d:DesignWidth="1500" d:DesignHeight="1000"
+			 x:Class="MedicInPoint.Views.Pages.Admin.PatientsAdminView"
+			 x:DataType="vm:PatientsAdminViewModel">
+	<Design.DataContext>
+		<vm:PatientsAdminViewModel />
+	</Design.DataContext>
+
+	<Panel>
+		<Grid>
+			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
+			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Text="{Binding SearchText, Mode=TwoWay}" Watermark="Искать пациента" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
+				<i:Interaction.Behaviors>
+					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
+				</i:Interaction.Behaviors>
+			</AutoCompleteBox>
+
+			<Grid ColumnDefinitions="*,10,auto" Margin="20,125">
+				<ScrollViewer Grid.Column="0">
+					<ItemsControl Name="patients_list">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel Orientation="Horizontal" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate DataType="model:Patient">
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+
+				<drawer:PatientDrawerView Grid.Column="2" />
+			</Grid>
+		</Grid>
+	</Panel>
+</UserControl>
