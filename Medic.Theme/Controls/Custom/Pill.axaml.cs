@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 
@@ -11,8 +12,18 @@ namespace Medic.Theme.Controls.Custom;
 public partial class Pill : TemplatedControl
 {
 #pragma warning disable IDE0044
-	[AvaStyledProperty]
+	public static readonly StyledProperty<bool> IsEditableProperty = AvaloniaProperty.Register<Pill, bool>(
+		nameof(IsEditable),
+		false,
+		defaultBindingMode: BindingMode.TwoWay,
+		enableDataValidation: true
+	);
 	private bool isEditable = false;
+	public bool IsEditable
+	{
+		get => isEditable;
+		set => SetValue(IsEditableProperty, value);
+	}
 
 	[AvaStyledProperty]
 	private string title = string.Empty;
@@ -23,8 +34,18 @@ public partial class Pill : TemplatedControl
 		set => SetValue(TitleProperty, value);
 	}*/
 
-	[AvaStyledProperty]
+	public static readonly StyledProperty<string> ValueProperty = AvaloniaProperty.Register<Pill, string>(
+		nameof(Value),
+		string.Empty,
+		defaultBindingMode: BindingMode.TwoWay,
+		enableDataValidation: true
+	);
 	private string value = string.Empty;
+	public string Value
+	{
+		get => GetValue(ValueProperty);
+		set => SetValue(ValueProperty, value);
+	}
 	/*public static readonly StyledProperty<string> ValueProperty = AvaloniaProperty.Register<Pill, string>("Value", "");
 
 	public string Value

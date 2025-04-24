@@ -32,6 +32,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		_appService = appService;
 
 		FillPatients();
+		FillAnalyses();
 
 		connections.PatientConnection.On<Patient>("PatientAdded", patient =>
 		{
@@ -108,4 +109,52 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 	[ObservableProperty]
 	private int? _selectedPatientIndex = Design.IsDesignMode ? 0 : null;
+
+
+
+	#region Record
+	[ObservableProperty]
+	private ObservableCollection<Analysis> _allAnalyses = [];
+
+	[ObservableProperty]
+	private Analysis? _selectedAnalysis = null;
+
+	async void FillAnalyses()
+	{
+		try
+		{
+			var response = await APIService.For<IAnalysis>().GetAnalyses();
+			if (!response.IsSuccessful)
+				return;
+
+			AllAnalyses = [.. response.Content];
+			SelectedAnalysis = AllAnalyses[0];
+			Log("none", "PatientDoctor");
+		}
+		catch (HttpRequestException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+		}
+		catch (Exception ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
+		}
+	}
+
+	[ObservableProperty]
+	private bool _isRecordButtonEnabled = true;
+
+	[ObservableProperty]
+	private AnalysisOrder _orderRecord = new();
+
+	[ObservableProperty]
+	private PatientAnalysisAddress _orderRecordAddress = new();
+
+	[RelayCommand]
+	private async Task NewOrder()
+	{
+
+	}
+
+	#endregion Record
 }

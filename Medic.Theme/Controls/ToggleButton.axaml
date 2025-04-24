@@ -73,7 +73,7 @@
 
 		<Style Selector="^:checked">
 			<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-				<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}" />
+				<Setter Property="Background" Value="#269fff" />
 				<Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushChecked}" />
 				<Setter Property="Foreground" Value="{DynamicResource ToggleButtonForegroundChecked}" />
 			</Style>
@@ -103,9 +103,10 @@
 			<Setter Property="Foreground" Value="White" />
 			<Setter Property="MinWidth" Value="100" />
 			<Setter Property="Content" Value="Подробнее" />
+			<Setter Property="Padding" Value="10" />
 			<Setter Property="Template">
 				<ControlTemplate>
-					<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="#1A6FEE" BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="#1A6FEE" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 						<ContentPresenter Name="PART_Content" Content="{TemplateBinding Content}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
 					</Border>
 				</ControlTemplate>

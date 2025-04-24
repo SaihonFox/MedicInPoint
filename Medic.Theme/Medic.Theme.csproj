@@ -52,6 +52,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Controls\Custom\DateTimePicker.axaml.cs">
+	    <DependentUpon>DateTimePicker.axaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Controls\Separator.axaml.cs">
 	    <DependentUpon>Separator.axaml</DependentUpon>
 	  </Compile>

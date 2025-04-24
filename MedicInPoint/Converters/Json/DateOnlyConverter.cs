@@ -4,25 +4,13 @@ using Newtonsoft.Json;
 
 namespace MedicInPoint.Converters.Json;
 
-internal class DateOnlyConverter : JsonConverter<DateOnly>
+/*internal class DateOnlyConverter : JsonConverter<DateOnly>
 {
 	private static readonly string[] formats = [
 		"yyyy-MM-dd",
-		"yyyy-M-dd",
-		"yyyy-MM-d",
-		"yyyy-M-d",
 		"dd-MM-yyyy",
-		"dd-M-yyyy",
-		"d-MM-yyyy",
-		"d-M-yyyy",
 		"yyyy.MM.dd",
-		"yyyy.M.dd",
-		"yyyy.MM.d",
-		"yyyy.M.d",
 		"dd.MM.yyyy",
-		"dd.M.yyyy",
-		"d.MM.yyyy",
-		"d.M.yyyy"
 	];
 
 	public override DateOnly ReadJson(JsonReader reader, Type objectType, DateOnly existingValue, bool hasExistingValue, JsonSerializer serializer)
@@ -41,4 +29,4 @@ internal class DateOnlyConverter : JsonConverter<DateOnly>
 
 	public override async void WriteJson(JsonWriter writer, DateOnly value, JsonSerializer serializer) =>
 		await writer.WriteValueAsync(value.ToString("dd.MM.yyyy", CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat));
-}
+}*/

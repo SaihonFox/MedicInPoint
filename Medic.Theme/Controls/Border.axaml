@@ -9,6 +9,7 @@
 	<ControlTheme x:Key="{x:Type Border}" TargetType="Border">
 		<Style Selector="^.drawerbg">
 			<Setter Property="Background" Value="White" />
+			<Setter Property="Padding" Value="16" />
 			<Setter Property="CornerRadius" Value="24" />
 			<Setter Property="ClipToBounds" Value="False" />
 			<Setter Property="Effect">

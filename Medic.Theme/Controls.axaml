@@ -40,6 +40,7 @@
 		<ResourceInclude Source="Controls/Custom/ImageButton.axaml" />
 		<ResourceInclude Source="Controls/Custom/MenuItem.axaml" />
 		<ResourceInclude Source="Controls/Custom/Pill.axaml" />
+		<ResourceInclude Source="Controls/Custom/DateTimePicker.axaml" />
 		<ResourceInclude Source="Controls/Custom/ProgressRing/ProgressRing.axaml" />
 	</ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -14,22 +14,26 @@
 	</Design.DataContext>
 	<UserControl.Resources>
 		<converter:ColorByNameConverter x:Key="ColorByNameConverter" />
+		<converter:IntConverter x:Key="IntConverter" />
 	</UserControl.Resources>
 
-	<Grid ClipToBounds="False" HorizontalAlignment="Center">
-		<Border Classes="drawerbg" Padding="16" HorizontalAlignment="Center">
+	<Grid ClipToBounds="False" HorizontalAlignment="Stretch">
+		<Border Classes="drawerbg" Padding="16" HorizontalAlignment="Stretch" MinWidth="500">
 			<StackPanel Orientation="Vertical" Spacing="10">
-				<Grid ColumnDefinitions="*,20,*" IsVisible="{CompiledBinding Request.RequestStateId, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=1}">
-					<Button Grid.Column="0" Command="{CompiledBinding AcceptRequestCommand}" Content="Одобрить" CornerRadius="12" Background="#00B712" Foreground="White" FontWeight="SemiBold" FontSize="24" TextBlock.LineHeight="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="40">
+				<Grid ColumnDefinitions="*,20,*" IsVisible="{CompiledBinding Request.RequestStateId, Converter={StaticResource IntConverter}, ConverterParameter=1}">
+					<Grid.Styles>
+						<Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+							<Setter Property="Background" Value="Gray" />
+						</Style>
+					</Grid.Styles>
+					<Button Grid.Column="0" IsEnabled="{CompiledBinding IsButtonEnabled}" Command="{CompiledBinding AcceptRequestCommand}" Content="Одобрить" CornerRadius="12" Background="#00B712" Foreground="White" FontWeight="SemiBold" FontSize="24" TextBlock.LineHeight="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="40">
 					</Button>
-					<Button Grid.Column="2" Command="{CompiledBinding DeclineRequestCommand}" Content="Отклонить" CornerRadius="12" Background="#FD3535" Foreground="White" FontWeight="SemiBold" FontSize="24" TextBlock.LineHeight="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="40" />
+					<Button Grid.Column="2" IsEnabled="{CompiledBinding IsButtonEnabled}" Command="{CompiledBinding DeclineRequestCommand}" Content="Отклонить" CornerRadius="12" Background="#FD3535" Foreground="White" FontWeight="SemiBold" FontSize="24" TextBlock.LineHeight="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="40" />
 				</Grid>
-				<Grid IsVisible="{CompiledBinding Request.RequestStateId, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}">
-					<TextBlock IsVisible="{CompiledBinding Request.RequestStateId, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}" Text="Заявка одобрена" Foreground="#00B712" FontSize="30" LineHeight="30" HorizontalAlignment="Center" />
-					<TextBlock IsVisible="{CompiledBinding Request.RequestStateId, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=2}" Text="Заявка отклонена" Foreground="#FD3535" FontSize="30" LineHeight="30" HorizontalAlignment="Center" />
-				</Grid>
+				<TextBlock IsVisible="{CompiledBinding Request.RequestStateId, Converter={StaticResource IntConverter}, ConverterParameter=3}" Text="Заявка одобрена" Foreground="#00B712" FontSize="30" LineHeight="30" HorizontalAlignment="Center" />
+				<TextBlock IsVisible="{CompiledBinding Request.RequestStateId, Converter={StaticResource IntConverter}, ConverterParameter=2}" Text="Заявка отклонена" Foreground="#FD3535" FontSize="30" LineHeight="30" HorizontalAlignment="Center" />
 				<StackPanel Orientation="Vertical" Spacing="5">
-					<TextBlock Text="  Адрес" FontSize="14" LineHeight="14" Foreground="#7E7E9A" />
+					<TextBlock Text="Адрес" FontSize="14" LineHeight="14" Foreground="#7E7E9A" Margin="8,0" />
 					<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
 						<TextBlock Text="{CompiledBinding Request.PatientAnalysisAddress.Address}" FontSize="20" LineHeight="20" />
 					</Border>
@@ -67,7 +71,7 @@
 					</Border>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
-					<TextBlock Text="Комментарий" FontSize="14" LineHeight="14" Foreground="#7E7E9A" />
+					<TextBlock Text="Комментарий" FontSize="14" LineHeight="14" Foreground="#7E7E9A" Margin="8,0" />
 					<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
 						<TextBlock Text="{CompiledBinding Request.PatientComment, TargetNullValue=Без комментария}" FontSize="20" LineHeight="20" />
 					</Border>

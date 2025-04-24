@@ -26,14 +26,39 @@
 
 			<Grid ColumnDefinitions="*,10,auto" Margin="20,125">
 				<ScrollViewer Grid.Column="0">
-					<ItemsControl Name="patients_list">
+					<ItemsControl Name="patients_list" ClipToBounds="False" ItemsSource="{CompiledBinding PatientsList}">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<WrapPanel Orientation="Horizontal" />
+								<WrapPanel Orientation="Horizontal" ClipToBounds="False" />
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
 						<ItemsControl.ItemTemplate>
-							<DataTemplate DataType="model:Patient">
+							<DataTemplate>
+								<Grid ClipToBounds="False" Margin="10">
+									<Border Background="White" ClipToBounds="False" CornerRadius="12" Padding="16" MinWidth="335" MinHeight="135">
+										<Border.Effect>
+											<DropShadowEffect BlurRadius="20" Color="#E4E8F5" OffsetX="0" OffsetY="0" />
+										</Border.Effect>
+
+										<Grid RowDefinitions="*,auto">
+											<TextBlock Grid.Row="0" Text="{CompiledBinding FullName}" FontSize="24" TextAlignment="Center" />
+											<Grid Grid.Row="1" ColumnDefinitions="*,auto">
+												<Grid RowDefinitions="auto,auto">
+													<StackPanel Orientation="Horizontal" Spacing="5">
+														<Border CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" Margin="0,2" Width="5" />
+														<Border CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" Margin="0,2" Width="5" />
+														<TextBlock Text="{CompiledBinding Sex}" FontSize="16" />
+													</StackPanel>
+													<TextBlock Grid.Row="1" Text="{CompiledBinding Birthday, StringFormat=dd.MM.yyyy}" FontSize="16" />
+												</Grid>
+
+												<ToggleButton Grid.Column="1" Classes="uc_tb" Padding="10">
+
+												</ToggleButton>
+											</Grid>
+										</Grid>
+									</Border>
+								</Grid>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>

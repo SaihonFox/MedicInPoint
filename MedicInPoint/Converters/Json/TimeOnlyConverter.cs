@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace MedicInPoint.Converters.Json;
 
-internal class TimeOnlyConverter : JsonConverter<TimeOnly>
+/*internal class TimeOnlyConverter : JsonConverter<TimeOnly>
 {
 	public override TimeOnly ReadJson(JsonReader reader, Type objectType, TimeOnly existingValue, bool hasExistingValue, JsonSerializer serializer)
 	{
@@ -20,4 +20,4 @@ internal class TimeOnlyConverter : JsonConverter<TimeOnly>
 
 	public override async void WriteJson(JsonWriter writer, TimeOnly value, JsonSerializer serializer) =>
 		await writer.WriteValueAsync(value.ToString("HH:mm:ss", CultureInfo.GetCultureInfo("ru-RU").DateTimeFormat));
-}
+}*/

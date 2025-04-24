@@ -26,7 +26,7 @@ namespace MedicInPoint;
 
 public partial class App : Application
 {
-	private static IServiceProvider services = null!;
+	public static IServiceProvider services { get; private set; } = null!;
 
 	public override void Initialize()
 	{
@@ -69,8 +69,7 @@ public partial class App : Application
 		services.AddSingleton<MedicSignalRConnections>();
 
 		// Add the HistoryRouter as a service
-		services.AddSingleton(s => 
-			new NestedHistoryRouter<ViewModelBase, MainViewModel>(t => (ViewModelBase)s.GetRequiredService(t)));
+		services.AddSingleton(s => new NestedHistoryRouter<ViewModelBase, MainViewModel>(t => (ViewModelBase)s.GetRequiredService(t)));
 		services.AddSingleton<INotificationService, NotificationService>();
 		services.AddSingleton<MainWindow>();
 		services.AddSingleton<MainView>();
@@ -92,17 +91,17 @@ public partial class App : Application
 
 		services.AddScoped<AuthorizationViewModel>();
 		services.AddTransient<FlyoutMenuViewModel>();
-		services.AddTransient<MenuViewModel>();
+		services.AddSingleton<MenuViewModel>();
 
 		// Admin
 		services.AddTransient<AnalysesAdminViewModel>();
-		services.AddTransient<UsersAdminViewModel>();
-		services.AddTransient<PatientsAdminViewModel>();
-		services.AddTransient<AnalysisCategoriesAdminViewModel>();
+		services.AddSingleton<UsersAdminViewModel>();
+		services.AddSingleton<PatientsAdminViewModel>();
+		services.AddSingleton<AnalysisCategoriesAdminViewModel>();
 
 		// Doctor
-		services.AddTransient<PatientDoctorViewModel>();
-		services.AddTransient<RnRDoctorViewModel>();
+		services.AddSingleton<PatientDoctorViewModel>();
+		services.AddSingleton<RnRDoctorViewModel>();
 
 		// UserControls
 		// Items

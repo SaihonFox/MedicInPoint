@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 
-using MedicInPoint.ViewModels;
-
 namespace MedicInPoint.Views;
 
 public partial class MainWindow : Window

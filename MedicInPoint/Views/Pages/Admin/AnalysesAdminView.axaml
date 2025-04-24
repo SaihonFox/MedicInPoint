@@ -1,12 +1,14 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+	<UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
+			 xmlns:model="using:MedicInPoint.Models"
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
 			 xmlns:dialog="using:MedicInPoint.Views.Pages"
 			 xmlns:item="using:MedicInPoint.Views.UserControls.Items"
 			 xmlns:converter="using:MedicInPoint.Converters"
+			 xmlns:medic="https://github.com/saihonfox"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
 			 mc:Ignorable="d"
@@ -40,9 +42,14 @@
 									<WrapPanel HorizontalAlignment="Center" />
 								</ItemsPanelTemplate>
 							</ItemsControl.ItemsPanel>
+							<ItemsControl.DataTemplates>
+								<DataTemplate DataType="model:Analysis">
+								</DataTemplate>
+							</ItemsControl.DataTemplates>
 						</ItemsControl>
 					</ScrollViewer>
 				</Grid>
+				<medic:Pill IsEditable="True" Title="some t" Value="das" />
 
 				<drawer:AnalysisDrawerView Grid.Column="1" DataContext="{Binding Analysis}" />
 			</Grid>

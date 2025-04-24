@@ -98,6 +98,5 @@
 				</Button>
 			</Panel>
 		</Grid>
-		<labs:ContentDialog Name="cd" FullSizeDesired="True" Title="titel1" Content="some once" PrimaryButtonText="pri" SecondaryButtonText="sec" CloseButtonText="clo" />
 	</Panel>
 </UserControl>

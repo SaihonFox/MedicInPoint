@@ -24,16 +24,12 @@ public partial class AuthorizationViewModel() : ViewModelBase
 	private readonly INotificationService _notificationService = null!;
 	private readonly IAppStateService _service = null!;
 
-	private List<CancellationTokenSource?> cts = [];
-
 	public AuthorizationViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService notificationService, IAppStateService service) : this()
 	{
 		Title = "Авторизация";
 		_router = router;
 		_notificationService = notificationService;
 		_service = service;
-
-		cts = [new CancellationTokenSource()];
 	}
 
 	[ObservableProperty]
@@ -52,41 +48,31 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		if (Login.IsNullOrWhiteSpace() || Password.IsNullOrWhiteSpace())
 			return;
 
-		await Task.Run(async () =>
+		try
 		{
-			try
-			{
-				Logger.Sink!.Log(LogEventLevel.Error, "Hash", cts[0], $"Cts Hash: {cts[0]!.GetHashCode()}");
-				cts[0]!.Cancel();
-				cts[0]!.Dispose();
-				cts[0] = null;
-				cts.Clear();
-				cts.Add(new CancellationTokenSource());
-				using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim(), cts[0]!.Token);
-				Logger.Sink!.Log(LogEventLevel.Error, "Hash", cts[0], $"Cts Hash Complete: {cts[0]!.GetHashCode()}");
-				if (!response.IsSuccessful)
-					return;
+			using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
+			if (!response.IsSuccessful)
+				return;
 
-				var user = response.Content;
-				_service.CurrentUser = user;
-			}
-			catch (ApiException ex)
-			{
-				Logger.Sink!.Log(LogEventLevel.Error, "ApiError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, Uri: {ex.Uri}");
-			}
-			catch (HttpRequestException ex)
-			{
-				Logger.Sink!.Log(LogEventLevel.Error, "HttpError", cts[0]!.Token, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
-			}
-			catch (TargetInvocationException ex)
-			{
-				Logger.Sink!.Log(LogEventLevel.Error, "TargetInvocation", this, "Message: " + ex.TargetSite + ex);
-			}
-			catch (Exception ex)
-			{
-				Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
-			}
-		}, cts[0]!.Token);
+			var user = response.Content;
+			_service.CurrentUser = user;
+		}
+		catch (ApiException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "ApiError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, Uri: {ex.Uri}");
+		}
+		catch (HttpRequestException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+		}
+		catch (TargetInvocationException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "TargetInvocation", this, "Message: " + ex.TargetSite + ex);
+		}
+		catch (Exception ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
+		}
 	}
 
 	async partial void OnLoginChanged(string value) => FindUser();
@@ -108,12 +94,7 @@ public partial class AuthorizationViewModel() : ViewModelBase
 
 			try
 			{
-				await cts[0]!.CancelAsync();
-				cts[0]!.Dispose();
-				cts[0] = null;
-				cts[0] = new CancellationTokenSource();
-				using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim(), cts[0]!.Token);
-				Logger.Sink!.Log(LogEventLevel.Error, "da", this, "nu da: " + response.Error?.Message);
+				using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
 				if (!response.IsSuccessful)
 				{
 					if (response.StatusCode == HttpStatusCode.NotFound)

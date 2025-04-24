@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MedicInPoint.Models;
+﻿namespace MedicInPoint.Models;
 
 public partial class UserLastEnter
 {

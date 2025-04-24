@@ -99,19 +99,6 @@
 				</Border>
 
 				<drawer:PatientDrawerView Grid.Column="5" DataContext="{CompiledBinding SelectedPatient}" HorizontalAlignment="Right" Width="0" />
-				<!-- <Border Grid.Column="5" Classes="drawerbg" Padding="16">
-					<Grid RowDefinitions="auto,10,auto,10,*,10,auto">
-						<TextBlock Grid.Row="0" Text="{CompiledBinding SelectedPatient.FullName}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
-						<Border Grid.Row="2" Background="#DBDBDC" CornerRadius="100" Height="1" />
-
-						<StackPanel Grid.Row="4" Orientation="Vertical" Spacing="10">
-							<medic:Pill Value="{CompiledBinding SelectedPatient.Sex}" Title="Пол" />
-							<medic:Pill Value="{CompiledBinding SelectedPatient.Phone}" Title="Номер телефона" />
-							<medic:Pill Value="{CompiledBinding SelectedPatient.Passport}" Title="Паспорт" />
-							<medic:Pill Value="{CompiledBinding SelectedPatient.Birthday}" Title="Дата рождения" />
-						</StackPanel>
-					</Grid>
-				</Border> -->
 			</Grid>
 		</Grid>
 	</Grid>
