@@ -49,9 +49,9 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			OnSearchTextChanged(SearchText);
 		});
 
-		AppStateService.OnConnectionChange += b =>
+		PortCheckJob.PortStateChanged += (s, e) =>
 		{
-			Dispatcher.UIThread.Invoke(() => _notificationService.Show("connection", b.ToString()));
+			Dispatcher.UIThread.Invoke(() => _notificationService.Show("connection", e.IsPortOpen.ToString()));
 		};
 	}
 
