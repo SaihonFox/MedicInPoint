@@ -25,14 +25,14 @@ public partial class MenuViewModel() : ViewModelBase
 	public ObservableCollection<object> AdminMenu => [
 		new MenuItem { Text = "Список анализов", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/analyses_btn.png"))), HotKey = new KeyGesture(Key.D1, KeyModifiers.Control), Command = new RelayCommand(AdminAnalyses) },
 		new MenuItem { Text = "Список сотрудников", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/users_btn.png"))), HotKey = new KeyGesture(Key.D3, KeyModifiers.Control), Command = new RelayCommand(AdminUsers) },
-		new MenuItem { Text = "Список пациентов", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/patients_btn.png"))), HotKey = new KeyGesture(Key.D2, KeyModifiers.Control), Command = new RelayCommand(AdminPatients) },
+		new MenuItem { Text = "Медицинские карты пациентов", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/patients_btn.png"))), HotKey = new KeyGesture(Key.D2, KeyModifiers.Control), Command = new RelayCommand(AdminPatients) },
 		new MenuItem { Text = "Список категорий", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/categories_btn.png"))), HotKey = new KeyGesture(Key.D4, KeyModifiers.Control), Command = new RelayCommand(AdminAnalysisCategories) },
 
 		new TextBlock { Text = "Документы", FontSize = 40, LineHeight = 40, HorizontalAlignment = HorizontalAlignment.Center },
 	];
 
 	public ObservableCollection<object> DoctorMenu => [
-		new MenuItem { Text = "Карточки пациентов", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/patients_btn.png"))), HotKey = new KeyGesture(Key.D1, KeyModifiers.Control), Command = new RelayCommand(DoctorPatients) },
+		new MenuItem { Text = "Медицинские карты пациентов", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/patients_btn.png"))), HotKey = new KeyGesture(Key.D1, KeyModifiers.Control), Command = new RelayCommand(DoctorPatients) },
 		new MenuItem { Text = "Запросы и запись", ImageSource = new Bitmap(AssetLoader.Open(new Uri("avares://MedicInPoint/Assets/Images/buttons/menu/requests_and_records_btn.png"))), HotKey = new KeyGesture(Key.D2, KeyModifiers.Control), Command = new RelayCommand(DoctorRnR) },
 
 		new TextBlock { Text = "Документы", FontSize = 40, LineHeight = 40, HorizontalAlignment = HorizontalAlignment.Center },

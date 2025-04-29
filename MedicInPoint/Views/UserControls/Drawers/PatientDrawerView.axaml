@@ -41,6 +41,7 @@
 				<medic:Pill IsVisible="{CompiledBinding !Phone, Converter={x:Static ObjectConverters.IsNull}}" Value="{CompiledBinding Phone}" Title="Номер телефона" />
 				<medic:Pill IsVisible="{CompiledBinding !Passport, Converter={x:Static ObjectConverters.IsNull}}" Value="{CompiledBinding Passport}" Title="Паспорт" />
 				<medic:Pill Value="{CompiledBinding Birthday}" Title="Дата рождения" />
+				<medic:Pill IsVisible="{CompiledBinding !Email, Converter={x:Static ObjectConverters.IsNull}}" Value="{CompiledBinding Email}" Title="Электронная почта" />
 			</StackPanel>
 			<TextBlock Grid.Row="4" IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 		</Grid>

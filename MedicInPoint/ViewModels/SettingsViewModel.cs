@@ -2,12 +2,13 @@
 
 namespace MedicInPoint.ViewModels;
 
-public class LogViewModel() : ViewModelBase
+public class SettingsViewModel() : ViewModelBase
 {
 	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router = null!;
 
-	public LogViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router) : this()
+	public SettingsViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router) : this()
 	{
+		Title = "Настройки";
 		_router = router;
 	}
 }

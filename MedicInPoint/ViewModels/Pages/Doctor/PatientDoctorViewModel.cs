@@ -36,13 +36,13 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		{
 			if(patient.AnalysisOrders.FirstOrDefault(o => o.User == appService.CurrentUser) != null)
 				AllPatients.Add(patient);
-			Search();
+			OnSearchTextChanged(SearchText);
 		});
 		connections.PatientConnection.On<Patient>("PatientDeleted", patient =>
 		{
 			if (patient.AnalysisOrders.FirstOrDefault(o => o.User == appService.CurrentUser) != null)
 				AllPatients.Remove(patient);
-			Search();
+			OnSearchTextChanged(SearchText);
 		});
 	}
 
@@ -52,7 +52,12 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		if (!response.IsSuccessStatusCode)
 			return;
 
-		AllPatients = [.. response.Content!];// [.. response.Content!.Where(p => p.AnalysisOrders.Select(o => o.User).ToList().Contains(_appService.CurrentUser))!];
+		AllPatients = [
+			..(Design.IsDesignMode ?
+				response.Content! :
+				response.Content!.Where(p => p.AnalysisOrders.Select(o => o.User).ToList().FirstOrDefault(x => x.Id == _appService.CurrentUser?.Id) != null)
+			)!
+		];
 		Patients = [.. SearchPatientsText()];
 	}
 
@@ -62,22 +67,18 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 	partial void OnSearchTextChanged(string value)
 	{
 		var selectedPatient = SelectedPatient;
+
 		if (value.IsNullOrWhiteSpace())
 			Patients = [.. AllPatients];
 		var patients = SearchPatientsText();
 		if(!patients.SequenceEqual(Patients))
 			Patients = [.. patients];
 
-		if (Patients.Contains(selectedPatient))
+		if (Patients.FirstOrDefault(x => x.Id == selectedPatient?.Id) != null)
 			SelectedPatient = selectedPatient;
 	}
 
 	IEnumerable<Patient> SearchPatientsText() => AllPatients.Where(p => p.FullName.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase));
-
-	void Search()
-	{
-
-	}
 
 	[RelayCommand]
 	private void Back() => _router.Back();

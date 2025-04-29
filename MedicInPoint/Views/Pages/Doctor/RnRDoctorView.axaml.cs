@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 
+using MedicInPoint.API.AIMLAPI.Models;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -17,26 +18,29 @@ namespace MedicInPoint.Views.Pages.Doctor;
 
 public partial class RnRDoctorView : UserControl
 {
-	private readonly RnRDoctorViewModel ViewModel = null!;
+	public RnRDoctorViewModel ViewModel { get; private set; } = null!;
 
 	private readonly MedicSignalRConnections connections = App.services.GetRequiredService<MedicSignalRConnections>();
 
 	public RnRDoctorView()
 	{
-		ViewModel = (RnRDoctorViewModel)DataContext!;
+		Loaded += (s, e) => ViewModel = (RnRDoctorViewModel)DataContext!;
 
 		InitializeComponent();
 
-		if(!Design.IsDesignMode)
+		if (!Design.IsDesignMode)
 			FillRequests();
 
 		connections.RequestConnection.On<Request>("RequestAdded", request => requests_ic.Items.Insert(0, request));
 
-		address_tb.KeyDown += TB_Int_Mask;
-		entrance_tb.KeyDown += TB_Int_Mask;
-		floor_tb.KeyDown += TB_Int_Mask;
-		intercome_tb.KeyDown += TB_Int_Mask;
+		datepicker.MinYear = DateTimeOffset.Now;
+		datepicker.MaxYear = DateTimeOffset.Now.AddMonths(6);
+
+		patients_lb.SelectionChanged += Patients_lb_SelectionChanged;
 	}
+
+	private void Patients_lb_SelectionChanged(object? sender, SelectionChangedEventArgs e) =>
+		FillRequests();
 
 	void TB_Int_Mask(object? source, KeyEventArgs e)
 	{
@@ -51,7 +55,7 @@ public partial class RnRDoctorView : UserControl
 			return;
 
 		requests_ic.Items.Clear();
-		foreach (var request in response.Content!.Reverse<Request>())
+		foreach (var request in response.Content!.Reverse<Request>().Where(x => x.PatientId == (patients_lb.SelectedItem as Patient)?.Id))
 		{
 			requests_ic.Items.Add(new RnRRequest_UserControl_View
 			{

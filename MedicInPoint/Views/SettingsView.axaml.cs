@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace MedicInPoint.Views;
 
-public partial class LogView : UserControl
+public partial class SettingsView : UserControl
 {
-	public LogView()
+	public SettingsView()
 	{
 		InitializeComponent();
 	}

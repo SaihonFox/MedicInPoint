@@ -3,10 +3,12 @@
 using Avalonia.Controls;
 using Avalonia.Logging;
 using Avalonia.SimpleRouter;
+using Avalonia.Threading;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using MedicInPoint.API;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -24,7 +26,12 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	public readonly INotificationService _notificationService = null!;
 	private readonly IAppStateService _appService = null!;
 
-	public RnRDoctorViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService notificationService, IAppStateService appService, MedicSignalRConnections connections) : this()
+	public RnRDoctorViewModel(
+		NestedHistoryRouter<ViewModelBase, MainViewModel> router,
+		INotificationService notificationService,
+		IAppStateService appService,
+		MedicSignalRConnections connections
+	) : this()
 	{
 		Title = "Запросы и запись";
 		_router = router;
@@ -32,22 +39,23 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		_appService = appService;
 
 		FillPatients();
+		FillRequests();
 		FillAnalyses();
 
 		connections.PatientConnection.On<Patient>("PatientAdded", patient =>
 		{
 			if (patient.AnalysisOrders.FirstOrDefault(o => o.User == appService.CurrentUser) != null)
 				AllPatients.Add(patient);
-			Search();
+			OnSearchTextChanged(SearchText);
 		});
-		connections.PatientConnection.On<Patient>("PatientDeleted", patient =>
+
+		AppStateService.OnConnectionChange += b =>
 		{
-			if (patient.AnalysisOrders.FirstOrDefault(o => o.User == appService.CurrentUser) != null)
-				AllPatients.Remove(patient);
-			Search();
-		});
+			Dispatcher.UIThread.Invoke(() => _notificationService.Show("connection", b.ToString()));
+		};
 	}
 
+	#region Fill Methods
 	async void FillPatients()
 	{
 		try
@@ -56,7 +64,8 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			if (!response.IsSuccessful)
 				return;
 
-			Patients = [.. response.Content.Reverse()!];
+			AllPatients = [..response.Content];
+			Patients = [.. AllPatients];
 			//SelectedPatientIndex = 0;
 			Log("none", "PatientDoctor");
 		}
@@ -69,6 +78,29 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
 		}
 	}
+
+	async void FillRequests()
+	{
+		try
+		{
+			var response = await APIService.For<IRequest>().GetRequests();
+			if (!response.IsSuccessful)
+				return;
+
+			AllRequests = [.. response.Content];
+			Requests = [.. AllRequests];
+			Log("none", "PatientDoctor");
+		}
+		catch (HttpRequestException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+		}
+		catch (Exception ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
+		}
+	}
+	#endregion Fill Methods
 
 	[ObservableProperty]
 	private string _searchText = string.Empty;
@@ -86,12 +118,38 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			SelectedPatient = selectedPatient;
 	}
 
-	IEnumerable<Patient> SearchPatientsText() => AllPatients.Where(p => p.FullName.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase));
-
-	void Search()
+	async void FillAnalyses()
 	{
-		
+		try
+		{
+			var response = await APIService.For<IAnalysis>().GetAnalyses();
+			if (!response.IsSuccessful)
+				return;
+
+			AllAnalyses = [.. response.Content];
+			
+			SelectedAnalysis = AllAnalyses[0];
+			Log("none", "PatientDoctor");
+		}
+		catch (HttpRequestException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+		}
+		catch (Exception ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
+		}
 	}
+
+	partial void OnSelectedPatientChanged(Patient? value)
+	{
+		if (value == null)
+			return;
+
+		Requests = [.. AllRequests.Where(x => x.PatientId == value.Id)];
+	}
+
+	IEnumerable<Patient> SearchPatientsText() => AllPatients.Where(p => p.FullName.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase));
 
 	[RelayCommand]
 	private void Back() => _router.Back();
@@ -101,8 +159,13 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			new Patient { Surname = "Тулькубаев", Name = "Ильнар", Sex = "Мужской", Phone = "89123456789", Birthday = new(2005, 04, 22), Passport = "8019123456" },
 			new Patient { Surname = "Набиева", Name = "Лиана", Patronym = "Рамилевна", Sex = "Женский", Phone = "89098765432", Birthday = new(1999, 05, 25), Passport = "8020123456" },
 		];
+
+	[ObservableProperty]
+	private ObservableCollection<Request> _allRequests = [];
 	[ObservableProperty]
 	private ObservableCollection<Patient> _patients = [];
+	[ObservableProperty]
+	private ObservableCollection<Request> _requests = [];
 
 	[ObservableProperty]
 	private Patient? _selectedPatient = null;
@@ -118,28 +181,6 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 	[ObservableProperty]
 	private Analysis? _selectedAnalysis = null;
-
-	async void FillAnalyses()
-	{
-		try
-		{
-			var response = await APIService.For<IAnalysis>().GetAnalyses();
-			if (!response.IsSuccessful)
-				return;
-
-			AllAnalyses = [.. response.Content];
-			SelectedAnalysis = AllAnalyses[0];
-			Log("none", "PatientDoctor");
-		}
-		catch (HttpRequestException ex)
-		{
-			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
-		}
-		catch (Exception ex)
-		{
-			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
-		}
-	}
 
 	[ObservableProperty]
 	private bool _isRecordButtonEnabled = true;

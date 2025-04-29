@@ -3,6 +3,7 @@
 			 x:Class="MedicInPoint.App"
 			 xmlns:local="using:MedicInPoint"
 			 xmlns:labs="using:Avalonia.Labs.Controls"
+			 xmlns:semi="https://irihi.tech/semi"
 			 xmlns:medic="https://github.com/saihonfox"
 			 xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
 			 RequestedThemeVariant="Light">
@@ -14,6 +15,7 @@
 
 	<Application.Styles>
 		<FluentTheme />
+		<semi:SemiTheme Locale="ru-RU" />
 		<medic:MedicTheme />
 		<labs:ControlThemes />
 

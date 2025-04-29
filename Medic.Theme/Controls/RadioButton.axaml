@@ -76,11 +76,11 @@
 			<Setter Property="Padding" Value="15,5" />
 
 			<Setter Property="MinWidth" Value="100" />
-			<Setter Property="Height" Value="50" />
+			<Setter Property="MinHeight" Value="50" />
 
 			<Setter Property="Template">
 				<ControlTemplate>
-					<Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="{TemplateBinding MinWidth}" Height="{TemplateBinding Height}">
+					<Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="{TemplateBinding MinWidth}" MinHeight="{TemplateBinding MinHeight}">
 						<Border.Transitions>
 							<Transitions>
 								<BrushTransition Property="Background" Duration="0:0:.2" Easing="QuadraticEaseIn" />

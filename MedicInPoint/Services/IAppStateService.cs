@@ -2,7 +2,7 @@
 
 namespace MedicInPoint.Services;
 
-public interface IAppStateService
+public interface IAppStateService : IDisposable
 {
 	public User? CurrentUser { get; set; }
 }

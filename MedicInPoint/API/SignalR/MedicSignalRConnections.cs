@@ -51,7 +51,7 @@ public class MedicSignalRConnections : IAsyncDisposable
 
 	public async ValueTask DisposeAsync()
 	{
-		if(AnalysisConnection != null)
+		if (AnalysisConnection != null)
 			await AnalysisConnection.DisposeAsync();
 		if (AnalysisCategoryConnection != null)
 			await AnalysisCategoryConnection.DisposeAsync();

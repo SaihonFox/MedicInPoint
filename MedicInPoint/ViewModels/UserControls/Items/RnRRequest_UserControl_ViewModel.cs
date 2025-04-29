@@ -39,7 +39,7 @@ public partial class RnRRequest_UserControl_ViewModel() : ViewModelBase
 		IsButtonEnabled = true;
 		if (request == null)
 			return;
-
+		
 		_notificationService?.Show("Запрос", $"Запрос одобрен");
 		Request = request;
 	}

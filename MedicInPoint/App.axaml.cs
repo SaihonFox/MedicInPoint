@@ -49,6 +49,7 @@ public partial class App : Application
 				var viewModel = services.GetRequiredService<MainViewModel>();
 				mainWindow.DataContext = viewModel;
 				desktop.MainWindow = mainWindow;
+				desktop.MainWindow.Closed += (s, e) => services.GetRequiredService<IAppStateService>().Dispose();
 				break;
 			case ISingleViewApplicationLifetime singleViewPlatform:
 				var mainView = services.GetRequiredService<MainView>();
@@ -87,7 +88,7 @@ public partial class App : Application
 		services.AddSingleton<MainViewModel>();
 
 		services.AddSingleton<LoadingViewModel>();
-		services.AddSingleton<LogViewModel>();
+		services.AddSingleton<SettingsViewModel>();
 
 		services.AddScoped<AuthorizationViewModel>();
 		services.AddTransient<FlyoutMenuViewModel>();

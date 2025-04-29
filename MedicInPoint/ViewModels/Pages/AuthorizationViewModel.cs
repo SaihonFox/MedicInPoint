@@ -75,9 +75,9 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		}
 	}
 
-	async partial void OnLoginChanged(string value) => FindUser();
+	async partial void OnLoginChanged(string value) => await FindUser();
 
-	async partial void OnPasswordChanged(string value) => FindUser();
+	async partial void OnPasswordChanged(string value) => await FindUser();
 
 	[RelayCommand]
 	private async Task Enter()

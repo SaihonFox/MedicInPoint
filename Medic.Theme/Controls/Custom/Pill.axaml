@@ -25,7 +25,7 @@
 		<Setter Property="ValueForeground" Value="Black" />
 		<Setter Property="TitleForeground" Value="#939396" />
 
-		<Setter Property="IsEditable" Value="True" />
+		<Setter Property="IsEditable" Value="False" />
 
 		<Setter Property="Template">
 			<ControlTemplate>
@@ -46,6 +46,7 @@
 										   VerticalAlignment="Center" />
 								<TextBox Name="PART_TextBoxValue" IsVisible="{Binding IsEditable}"
 										 Text="{Binding Value, Mode=TwoWay}" FontSize="{TemplateBinding ValueFontSize}"
+										 IsReadOnly="{Binding !IsEditable}"
 										 LineHeight="{TemplateBinding ValueFontSize}"
 										 TextAlignment="Center" TextWrapping="WrapWithOverflow"
 										 Background="Transparent" Foreground="{TemplateBinding ValueForeground}"

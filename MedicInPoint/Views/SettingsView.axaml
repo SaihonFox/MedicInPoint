@@ -5,15 +5,14 @@
 			 xmlns:vm="using:MedicInPoint.ViewModels"
 			 mc:Ignorable="d"
 			 d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="MedicInPoint.Views.LogView"
-			 x:DataType="vm:LogViewModel">
+			 x:Class="MedicInPoint.Views.SettingsView"
+			 x:DataType="vm:SettingsViewModel">
 	<Design.DataContext>
-		<vm:LogViewModel />
+		<vm:SettingsViewModel />
 	</Design.DataContext>
 
 	<Grid>
 		<Grid RowDefinitions="auto,*">
-			<TextBlock Grid.Row="0" Text="Логи" FontSize="24" HorizontalAlignment="Center" />
 
 		</Grid>
 	</Grid>

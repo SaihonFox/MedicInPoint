@@ -12,7 +12,7 @@
 	</Design.DataContext>
 
 	<Grid>
-		<TransitioningContentControl Content="{Binding Content}">
+		<TransitioningContentControl Content="{Binding Content}" Margin="0,30,0,0">
 			<TransitioningContentControl.PageTransition>
 				<CrossFade Duration="0:00:00.500" />
 			</TransitioningContentControl.PageTransition>
@@ -20,7 +20,8 @@
 
 		<Menu Height="30" VerticalAlignment="Top">
 			<MenuItem Header="Меню">
-				
+				<MenuItem Header="Папка конфигураций" Command="{CompiledBinding OpenExplorerCommand}" />
+				<MenuItem Header="Настройки" ToggleType="CheckBox" Command="{CompiledBinding OpenSettingsCommand}" CommandParameter="{CompiledBinding $self.IsChecked}" />
 			</MenuItem>
 		</Menu>
 

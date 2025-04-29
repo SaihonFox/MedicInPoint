@@ -20,25 +20,25 @@
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,45,0,0" HorizontalAlignment="Left" />
 
 			<Grid ColumnDefinitions="300,*,300" Margin="25,100">
-				<AutoCompleteBox Grid.Column="0" Name="acb" Classes="search" Text="{CompiledBinding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsDropDownOpen="False" Watermark="Искать пациента" FilterMode="ContainsOrdinal" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="300" Height="50">
+				<AutoCompleteBox Grid.Column="0" Name="acb" Classes="search" Text="{CompiledBinding SearchText, Mode=TwoWay}" IsDropDownOpen="False" Watermark="Искать пациента" FilterMode="ContainsOrdinal" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="300" Height="50">
 					<i:Interaction.Behaviors>
 						<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
 					</i:Interaction.Behaviors>
 				</AutoCompleteBox>
 
-				<Grid Grid.Column="1" ColumnDefinitions="auto,20,auto" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50">
-					<RadioButton Classes="ac" Grid.Column="0" GroupName="a_c_group" Name="analyses_results_rb"
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50">
+					<RadioButton Classes="ac" Grid.Column="0" GroupName="a_c_group" Name="analyses_results_rb" IsVisible="False"
 								 IsChecked="True"
 								 Content="Результаты анализов"
 								 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
 								 HorizontalAlignment="Right"
 								 Height="50" />
-					<RadioButton Classes="ac" Grid.Column="2" GroupName="a_c_group" Name="chat_rb"
+					<RadioButton Classes="ac" Grid.Column="2" GroupName="a_c_group" Name="chat_rb" IsVisible="False"
 								 Content="Чат"
 								 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
 								 HorizontalAlignment="Left"
 								 Height="50" />
-				</Grid>
+				</StackPanel>
 			</Grid>
 
 			<Grid ColumnDefinitions="300,25,*,25,300" Margin="25,175,25,25">

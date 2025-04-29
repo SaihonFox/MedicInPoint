@@ -4,8 +4,8 @@ namespace MedicInPoint.Views.Pages.Doctor;
 
 public partial class PatientDoctorView : UserControl
 {
-    public PatientDoctorView()
-    {
-        InitializeComponent();
-    }
+	public PatientDoctorView()
+	{
+		InitializeComponent();
+	}
 }
