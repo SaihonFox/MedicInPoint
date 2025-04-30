@@ -1,8 +1,12 @@
 ﻿using System.Net.Sockets;
 
+using Avalonia.Threading;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using MedicInPoint.Models;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Quartz;
 using Quartz.Impl;
@@ -37,7 +41,7 @@ public partial class AppStateService : ObservableObject, IAppStateService
 				 .RepeatForever()
 			)
 			.Build();
-
+		
 		await scheduler.ScheduleJob(job, trigger, cts.Token);
 		await scheduler.Start(cts.Token);
 	}
@@ -59,7 +63,22 @@ public partial class AppStateService : ObservableObject, IAppStateService
 public class PortCheckJob : IJob
 {
 	private static bool _previousState = false;
-	public static event EventHandler<PortStateChangedEventArgs> PortStateChanged = null!;
+	public static EventHandler<PortStateChangedEventArgs> PortStateChanged = null!;
+
+	private readonly TcpClient client = new TcpClient
+	{
+		ReceiveTimeout = 0,
+		SendTimeout = 0,
+		LingerState = new LingerOption(true, 0),
+		NoDelay = true,
+		Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+		{
+			ReceiveTimeout = 0,
+			SendTimeout = 0,
+			LingerState = new LingerOption(true, 0),
+			NoDelay = true
+		}
+	};
 
 	public async Task Execute(IJobExecutionContext context) =>
 		await CheckPortAsync(context);
@@ -67,6 +86,7 @@ public class PortCheckJob : IJob
 	private async Task CheckPortAsync(IJobExecutionContext context)
 	{
 		bool currentState = await IsPortOpenAsync(context);
+		await File.AppendAllTextAsync(@"C:\Users\ILNAR\Desktop\ping.txt", $"1|time: {context.ScheduledFireTimeUtc:HH.mm.ss.ffffff} | available: {client.Connected}\n");
 
 		if (currentState != _previousState)
 		{
@@ -77,22 +97,9 @@ public class PortCheckJob : IJob
 
 	private async Task<bool> IsPortOpenAsync(IJobExecutionContext context)
 	{
-		using var client = new TcpClient
-		{
-			ReceiveTimeout = 0,
-			SendTimeout = 0,
-			LingerState = new LingerOption(true, 0),
-			NoDelay = true
-		};
-		client.Client.ReceiveTimeout = 0;
-		client.Client.SendTimeout = 0;
-		client.Client.LingerState = new LingerOption(true, 0);
-		client.Client.NoDelay = true;
 		try
 		{
-			var task = client.ConnectAsync("localhost", 5033);
-			if (task.Wait(50) && !client.Connected)
-				return false;
+			await client.ConnectAsync("localhost", 5033).ConfigureAwait(false);
 			return true;
 		}
 		catch (Exception)

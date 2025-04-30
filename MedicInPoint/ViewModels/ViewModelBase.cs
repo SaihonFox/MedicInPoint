@@ -13,5 +13,5 @@ public abstract partial class ViewModelBase : ObservableObject, ISimpleRoute<Vie
 	private string _title;
 
 	protected async void Log(string message, string tag = "MIP") =>
-		await File.AppendAllTextAsync(Environment.CurrentDirectory + "/log.txt", $"[{DateTime.Now:H:m:s.fffffff}]#{tag}: message\n");
+		await File.AppendAllTextAsync(Environment.CurrentDirectory + "/log.txt", $"[{DateTime.Now:H:m:s.fffffff}]#{tag}: {message}\n");
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Net.Sockets;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Logging;
 using Avalonia.SimpleRouter;
 using Avalonia.Threading;
@@ -17,6 +19,8 @@ using MedicInPoint.Models;
 using MedicInPoint.Services;
 
 using Microsoft.AspNetCore.SignalR.Client;
+
+using Refit;
 
 namespace MedicInPoint.ViewModels.Pages.Doctor;
 
@@ -51,27 +55,60 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 		PortCheckJob.PortStateChanged += (s, e) =>
 		{
-			Dispatcher.UIThread.Invoke(() => _notificationService.Show("connection", e.IsPortOpen.ToString()));
+			//Dispatcher.UIThread.Invoke(() => _notificationService.Show("connection rnr", e.IsPortOpen.ToString()));
 		};
 	}
 
 	#region Fill Methods
-	async void FillPatients()
+	async Task FillPatients()
 	{
 		try
 		{
-			var response = await APIService.For<IPatient>().GetPatients();
-			if (!response.IsSuccessful)
+			var response = await APIService.For<IPatient>().GetPatients().ConfigureAwait(false);
+			if (!response?.IsSuccessful ?? false)
 				return;
 
-			AllPatients = [..response.Content];
-			Patients = [.. AllPatients];
-			//SelectedPatientIndex = 0;
-			Log("none", "PatientDoctor");
+			//AllPatients = [.. response.Content];
+			//Patients = [.. AllPatients];
+		}
+		catch (HttpRequestException ex) when (ex.GetBaseException() is SocketException sex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "SHttpError", this, $"|Patients|Message: {sex.Message}\nStatus code: {sex.ErrorCode}, RequestError: {sex.SocketErrorCode}");
+			if (sex.SocketErrorCode == SocketError.ConnectionReset)
+				Dispatcher.UIThread.Invoke(() => _notificationService.Show("Уведомление!", "Подключение прервано", NotificationType.Error));
 		}
 		catch (HttpRequestException ex)
 		{
-			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"|Patients|Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+			Dispatcher.UIThread.Invoke(() => _notificationService.Show("Уведомление!", ex.Message, NotificationType.Error));
+		}
+		catch (Exception ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, $"{ex.GetBaseException().GetType().FullName}-{ex.HResult}|Message: {ex.Message}\nsource: {ex.GetType().FullName}");
+		}
+	}
+
+	async Task FillRequests()
+	{
+		try
+		{
+			var response = await APIService.For<IRequest>().GetRequests().ConfigureAwait(false);
+			if (!response?.IsSuccessful ?? false)
+				return;
+
+			//AllRequests = [.. response.Content];
+			//Requests = [.. AllRequests];
+		}
+		catch (HttpRequestException ex) when (ex.GetBaseException() is SocketException sex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "SHttpError", this, $"|Requests|Message: {sex.Message}\nStatus code: {sex.ErrorCode}, RequestError: {sex.SocketErrorCode}");
+			if (sex.SocketErrorCode == SocketError.ConnectionReset)
+				Dispatcher.UIThread.Invoke(() => _notificationService.Show("Уведомление!", "Подключение прервано", NotificationType.Error));
+		}
+		catch (HttpRequestException ex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"|Requests|Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+			Dispatcher.UIThread.Invoke(() => _notificationService.Show("Уведомление!", ex.Message, NotificationType.Error));
 		}
 		catch (Exception ex)
 		{
@@ -79,21 +116,27 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		}
 	}
 
-	async void FillRequests()
+	async Task FillAnalyses()
 	{
 		try
 		{
-			var response = await APIService.For<IRequest>().GetRequests();
-			if (!response.IsSuccessful)
+			var response = await APIService.For<IAnalysis>().GetAnalyses().ConfigureAwait(false);
+			if (!response?.IsSuccessful ?? false)
 				return;
 
-			AllRequests = [.. response.Content];
-			Requests = [.. AllRequests];
-			Log("none", "PatientDoctor");
+			//AllAnalyses = [.. response.Content];
+			//SelectedAnalysis = AllAnalyses[0];
+		}
+		catch (HttpRequestException ex) when (ex.GetBaseException() is SocketException sex && ex.InnerException is IOException ioex)
+		{
+			Logger.Sink!.Log(LogEventLevel.Error, "SHttpError", this, $"|Analyses|Message: {sex.Message}\n, RequestError: {sex.SocketErrorCode}");
+			if (sex.SocketErrorCode == SocketError.ConnectionReset)
+				Dispatcher.UIThread.Invoke(() => _notificationService.Show("Уведомление!", ioex.Message, NotificationType.Error));
 		}
 		catch (HttpRequestException ex)
 		{
-			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"|Analyses|Message: {ex.Message}\n\t\tStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+			Dispatcher.UIThread.Invoke(() => _notificationService.Show("Уведомление!", ex.Message, NotificationType.Error));
 		}
 		catch (Exception ex)
 		{
@@ -116,29 +159,6 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 		if (Patients.Contains(selectedPatient))
 			SelectedPatient = selectedPatient;
-	}
-
-	async void FillAnalyses()
-	{
-		try
-		{
-			var response = await APIService.For<IAnalysis>().GetAnalyses();
-			if (!response.IsSuccessful)
-				return;
-
-			AllAnalyses = [.. response.Content];
-			
-			SelectedAnalysis = AllAnalyses[0];
-			Log("none", "PatientDoctor");
-		}
-		catch (HttpRequestException ex)
-		{
-			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
-		}
-		catch (Exception ex)
-		{
-			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
-		}
 	}
 
 	partial void OnSelectedPatientChanged(Patient? value)

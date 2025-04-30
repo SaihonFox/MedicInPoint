@@ -1,10 +1,10 @@
-﻿using System.Globalization;
-using System.Net;
+﻿using System.Net;
 using System.Reflection;
 
 using Avalonia.Controls.Notifications;
 using Avalonia.Logging;
 using Avalonia.SimpleRouter;
+using Avalonia.Threading;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -30,6 +30,12 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		_router = router;
 		_notificationService = notificationService;
 		_service = service;
+
+		PortCheckJob.PortStateChanged += async (s, e) =>
+		{
+			if (e.IsPortOpen)
+				await Dispatcher.UIThread.Invoke(async() => await FindUser().ConfigureAwait(false)).ConfigureAwait(false);
+		};
 	}
 
 	[ObservableProperty]
