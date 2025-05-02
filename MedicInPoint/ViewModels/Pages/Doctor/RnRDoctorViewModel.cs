@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq.Dynamic.Core;
 using System.Net.Sockets;
 
 using Avalonia.Controls;
@@ -223,10 +224,13 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	[RelayCommand]
 	private async Task NewOrder()
 	{
+		OrderRecord.UserId = _appService.CurrentUser!.Id;
+		OrderRecord.PatientId = SelectedPatient!.Id;
+		OrderRecord.RegistrationDate = DateTime.Now;
 		OrderRecord.AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.DateTime), TimeOnly.FromTimeSpan(SelectedTime));
 
 		var response = await APIService.For<IAnalysisOrder>().NewOrder((OrderRecord, OrderRecordAddress, AnalysesInRecord.ToList()));
-		_notificationService.Show("Отправка", response.ReasonPhrase);
+		_notificationService.Show("Отправка", string.Join(", ", response.ContentHeaders.ToList().Select(x => $"{x.Key}-{x.Value}")));
 	}
 
 	[RelayCommand]
