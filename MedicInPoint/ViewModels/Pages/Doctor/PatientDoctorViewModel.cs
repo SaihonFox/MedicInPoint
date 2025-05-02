@@ -52,11 +52,11 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		if (!response.IsSuccessStatusCode)
 			return;
 
-		AllPatients = [
-			..(Design.IsDesignMode ?
+		AllPatients = [..response.Content!.Where(p => p.AnalysisOrders.Select(o => o.User).ToList().FirstOrDefault(x => x.Id == _appService.CurrentUser?.Id) != null)
+			/*..(Design.IsDesignMode ?
 				response.Content! :
 				response.Content!.Where(p => p.AnalysisOrders.Select(o => o.User).ToList().FirstOrDefault(x => x.Id == _appService.CurrentUser?.Id) != null)
-			)!
+			)*/
 		];
 		Patients = [.. SearchPatientsText()];
 	}

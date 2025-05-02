@@ -10,7 +10,8 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using MedicInPoint.API;
+using Medic.API.Refit.Placeholders;
+
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -19,8 +20,6 @@ using MedicInPoint.Models;
 using MedicInPoint.Services;
 
 using Microsoft.AspNetCore.SignalR.Client;
-
-using Refit;
 
 namespace MedicInPoint.ViewModels.Pages.Doctor;
 
@@ -42,6 +41,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		_notificationService = notificationService;
 		_appService = appService;
 
+
 		FillPatients();
 		FillRequests();
 		FillAnalyses();
@@ -53,10 +53,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			OnSearchTextChanged(SearchText);
 		});
 
-		PortCheckJob.PortStateChanged += (s, e) =>
-		{
-			//Dispatcher.UIThread.Invoke(() => _notificationService.Show("connection rnr", e.IsPortOpen.ToString()));
-		};
+		AnalysesInRecord.CollectionChanged += (s, e) => AnalysesInRecordTotalPrice = AnalysesInRecord.Sum(x => x.Price);
 	}
 
 	#region Fill Methods
@@ -65,11 +62,11 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		try
 		{
 			var response = await APIService.For<IPatient>().GetPatients().ConfigureAwait(false);
-			if (!response?.IsSuccessful ?? false)
+			if (!response.IsSuccessful)
 				return;
 
-			//AllPatients = [.. response.Content];
-			//Patients = [.. AllPatients];
+			AllPatients = [.. response.Content];
+			Patients = [.. AllPatients];
 		}
 		catch (HttpRequestException ex) when (ex.GetBaseException() is SocketException sex)
 		{
@@ -96,8 +93,8 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			if (!response?.IsSuccessful ?? false)
 				return;
 
-			//AllRequests = [.. response.Content];
-			//Requests = [.. AllRequests];
+			AllRequests = [.. response.Content];
+			Requests = [.. AllRequests];
 		}
 		catch (HttpRequestException ex) when (ex.GetBaseException() is SocketException sex)
 		{
@@ -124,8 +121,8 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			if (!response?.IsSuccessful ?? false)
 				return;
 
-			//AllAnalyses = [.. response.Content];
-			//SelectedAnalysis = AllAnalyses[0];
+			AllAnalyses = [.. response.Content];
+			SelectedAnalysis = AllAnalyses[0];
 		}
 		catch (HttpRequestException ex) when (ex.GetBaseException() is SocketException sex && ex.InnerException is IOException ioex)
 		{
@@ -206,16 +203,44 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	private bool _isRecordButtonEnabled = true;
 
 	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(AnalysesInRecordTotalPrice))]
+	private ObservableCollection<Analysis> _analysesInRecord = [];
+
+	[ObservableProperty]
 	private AnalysisOrder _orderRecord = new();
 
 	[ObservableProperty]
 	private PatientAnalysisAddress _orderRecordAddress = new();
 
+	[ObservableProperty]
+	public decimal _analysesInRecordTotalPrice = 0;
+
+	[ObservableProperty]
+	private DateTimeOffset _selectedDate;
+	[ObservableProperty]
+	private TimeSpan _selectedTime;
+
 	[RelayCommand]
 	private async Task NewOrder()
 	{
+		OrderRecord.AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.DateTime), TimeOnly.FromTimeSpan(SelectedTime));
 
+		var response = await APIService.For<IAnalysisOrder>().NewOrder((OrderRecord, OrderRecordAddress, AnalysesInRecord.ToList()));
+		_notificationService.Show("Отправка", response.ReasonPhrase);
 	}
+
+	[RelayCommand]
+	private void AddAnalysis2Record()
+	{
+		if (AnalysesInRecord.Contains(SelectedAnalysis!))
+			_notificationService.Show("Уведомление", "Список уже содержит текущий анализ");
+		if(SelectedAnalysis != null && !AnalysesInRecord.Contains(SelectedAnalysis))
+			AnalysesInRecord.Add(SelectedAnalysis);
+	}
+
+	[RelayCommand]
+	private void DeleteAnalysis(Analysis analysis) =>
+		AnalysesInRecord.Remove(analysis);
 
 	#endregion Record
 }

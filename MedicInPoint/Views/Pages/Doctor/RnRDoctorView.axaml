@@ -5,6 +5,8 @@
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Doctor"
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
 			 xmlns:medic="https://github.com/saihonfox"
+			 xmlns:converter="using:MedicInPoint.Converters"
+			 xmlns:model="using:MedicInPoint.Models"
 			 xmlns:i="using:Avalonia.Xaml.Interactivity"
 			 xmlns:ic="using:Avalonia.Xaml.Interactions.Core"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
@@ -16,6 +18,10 @@
 	<Design.DataContext>
 		<vm:RnRDoctorViewModel />
 	</Design.DataContext>
+	<UserControl.Resources>
+		<converter:IntConverter x:Key="IntConverter" />
+		<converter:ColorByNameConverter x:Key="ColorByNameConverter" />
+	</UserControl.Resources>
 
 	<Grid>
 		<Grid>
@@ -43,61 +49,68 @@
 				</Grid>
 			</Grid>
 
-			<Grid ColumnDefinitions="300,*,300" ColumnSpacing="25" ClipToBounds="False" Margin="25,175,25,25">
+			<Grid ColumnDefinitions="300,*,auto" ColumnSpacing="25" ClipToBounds="False" Margin="25,175,25,25">
 				<!--#region Patients List -->
-				<Border Grid.Column="0" Classes="drawerbg" ClipToBounds="False" Padding="6">
-					<ListBox Name="patients_lb" ClipToBounds="False" ItemsSource="{CompiledBinding Patients}" Background="Transparent" SelectionMode="Single" SelectedIndex="{CompiledBinding SelectedPatientIndex, Mode=TwoWay}" SelectedItem="{CompiledBinding SelectedPatient, Mode=TwoWay}" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-						<ListBox.ItemsPanel>
-							<ItemsPanelTemplate>
-								<StackPanel ClipToBounds="False" Orientation="Vertical" />
-							</ItemsPanelTemplate>
-						</ListBox.ItemsPanel>
-						<ListBox.Styles>
-							<Style Selector="ListBoxItem">
-								<Setter Property="Padding" Value="10,5" />
-								<Setter Property="ClipToBounds" Value="False" />
-								<Setter Property="Transitions">
-									<Transitions>
-										<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
-									</Transitions>
-								</Setter>
-							</Style>
-							<Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
-								<Setter Property="ClipToBounds" Value="False" />
-								<Setter Property="Background" Value="Transparent" />
-							</Style>
-							<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-								<Setter Property="ClipToBounds" Value="False" />
-								<Setter Property="Background" Value="Transparent" />
-								<Setter Property="Effect">
-									<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
-								</Setter>
-								<Setter Property="RenderTransform" Value="scale(1.02)" />
-							</Style>
-							<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-								<Setter Property="ClipToBounds" Value="False" />
-								<Setter Property="Background" Value="Transparent" />
-								<Setter Property="Effect">
-									<DropShadowEffect Color="#BFBEBE" BlurRadius="20" OffsetX="0" OffsetY="0" />
-								</Setter>
-							</Style>
-						</ListBox.Styles>
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<Border ClipToBounds="False" CornerRadius="16" Background="#F5F5F9" Padding="10">
-									<Grid ColumnDefinitions="auto,5,*">
-										<Border Grid.Column="0" CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" Width="5" />
-										<Border Grid.Column="0" CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" Width="5" />
-										<TextBlock Grid.Column="2" Text="{CompiledBinding FullName}" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
-									</Grid>
-								</Border>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
-				</Border>
+				<Grid Grid.Column="0" RowDefinitions="auto,*" RowSpacing="10">
+					<TextBlock Grid.Row="0" Text="Список пациентов" FontSize="30" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" />
+					<Border Grid.Row="1" Classes="drawerbg" ClipToBounds="False" Padding="6">
+						<Grid>
+							<ListBox Name="patients_lb" ClipToBounds="False" ItemsSource="{CompiledBinding Patients}" Background="Transparent" SelectionMode="Single" SelectedIndex="{CompiledBinding SelectedPatientIndex, Mode=TwoWay}" SelectedItem="{CompiledBinding SelectedPatient, Mode=TwoWay}" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+								<ListBox.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel ClipToBounds="False" Orientation="Vertical" />
+									</ItemsPanelTemplate>
+								</ListBox.ItemsPanel>
+								<ListBox.Styles>
+									<Style Selector="ListBoxItem">
+										<Setter Property="Padding" Value="10,5" />
+										<Setter Property="ClipToBounds" Value="False" />
+										<Setter Property="Transitions">
+											<Transitions>
+												<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+											</Transitions>
+										</Setter>
+									</Style>
+									<Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+										<Setter Property="ClipToBounds" Value="False" />
+										<Setter Property="Background" Value="Transparent" />
+									</Style>
+									<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+										<Setter Property="ClipToBounds" Value="False" />
+										<Setter Property="Background" Value="Transparent" />
+										<Setter Property="Effect">
+											<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
+										</Setter>
+										<Setter Property="RenderTransform" Value="scale(1.02)" />
+									</Style>
+									<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+										<Setter Property="ClipToBounds" Value="False" />
+										<Setter Property="Background" Value="Transparent" />
+										<Setter Property="Effect">
+											<DropShadowEffect Color="#BFBEBE" BlurRadius="20" OffsetX="0" OffsetY="0" />
+										</Setter>
+									</Style>
+								</ListBox.Styles>
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border ClipToBounds="False" CornerRadius="16" Background="#F5F5F9" Padding="10">
+											<Grid ColumnDefinitions="auto,5,*">
+												<Border Grid.Column="0" CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" Width="5" />
+												<Border Grid.Column="0" CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" Width="5" />
+												<TextBlock Grid.Column="2" Text="{CompiledBinding FullName}" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
+											</Grid>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+							<TextBlock IsVisible="{CompiledBinding Patients.Count, Converter={StaticResource IntConverter}, ConverterParameter=0}" Text="Список пуст" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Grid>
+					</Border>
+				</Grid>
 				<!--#endregion Patients List -->
 
 				<!--#region Main Content -->
+				<TextBlock Grid.Column="1" IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNull}}" Text="Для начала выберите пациента из списка слева" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 				<Grid Grid.Column="1" ClipToBounds="False" IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNotNull}}">
 					<!--#region Requests -->
 					<Grid RowDefinitions="*,10,auto" IsVisible="{CompiledBinding #requests_rb.IsChecked}">
@@ -135,115 +148,174 @@
 					<!--#endregion Requests -->
 					<!--#region Record -->
 					<Grid Name="record_g" IsVisible="{CompiledBinding #record_rb.IsChecked}">
-						<Border Classes="drawerbg">
-							<StackPanel Orientation="Vertical" Spacing="10">
-								<Button Command="{CompiledBinding NewOrderCommand}" CornerRadius="12" IsEnabled="{CompiledBinding IsRecordButtonEnabled}" Content="Записать" FontSize="24" Background="#00B712" Foreground="White" Margin="200,0" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch">
-									<Button.Styles>
-										<Style Selector="Button:disabled /template/ ContentPresenter">
-											<Setter Property="Background" Value="Gray" />
-										</Style>
-									</Button.Styles>
-								</Button>
-
-								<StackPanel Orientation="Vertical" Spacing="5">
-									<TextBlock Text="Адрес" Foreground="#7E7E9A" Margin="8,0" />
-									<TextBox FontSize="20" Text="{CompiledBinding OrderRecordAddress.Address, Mode=TwoWay}" Padding="10" />
-
-									<Grid ColumnDefinitions="*,5,*,5,*,5,*">
-										<Grid.Styles>
-											<Style Selector="NumericUpDown">
-												<Setter Property="Background" Value="#F3F3F7" />
-												<Setter Property="BorderThickness" Value="0" />
-												<Setter Property="CornerRadius" Value="12" />
-												<Setter Property="ParsingNumberStyle" Value="Integer" />
-												<Setter Property="Padding" Value="10" />
-												<Setter Property="Increment" Value="1" />
-												<Setter Property="Minimum" Value="1" />
-												<Setter Property="ClipValueToMinMax" Value="True" /> 
+						<Border Classes="drawerbg" ClipToBounds="True">
+							<ScrollViewer CornerRadius="16" ClipToBounds="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+								<ScrollViewer.Styles>
+									<Style Selector="ScrollViewer /template/ Grid">
+										<Setter Property="ClipToBounds" Value="False" />
+									</Style>
+									<Style Selector="ScrollViewer /template/ ScrollContentPresenter#PART_ContentPresenter">
+										<Setter Property="ClipToBounds" Value="False" />
+									</Style>
+								</ScrollViewer.Styles>
+								<StackPanel Orientation="Vertical" Spacing="10">
+									<Button Command="{CompiledBinding NewOrderCommand}" CornerRadius="12" IsEnabled="{CompiledBinding IsRecordButtonEnabled}" Content="Записать" FontSize="24" Background="#00B712" Foreground="White" Margin="200,0" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch">
+										<Button.Styles>
+											<Style Selector="Button:disabled /template/ ContentPresenter">
+												<Setter Property="Background" Value="Gray" />
 											</Style>
-										</Grid.Styles>
+										</Button.Styles>
+									</Button>
 
-										<StackPanel Grid.Column="0" Orientation="Vertical" Spacing="5">
-											<TextBlock Text="Квартира" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-											<NumericUpDown Name="address_nup" AllowSpin="True" Text="{CompiledBinding OrderRecordAddress.Room, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
-										</StackPanel>
-										<StackPanel Grid.Column="2" Orientation="Vertical" Spacing="5">
-											<TextBlock Text="Подъезд" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-											<NumericUpDown Name="entrance_nup" Text="{CompiledBinding OrderRecordAddress.Entrance, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
-										</StackPanel>
-										<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
-											<TextBlock Text="Этаж" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-											<NumericUpDown Name="floor_nup" Text="{CompiledBinding OrderRecordAddress.Floor, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
-										</StackPanel>
-										<StackPanel Grid.Column="6" Orientation="Vertical" Spacing="5">
-											<TextBlock Text="Домофон" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-											<NumericUpDown Name="intercome_nup" Text="{CompiledBinding OrderRecordAddress.Intercome, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
-										</StackPanel>
-									</Grid>
-								</StackPanel>
+									<StackPanel Orientation="Vertical" Spacing="5">
+										<TextBlock Text="Адрес" Foreground="#7E7E9A" Margin="8,0" />
+										<TextBox FontSize="20" Text="{CompiledBinding OrderRecordAddress.Address, Mode=TwoWay}" Padding="10" />
 
-								<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
-									<TextBlock Text="Дата и время" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-									<DatePicker Name="datepicker" HorizontalAlignment="Center" />
-									<TimePicker SecondIncrement="1" MinuteIncrement="30" ClockIdentifier="24HourClock" HorizontalAlignment="Center" />
-								</StackPanel>
-
-								<StackPanel Orientation="Vertical" Spacing="5">
-									<TextBlock Text="Комментарий" Foreground="#7E7E9A" Margin="8,0" />
-									<TextBox Text="{CompiledBinding OrderRecord.Comment, Mode=TwoWay}" FontSize="20" Padding="10" />
-								</StackPanel>
-
-								<Border CornerRadius="100" Background="#DBDBDC" Height="1" />
-								<TextBlock Text="Анализы" FontSize="26" HorizontalAlignment="Center" />
-
-								<Border CornerRadius="15" BorderBrush="#F4F4F4" BorderThickness="1" Background="White" Padding="10">
-									<Border.Effect>
-										<DropShadowEffect BlurRadius="20" Color="#E4E8F5" Opacity="0.6" OffsetX="0" OffsetY="0" />
-									</Border.Effect>
-									<Grid ColumnDefinitions="*,10,auto" VerticalAlignment="Center">
-										<ComboBox ItemsSource="{CompiledBinding AllAnalyses}" SelectedItem="{CompiledBinding SelectedAnalysis}" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
-											<ComboBox.ItemTemplate>
-												<DataTemplate>
-													<TextBlock Text="{CompiledBinding Name}" TextWrapping="Wrap" FontSize="20" />
-												</DataTemplate>
-											</ComboBox.ItemTemplate>
-										</ComboBox>
-										<Button Grid.Column="2" Name="add_order" Content="Добавить" Padding="6">
-											<Button.Styles>
-												<Style Selector="Button">
-													<Setter Property="CornerRadius" Value="10" />
-													<Setter Property="Background" Value="#00B712" />
-													<Setter Property="Foreground" Value="White" />
-
-													<Setter Property="RenderTransform" Value="none" />
-													<Setter Property="Transitions">
-														<Transitions>
-															<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
-														</Transitions>
-													</Setter>
-
-													<Style Selector="^:pointerover">
-														<Setter Property="Background" Value="#0A8D17" />
-													</Style>
+										<Grid ColumnDefinitions="*,5,*,5,*,5,*">
+											<Grid.Styles>
+												<Style Selector="NumericUpDown">
+													<Setter Property="Background" Value="#F3F3F7" />
+													<Setter Property="BorderThickness" Value="0" />
+													<Setter Property="CornerRadius" Value="12" />
+													<Setter Property="ParsingNumberStyle" Value="Integer" />
+													<Setter Property="Padding" Value="10" />
+													<Setter Property="Increment" Value="1" />
+													<Setter Property="Minimum" Value="1" />
+													<Setter Property="ClipValueToMinMax" Value="True" />
 												</Style>
-											</Button.Styles>
+											</Grid.Styles>
 
-											<StackPanel Orientation="Horizontal" Spacing="6">
-												<Svg Path="avares://MedicInPoint/Assets/SVGs/add_analysis_order.svg" Width="22" Height="22" />
-												<TextBlock Text="Добавить" FontSize="16" LineHeight="16" VerticalAlignment="Center" />
+											<StackPanel Grid.Column="0" Orientation="Vertical" Spacing="5">
+												<TextBlock Text="Квартира" Foreground="#7E7E9A" HorizontalAlignment="Center" />
+												<NumericUpDown Name="address_nup" AllowSpin="True" Text="{CompiledBinding OrderRecordAddress.Room, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
 											</StackPanel>
-										</Button>
+											<StackPanel Grid.Column="2" Orientation="Vertical" Spacing="5">
+												<TextBlock Text="Подъезд" Foreground="#7E7E9A" HorizontalAlignment="Center" />
+												<NumericUpDown Name="entrance_nup" Text="{CompiledBinding OrderRecordAddress.Entrance, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
+											</StackPanel>
+											<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
+												<TextBlock Text="Этаж" Foreground="#7E7E9A" HorizontalAlignment="Center" />
+												<NumericUpDown Name="floor_nup" Text="{CompiledBinding OrderRecordAddress.Floor, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
+											</StackPanel>
+											<StackPanel Grid.Column="6" Orientation="Vertical" Spacing="5">
+												<TextBlock Text="Домофон" Foreground="#7E7E9A" HorizontalAlignment="Center" />
+												<NumericUpDown Name="intercome_nup" Text="{CompiledBinding OrderRecordAddress.Intercome, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
+											</StackPanel>
+										</Grid>
+									</StackPanel>
+
+									<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
+										<TextBlock Text="Дата и время" Foreground="#7E7E9A" HorizontalAlignment="Center" />
+										<DatePicker Name="datepicker" SelectedDate="{}" HorizontalAlignment="Center" />
+										<TimePicker Name="timepicker" SecondIncrement="1" MinuteIncrement="30" ClockIdentifier="24HourClock" HorizontalAlignment="Center" />
+									</StackPanel>
+
+									<StackPanel Orientation="Vertical" Spacing="5">
+										<TextBlock Text="Комментарий пациента" Foreground="#7E7E9A" Margin="8,0" />
+										<TextBox Text="{CompiledBinding OrderRecord.Comment, Mode=TwoWay}" FontSize="20" Padding="10" />
+									</StackPanel>
+
+									<Border CornerRadius="100" Background="#DBDBDC" Height="1" />
+									<Grid VerticalAlignment="Top">
+										<TextBlock Text="Анализы" FontSize="26" HorizontalAlignment="Center" />
+										<TextBlock Text="{CompiledBinding AnalysesInRecordTotalPrice, StringFormat='Общая сумма: {0:0.00} руб.'}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Center" />
 									</Grid>
-								</Border>
-							</StackPanel>
-						</Border>
-					</Grid>
+
+									<!--#region Добавление анализов в запись -->
+									<StackPanel Orientation="Vertical" Spacing="10">
+										<Border CornerRadius="15" BorderBrush="#F4F4F4" BorderThickness="1" Background="White" Padding="10">
+											<Border.Effect>
+												<DropShadowEffect BlurRadius="20" Color="#E4E8F5" Opacity="0.6" OffsetX="0" OffsetY="0" />
+											</Border.Effect>
+											<Grid ColumnDefinitions="*,10,auto" VerticalAlignment="Center">
+												<ComboBox ItemsSource="{CompiledBinding AllAnalyses}" SelectedItem="{CompiledBinding SelectedAnalysis, Mode=TwoWay}" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<TextBlock Text="{CompiledBinding Name}" TextWrapping="Wrap" FontSize="20" />
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+													<ComboBox.Styles>
+														<Style Selector="ComboBoxItem">
+															<Setter Property="CornerRadius" Value="10" />
+															<Setter Property="Margin" Value="5" />
+														</Style>
+													</ComboBox.Styles>
+												</ComboBox>
+												<Button Grid.Column="2" Name="add_order" Command="{CompiledBinding AddAnalysis2RecordCommand}" Content="Добавить" Padding="6">
+													<Button.Styles>
+														<Style Selector="Button">
+															<Setter Property="CornerRadius" Value="10" />
+															<Setter Property="Background" Value="#00B712" />
+															<Setter Property="Foreground" Value="White" />
+
+															<Setter Property="RenderTransform" Value="none" />
+															<Setter Property="Transitions">
+																<Transitions>
+																	<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+																</Transitions>
+															</Setter>
+
+															<Style Selector="^:pointerover">
+																<Setter Property="Background" Value="#0A8D17" />
+															</Style>
+														</Style>
+													</Button.Styles>
+
+													<StackPanel Orientation="Horizontal" Spacing="6">
+														<Svg Path="avares://MedicInPoint/Assets/SVGs/add_analysis_order.svg" Width="22" Height="22" />
+														<TextBlock Text="Добавить" FontSize="16" LineHeight="16" VerticalAlignment="Center" />
+													</StackPanel>
+												</Button>
+											</Grid>
+										</Border>
+
+										<!-- Дезайн анализа в списке -->
+										<ItemsControl ItemsSource="{CompiledBinding AnalysesInRecord}" Name="analysesInOrder_ic" ClipToBounds="False">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<StackPanel Orientation="Vertical" Spacing="10" />
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+											<ItemsControl.ItemTemplate>
+												<DataTemplate DataType="model:Analysis">
+													<Border ClipToBounds="False" Background="White" CornerRadius="15" Padding="5">
+														<Border.Effect>
+															<DropShadowEffect Color="#E4E8F5" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
+														</Border.Effect>
+														<Grid ColumnDefinitions="auto,5,*,10,auto,10,auto">
+															<Border Grid.Column="0" Background="{CompiledBinding Name, Converter={StaticResource ColorByNameConverter}}" CornerRadius="100" Width="5" Height="{CompiledBinding $parent.Children[1].Bounds.Height}" />
+															<TextBlock Grid.Column="2" Text="{CompiledBinding Name}" FontSize="20" LineHeight="20" VerticalAlignment="Center" />
+															<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
+																<TextBlock Text="Цена" Foreground="#7E7E9A" FontSize="14" LineHeight="14" HorizontalAlignment="Center" />
+																<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
+																	<TextBlock Text="{CompiledBinding Price, StringFormat=#.## руб\\.}" FontSize="18" LineHeight="18" HorizontalAlignment="Center" />
+																</Border>
+															</StackPanel>
+															<Button Grid.Column="6" Command="{CompiledBinding $parent[ItemsControl].((vm:RnRDoctorViewModel)DataContext).DeleteAnalysisCommand}" CommandParameter="{CompiledBinding $self.DataContext}" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="34" Height="34">
+																<Button.Styles>
+																	<Style Selector="Button:pressed">
+																		<Setter Property="RenderTransform" Value="scale(0.95)" />
+																	</Style>
+																</Button.Styles>
+																<Svg Path="avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg" Stretch="Fill" />
+															</Button>
+														</Grid>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+									<!--#endregion Добавление нового анализа -->
+								</StackPanel>
+							</ScrollViewer>
+					</Border>
+				</Grid>
 					<!--#endregion Record -->
 				</Grid>
 				<!--#region Main Content -->
 
 				<!--#region Drawer -->
-				<drawer:PatientDrawerView Grid.Column="2" DataContext="{CompiledBinding SelectedPatient}" />
+				<drawer:PatientDrawerView Grid.Column="2" DataContext="{CompiledBinding SelectedPatient}" HorizontalAlignment="Right" />
 				<!--#region Drawer -->
 			</Grid>
 		</Grid>

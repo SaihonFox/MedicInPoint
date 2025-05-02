@@ -35,6 +35,14 @@ public partial class RnRDoctorView : UserControl
 
 		datepicker.MinYear = DateTimeOffset.Now;
 		datepicker.MaxYear = DateTimeOffset.Now.AddMonths(6);
+		
+		timepicker.SelectedTimeChanged += (s, e) =>
+		{
+			if (e.NewTime!.Value < TimeSpan.FromHours(8))
+				timepicker.SelectedTime = TimeSpan.FromHours(8);
+			if (e.NewTime.Value > TimeSpan.FromHours(20))
+				timepicker.SelectedTime = TimeSpan.FromHours(20);
+		};
 
 		patients_lb.SelectionChanged += Patients_lb_SelectionChanged;
 	}

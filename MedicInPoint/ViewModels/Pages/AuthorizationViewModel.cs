@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Reflection;
 
 using Avalonia.Controls.Notifications;
@@ -51,15 +52,18 @@ public partial class AuthorizationViewModel() : ViewModelBase
 
 	async Task FindUser()
 	{
-		if (Login.IsNullOrWhiteSpace() || Password.IsNullOrWhiteSpace())
+		/*if (Login.IsNullOrWhiteSpace() || Password.IsNullOrWhiteSpace())
 			return;
+
+		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
 		try
 		{
-			using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
+			using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim(), cts.Token);
 			if (!response.IsSuccessful)
 				return;
 
+			cts.Cancel();
 			var user = response.Content;
 			_service.CurrentUser = user;
 		}
@@ -71,6 +75,11 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		{
 			Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
 		}
+		catch (TaskCanceledException ex)
+		{
+			_notificationService.Show("Уведомление", "Ошибка времени: " + ex.Message, NotificationType.Error);
+			return;
+		}
 		catch (TargetInvocationException ex)
 		{
 			Logger.Sink!.Log(LogEventLevel.Error, "TargetInvocation", this, "Message: " + ex.TargetSite + ex);
@@ -78,7 +87,7 @@ public partial class AuthorizationViewModel() : ViewModelBase
 		catch (Exception ex)
 		{
 			Logger.Sink!.Log(LogEventLevel.Error, "Error", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
-		}
+		}*/
 	}
 
 	async partial void OnLoginChanged(string value) => await FindUser();
@@ -94,10 +103,13 @@ public partial class AuthorizationViewModel() : ViewModelBase
 			return;
 		}
 
+		IsEnterEnabled = false;
 		if (_service.CurrentUser == null)
 		{
-			IsEnterEnabled = false;
-
+			_notificationService.Show("Поиск", "Поиск пользователя с введенными данными");
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+			
 			try
 			{
 				using var response = await APIService.For<IUser>().Login(Login.Trim(), Password.Trim());
@@ -110,12 +122,20 @@ public partial class AuthorizationViewModel() : ViewModelBase
 					IsEnterEnabled = true;
 					return;
 				}
+				stopwatch.Stop();
 				_service.CurrentUser = response.Content;
+				_notificationService.Show("Поиск", $"Поиск завершен за: {stopwatch.Elapsed.TotalSeconds:0.##} сек.");
 			}
 			catch (HttpRequestException ex)
 			{
 				_notificationService.Show("Уведомление", "Ошибка подключения к серверу!", NotificationType.Error);
 				Logger.Sink!.Log(LogEventLevel.Error, "HttpError", this, $"Message: {ex.Message}\nStatus code: {ex.StatusCode}, RequestError: {ex.HttpRequestError}");
+				return;
+			}
+			catch (TaskCanceledException ex)
+			{
+				_notificationService.Show("Уведомление", "Ошибка времени: " + ex.Message, NotificationType.Error);
+				Logger.Sink!.Log(LogEventLevel.Error, "TaskError", this, "Message: " + ex.Message + "\nsource: " + ex.GetType().FullName);
 				return;
 			}
 			catch (Exception ex)

@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Doctor"
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
+			 xmlns:converter="using:MedicInPoint.Converters"
 			 xmlns:medic="https://github.com/saihonfox"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
@@ -14,6 +15,9 @@
 	<Design.DataContext>
 		<vm:PatientDoctorViewModel />
 	</Design.DataContext>
+	<UserControl.Resources>
+		<converter:IntConverter x:Key="IntConverter" />
+	</UserControl.Resources>
 
 	<Grid>
 		<Grid>
@@ -41,64 +45,71 @@
 				</StackPanel>
 			</Grid>
 
-			<Grid ColumnDefinitions="300,25,*,25,300" Margin="25,175,25,25">
-				<Border Grid.Column="0" Classes="drawerbg" ClipToBounds="False" Padding="6">
-					<Grid>
-						<ListBox ClipToBounds="False" ItemsSource="{CompiledBinding Patients}" Background="Transparent" SelectionMode="Single" SelectedIndex="{CompiledBinding SelectedPatientIndex, Mode=TwoWay}" SelectedItem="{CompiledBinding SelectedPatient, Mode=TwoWay}" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-							<ListBox.ItemsPanel>
-								<ItemsPanelTemplate>
-									<StackPanel ClipToBounds="False" Orientation="Vertical" />
-								</ItemsPanelTemplate>
-							</ListBox.ItemsPanel>
-							<ListBox.Styles>
-								<Styles>
-									<Style Selector="ListBoxItem">
-										<Setter Property="Padding" Value="10" />
-										<Setter Property="ClipToBounds" Value="False" />
-										<Setter Property="Transitions">
-											<Transitions>
-												<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
-											</Transitions>
-										</Setter>
-									</Style>
-									<Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
-										<Setter Property="ClipToBounds" Value="False" />
-										<Setter Property="Background" Value="Transparent" />
-									</Style>
-									<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-										<Setter Property="ClipToBounds" Value="False" />
-										<Setter Property="Background" Value="Transparent" />
-										<Setter Property="Effect">
-											<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
-										</Setter>
-										<Setter Property="RenderTransform" Value="scale(1.02)" />
-									</Style>
-									<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-										<Setter Property="ClipToBounds" Value="False" />
-										<Setter Property="Background" Value="Transparent" />
-										<Setter Property="Effect">
-											<DropShadowEffect Color="#BFBEBE" BlurRadius="20" OffsetX="0" OffsetY="0" />
-										</Setter>
-									</Style>
-								</Styles>
-							</ListBox.Styles>
-							<ListBox.ItemTemplate>
-								<DataTemplate>
-									<Border ClipToBounds="False" CornerRadius="16" Background="#F5F5F9" Padding="10">
-										<Grid ColumnDefinitions="auto,5,*">
-											<Border Grid.Column="0" CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" Width="5" />
-											<Border Grid.Column="0" CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" Width="5" />
-											<TextBlock Grid.Column="2" Text="{CompiledBinding FullName}" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
-										</Grid>
-									</Border>
-								</DataTemplate>
-							</ListBox.ItemTemplate>
-						</ListBox>
-						<TextBlock IsVisible="{Binding Patients, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}" Text="Данные пусты" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
-					</Grid>
-				</Border>
+			<Grid ColumnDefinitions="300,*,auto" ColumnSpacing="25" Margin="25,175,25,25">
+				<Grid Grid.Column="0" RowDefinitions="auto,*" RowSpacing="10">
+					<TextBlock Grid.Row="0" Text="Список пациентов" FontSize="30" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" />
+					<Border Grid.Row="1" Classes="drawerbg" ClipToBounds="False" Padding="6">
+						<Grid>
+							<ListBox ClipToBounds="False" ItemsSource="{CompiledBinding Patients}" Background="Transparent" SelectionMode="Single" SelectedIndex="{CompiledBinding SelectedPatientIndex, Mode=TwoWay}" SelectedItem="{CompiledBinding SelectedPatient, Mode=TwoWay}" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+								<ListBox.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel ClipToBounds="False" Orientation="Vertical" />
+									</ItemsPanelTemplate>
+								</ListBox.ItemsPanel>
+								<ListBox.Styles>
+									<Styles>
+										<Style Selector="ListBoxItem">
+											<Setter Property="Padding" Value="10,5" />
+											<Setter Property="ClipToBounds" Value="False" />
+											<Setter Property="Transitions">
+												<Transitions>
+													<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+												</Transitions>
+											</Setter>
+										</Style>
+										<Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+											<Setter Property="ClipToBounds" Value="False" />
+											<Setter Property="Background" Value="Transparent" />
+										</Style>
+										<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+											<Setter Property="ClipToBounds" Value="False" />
+											<Setter Property="Background" Value="Transparent" />
+											<Setter Property="Effect">
+												<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
+											</Setter>
+											<Setter Property="RenderTransform" Value="scale(1.02)" />
+										</Style>
+										<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+											<Setter Property="ClipToBounds" Value="False" />
+											<Setter Property="Background" Value="Transparent" />
+											<Setter Property="Effect">
+												<DropShadowEffect Color="#BFBEBE" BlurRadius="20" OffsetX="0" OffsetY="0" />
+											</Setter>
+										</Style>
+									</Styles>
+								</ListBox.Styles>
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border ClipToBounds="False" CornerRadius="16" Background="#F5F5F9" Padding="10">
+											<Grid ColumnDefinitions="auto,5,*">
+												<Border Grid.Column="0" CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" Width="5" />
+												<Border Grid.Column="0" CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" Width="5" />
+												<TextBlock Grid.Column="2" Text="{CompiledBinding FullName}" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
+											</Grid>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+							<TextBlock IsVisible="{CompiledBinding Patients.Count, Converter={StaticResource IntConverter}, ConverterParameter=0}" Text="Список пуст" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Grid>
+					</Border>
+				</Grid>
 
-				<drawer:PatientDrawerView Grid.Column="5" DataContext="{CompiledBinding SelectedPatient}" HorizontalAlignment="Right" Width="0" />
+				<Grid Grid.Column="1">
+					<TextBlock IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNotNull}}" Text="Для начала выберите пациента из списка слева" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+				</Grid>
+
+				<drawer:PatientDrawerView Grid.Column="2" DataContext="{CompiledBinding SelectedPatient}" HorizontalAlignment="Right" Width="0" />
 			</Grid>
 		</Grid>
 	</Grid>

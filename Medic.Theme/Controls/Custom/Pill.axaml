@@ -38,12 +38,12 @@
 								Padding="{TemplateBinding PillPadding}"
 								MinWidth="{TemplateBinding PillMinWidth}" MaxWidth="{TemplateBinding PillMaxWidth}">
 							<Panel>
-								<TextBlock Name="PART_TextBlockValue" IsVisible="{Binding !IsEditable}"
-										   Text="{TemplateBinding Value}" FontSize="{TemplateBinding ValueFontSize}"
-										   LineHeight="{TemplateBinding ValueFontSize}"
-										   TextAlignment="Center" TextWrapping="WrapWithOverflow"
-										   Background="Transparent" Foreground="{TemplateBinding ValueForeground}"
-										   VerticalAlignment="Center" />
+								<SelectableTextBlock Name="PART_TextBlockValue" IsVisible="{Binding !IsEditable}"
+													 Text="{TemplateBinding Value}" FontSize="{TemplateBinding ValueFontSize}"
+													 LineHeight="{TemplateBinding ValueFontSize}"
+													 TextAlignment="Center" TextWrapping="WrapWithOverflow"
+													 Background="Transparent" Foreground="{TemplateBinding ValueForeground}"
+													 VerticalAlignment="Center" />
 								<TextBox Name="PART_TextBoxValue" IsVisible="{Binding IsEditable}"
 										 Text="{Binding Value, Mode=TwoWay}" FontSize="{TemplateBinding ValueFontSize}"
 										 IsReadOnly="{Binding !IsEditable}"
