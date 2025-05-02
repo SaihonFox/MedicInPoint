@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 using Avalonia.Threading;
 
@@ -63,6 +64,7 @@ public partial class AppStateService : ObservableObject, IAppStateService
 public class PortCheckJob : IJob
 {
 	private static bool _previousState = false;
+	private static bool _internetAvailable = false;
 	public static EventHandler<PortStateChangedEventArgs> PortStateChanged = null!;
 
 	private readonly TcpClient client = new TcpClient
@@ -79,6 +81,11 @@ public class PortCheckJob : IJob
 			NoDelay = true
 		}
 	};
+
+	public PortCheckJob()
+	{
+		NetworkChange.NetworkAvailabilityChanged += (s, e) => _internetAvailable = e.IsAvailable;
+	}
 
 	public async Task Execute(IJobExecutionContext context) =>
 		await CheckPortAsync(context);

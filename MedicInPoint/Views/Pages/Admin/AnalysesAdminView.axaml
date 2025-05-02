@@ -39,7 +39,7 @@
 						<ItemsControl Name="analyses_list" ClipToBounds="False">
 							<ItemsControl.ItemsPanel>
 								<ItemsPanelTemplate>
-									<WrapPanel HorizontalAlignment="Center" />
+									<WrapPanel ItemsAlignment="Center" />
 								</ItemsPanelTemplate>
 							</ItemsControl.ItemsPanel>
 							<ItemsControl.DataTemplates>
@@ -49,7 +49,6 @@
 						</ItemsControl>
 					</ScrollViewer>
 				</Grid>
-				<medic:Pill IsEditable="True" Title="some t" Value="das" />
 
 				<drawer:AnalysisDrawerView Grid.Column="1" DataContext="{Binding Analysis}" />
 			</Grid>
