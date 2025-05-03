@@ -206,8 +206,8 @@
 
 									<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
 										<TextBlock Text="Дата и время" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-										<DatePicker Name="datepicker" SelectedDate="{}" HorizontalAlignment="Center" />
-										<TimePicker Name="timepicker" SecondIncrement="1" MinuteIncrement="30" ClockIdentifier="24HourClock" HorizontalAlignment="Center" />
+										<DatePicker Name="datepicker" SelectedDate="{CompiledBinding SelectedDate, Mode=TwoWay}" HorizontalAlignment="Center" />
+										<TimePicker Name="timepicker" SelectedTime="{CompiledBinding SelectedTime, Mode=TwoWay}" SecondIncrement="1" MinuteIncrement="30" ClockIdentifier="24HourClock" HorizontalAlignment="Center" />
 									</StackPanel>
 
 									<StackPanel Orientation="Vertical" Spacing="5">

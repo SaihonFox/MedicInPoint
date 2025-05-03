@@ -90,19 +90,19 @@ public partial class App : Application
 		services.AddSingleton<LoadingViewModel>();
 		services.AddSingleton<SettingsViewModel>();
 
-		services.AddScoped<AuthorizationViewModel>();
-		services.AddTransient<FlyoutMenuViewModel>();
+		services.AddSingleton<AuthorizationViewModel>();
+		services.AddSingleton<FlyoutMenuViewModel>();
 		services.AddSingleton<MenuViewModel>();
 
 		// Admin
 		services.AddTransient<AnalysesAdminViewModel>();
-		services.AddSingleton<UsersAdminViewModel>();
-		services.AddSingleton<PatientsAdminViewModel>();
-		services.AddSingleton<AnalysisCategoriesAdminViewModel>();
+		services.AddTransient<UsersAdminViewModel>();
+		services.AddTransient<PatientsAdminViewModel>();
+		services.AddTransient<AnalysisCategoriesAdminViewModel>();
 
 		// Doctor
-		services.AddSingleton<PatientDoctorViewModel>();
-		services.AddSingleton<RnRDoctorViewModel>();
+		services.AddTransient<PatientDoctorViewModel>();
+		services.AddTransient<RnRDoctorViewModel>();
 
 		// UserControls
 		// Items

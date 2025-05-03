@@ -24,7 +24,154 @@
 				</i:Interaction.Behaviors>
 			</AutoCompleteBox>
 
-			
+			<ScrollViewer Margin="30,125">
+				<ItemsControl Name="categories_list" ItemsSource="{CompiledBinding Categories}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel ItemsAlignment="Center" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.DataTemplates>
+						<DataTemplate DataType="model:AnalysisCategory">
+							<Grid Margin="5">
+								<Border Background="White" CornerRadius="16" ClipToBounds="False" Padding="8">
+									<Border.Effect>
+										<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
+									</Border.Effect>
+									<Grid>
+										<Grid ColumnDefinitions="*,auto,auto" ColumnSpacing="10">
+											<TextBlock Grid.Column="0" Name="name" Text="{CompiledBinding Name}" FontSize="24" TextAlignment="Center" VerticalAlignment="Center" />
+											<TextBox Grid.Column="0" IsVisible="False" Name="name_edit" Text="{CompiledBinding Name, Mode=TwoWay}" BorderThickness="0" FontSize="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+											<Button Grid.Column="1" Name="edit_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+												<Button.Styles>
+													<Style Selector="Button:pressed">
+														<Setter Property="RenderTransform" Value="scale(0.95)" />
+													</Style>
+												</Button.Styles>
+												<Svg Path="/Assets/SVGs/buttons/edit_category.svg" />
+											</Button>
+											<Button Grid.Column="2" Name="delete_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+												<Button.Styles>
+													<Style Selector="Button:pressed">
+														<Setter Property="RenderTransform" Value="scale(0.95)" />
+													</Style>
+												</Button.Styles>
+												<Svg Path="/Assets/SVGs/buttons/delete_category.svg" Stretch="Fill" />
+											</Button>
+										</Grid>
+									</Grid>
+								</Border>
+
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.DataTemplates>
+				</ItemsControl>
+			</ScrollViewer>
+
+			<StackPanel Orientation="Horizontal" Spacing="10" Margin="10,0,10,40" HorizontalAlignment="Center" VerticalAlignment="Bottom" MaxWidth="600">
+				<TextBox Name="category_name" Text="{CompiledBinding AnalysisCategory.Name, Mode=TwoWay}" Watermark="Название категории" HorizontalAlignment="Stretch" Width="450" Height="50">
+					<TextBox.Styles>
+						<Style Selector="TextBox">
+							<Setter Property="Template">
+								<ControlTemplate>
+									<DataValidationErrors>
+										<Panel>
+											<Border Background="#F5F5F9"
+													BorderThickness="0"
+													CornerRadius="16"
+													MinWidth="{TemplateBinding MinWidth}"
+													MinHeight="{TemplateBinding MinHeight}" />
+
+											<Border Margin="{TemplateBinding BorderThickness}">
+												<Grid ColumnDefinitions="15,auto,*,15">
+													<Svg Grid.Column="1" Path="/Assets/SVGs/add_category.svg" VerticalAlignment="Center" Width="20" Height="20" />
+													<ContentPresenter Grid.Column="0"
+																	  Content="{TemplateBinding InnerLeftContent}" />
+													<DockPanel x:Name="PART_InnerDockPanel"
+															   Grid.Column="2"
+															   Margin="{TemplateBinding Padding}">
+														<TextBlock Name="PART_FloatingWatermark"
+																   FontSize="20"
+																   Foreground="#7E7E9A"
+																   IsVisible="False"
+																   Text="{TemplateBinding Watermark}"
+																   DockPanel.Dock="Top" />
+														<ScrollViewer Name="PART_ScrollViewer"
+																	  HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+																	  VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+																	  IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+																	  AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+																	  BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
+															<Panel>
+																<TextBlock Name="PART_Watermark"
+																		   FontSize="20"
+																		   Foreground="#7E7E9A"
+																		   Text="{TemplateBinding Watermark}"
+																		   TextAlignment="{TemplateBinding TextAlignment}"
+																		   TextWrapping="{TemplateBinding TextWrapping}"
+																		   HorizontalAlignment="Left"
+																		   VerticalAlignment="Center">
+																	<TextBlock.IsVisible>
+																		<MultiBinding Converter="{x:Static BoolConverters.And}">
+																			<Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+																			<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+																		</MultiBinding>
+																	</TextBlock.IsVisible>
+																</TextBlock>
+																<TextPresenter Name="PART_TextPresenter"
+																			   Text="{TemplateBinding Text, Mode=TwoWay}"
+																			   FontSize="20"
+																			   CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+																			   CaretIndex="{TemplateBinding CaretIndex}"
+																			   SelectionStart="{TemplateBinding SelectionStart}"
+																			   SelectionEnd="{TemplateBinding SelectionEnd}"
+																			   TextAlignment="{TemplateBinding TextAlignment}"
+																			   TextWrapping="{TemplateBinding TextWrapping}"
+																			   LineHeight="{TemplateBinding LineHeight}"
+																			   LetterSpacing="{TemplateBinding LetterSpacing}"
+																			   PasswordChar="{TemplateBinding PasswordChar}"
+																			   RevealPassword="{TemplateBinding RevealPassword}"
+																			   SelectionBrush="{TemplateBinding SelectionBrush}"
+																			   SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+																			   CaretBrush="{TemplateBinding CaretBrush}"
+																			   HorizontalAlignment="Left"
+																			   VerticalAlignment="Center" />
+															</Panel>
+															<ScrollViewer.Styles>
+																<Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+																	<Setter Property="Cursor" Value="IBeam" />
+																</Style>
+															</ScrollViewer.Styles>
+														</ScrollViewer>
+													</DockPanel>
+												</Grid>
+											</Border>
+										</Panel>
+									</DataValidationErrors>
+								</ControlTemplate>
+							</Setter>
+							<Style Selector="^:pointerover /template/ TextBlock#PART_Watermark">
+								<Setter Property="Foreground" Value="#7E7E9A" />
+							</Style>
+						</Style>
+					</TextBox.Styles>
+				</TextBox>
+
+				<Button Command="{CompiledBinding AddCategoryCommand}" Name="add_category" Background="#00B712" CornerRadius="16" Padding="0" VerticalAlignment="Center" Height="40">
+					<Button.Styles>
+						<Style Selector="Button:pointerover /template/ ContentPresenter">
+							<Setter Property="Background" Value="#00A20F" />
+						</Style>
+						<Style Selector="Button:pressed">
+							<Setter Property="RenderTransform" Value="scale(0.95)" />
+						</Style>
+					</Button.Styles>
+					<StackPanel Orientation="Horizontal" Spacing="9" Margin="8">
+						<Svg Path="avares://MedicInPoint/Assets/SVGs/add_analysis_order.svg" Width="24" Height="24" />
+						<TextBlock Text="Добавить" Foreground="White" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					</StackPanel>
+				</Button>
+			</StackPanel>
 		</Grid>
 	</Panel>
 </UserControl>

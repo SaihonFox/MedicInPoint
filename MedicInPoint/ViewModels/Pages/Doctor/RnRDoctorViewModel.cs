@@ -62,7 +62,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	{
 		try
 		{
-			var response = await APIService.For<IPatient>().GetPatients().ConfigureAwait(false);
+			using var response = await APIService.For<IPatient>().GetPatients().ConfigureAwait(false);
 			if (!response.IsSuccessful)
 				return;
 
@@ -90,7 +90,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	{
 		try
 		{
-			var response = await APIService.For<IRequest>().GetRequests().ConfigureAwait(false);
+			using var response = await APIService.For<IRequest>().GetRequests().ConfigureAwait(false);
 			if (!response?.IsSuccessful ?? false)
 				return;
 
@@ -118,7 +118,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	{
 		try
 		{
-			var response = await APIService.For<IAnalysis>().GetAnalyses().ConfigureAwait(false);
+			using var response = await APIService.For<IAnalysis>().GetAnalyses().ConfigureAwait(false);
 			if (!response?.IsSuccessful ?? false)
 				return;
 
@@ -217,20 +217,34 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	public decimal _analysesInRecordTotalPrice = 0;
 
 	[ObservableProperty]
-	private DateTimeOffset _selectedDate;
+	private DateTimeOffset? _selectedDate = null;
 	[ObservableProperty]
-	private TimeSpan _selectedTime;
+	private TimeSpan? _selectedTime = null;
 
 	[RelayCommand]
 	private async Task NewOrder()
 	{
+		IsRecordButtonEnabled = false;
+
 		OrderRecord.UserId = _appService.CurrentUser!.Id;
 		OrderRecord.PatientId = SelectedPatient!.Id;
 		OrderRecord.RegistrationDate = DateTime.Now;
-		OrderRecord.AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.DateTime), TimeOnly.FromTimeSpan(SelectedTime));
+		_notificationService.Show("Дата", DateOnly.FromDateTime(SelectedDate!.Value.DateTime).ToString());
+		OrderRecord.AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.DateTime), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes));
 
 		var response = await APIService.For<IAnalysisOrder>().NewOrder((OrderRecord, OrderRecordAddress, AnalysesInRecord.ToList()));
-		_notificationService.Show("Отправка", string.Join(", ", response.ContentHeaders.ToList().Select(x => $"{x.Key}-{x.Value}")));
+		if (response.IsSuccessful)
+		{
+			_notificationService.Show("Успех!", $"Пациент успешно записан на {OrderRecord.AnalysisDatetime:D H:m}");
+			//_appService.CurrentUser = response.Content;
+		}
+		else
+		{
+			_notificationService.Show("Ошибка!", $"Возникли некоторые ошибки: {response.Error.Message}");
+			Logger.Sink!.Log(LogEventLevel.Error, "NewOrder", this, $"Message: {response.Error.Content}, Source: {await response.Error.GetContentAsAsync<object>()}");
+		}
+
+		IsRecordButtonEnabled = true;
 	}
 
 	[RelayCommand]
