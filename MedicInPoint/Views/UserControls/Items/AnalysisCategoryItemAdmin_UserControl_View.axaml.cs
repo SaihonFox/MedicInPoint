@@ -1,96 +1,127 @@
-using System;
-
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Svg;
+using Avalonia.Svg.Skia;
+using Avalonia.Threading;
 
+using MedicInPoint.API.Refit;
+using MedicInPoint.API.Refit.Placeholders;
+using MedicInPoint.Extensions;
 using MedicInPoint.Models;
+using MedicInPoint.Services;
 using MedicInPoint.ViewModels.UserControls.Items;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicInPoint.Views.UserControls.Items;
 
 public partial class AnalysisCategoryItemAdminUserControl : UserControl
 {
-	public AnalysisCategoryItem_UserControl_ViewModel ViewModel = null!;
+	public AnalysisCategoryItem_UserControl_ViewModel ViewModel { get; set; } = null!;
+
+	public readonly INotificationService notification = null!;
 
 	public Action<AnalysisCategory?>? ActionOnSelect = null;
 
 	public bool IsEditing { get; set; } = false;
+	private string initName = string.Empty;
 
 	public AnalysisCategoryItemAdminUserControl()
 	{
-		ViewModel = (AnalysisCategoryItem_UserControl_ViewModel)DataContext!;
+		ViewModel = (DataContext as AnalysisCategoryItem_UserControl_ViewModel)!;
+		notification = App.services.GetRequiredService<INotificationService>();
 
 		InitializeComponent();
 
 		edit_btn.Click += Edit_btn_Click;
 		delete_btn.Click += Delete_btn_Click;
+
+		if(!Design.IsDesignMode)
+			Loaded += (_, _) => Dispatcher.UIThread.Invoke(() => initName = (DataContext as AnalysisCategoryItem_UserControl_ViewModel)!.AnalysisCategory!.Name);
 	}
 
 	async void Edit_btn_Click(object? sender, RoutedEventArgs e)
 	{
-		/*if (!IsEditing)
+		ViewModel = (DataContext as AnalysisCategoryItem_UserControl_ViewModel)!;
+		if (!IsEditing)
 		{
-			ActionOnSelect?.Invoke(ViewModel!.Category);
+			ActionOnSelect?.Invoke(ViewModel!.AnalysisCategory);
 			IsEditing = true;
 			name.IsVisible = false;
 			name_edit.IsVisible = true;
 			name_edit.Focus();
-			name_edit.SelectionStart = ViewModel!.Category!.Name.Length;
-			name_edit.SelectionEnd = ViewModel!.Category!.Name.Length;
-			(edit_btn.Content as Avalonia.Svg.Svg)!.Path = "/Assets/SVGs/buttons/confirm_edit.svg";
-			(delete_btn.Content as Avalonia.Svg.Svg)!.Path = "/Assets/SVGs/buttons/reject_edit.svg";
+			name_edit.SelectionStart = ViewModel!.AnalysisCategory!.Name.Length;
+			name_edit.SelectionEnd = ViewModel!.AnalysisCategory!.Name.Length;
+			(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/confirm_edit.svg";
+			(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/reject_edit.svg";
 		}
 		else
 		{
-			if (string.IsNullOrWhiteSpace(name_edit.Text))
+			if (name_edit.Text.IsNullOrWhiteSpace())
 			{
-				//new WindowNotificationManager(CategoriesWindow_Admin.Instance)
-				//	.Show(new Notification("Внимание", "Пустые поля", NotificationType.Warning));
+				notification.Show("Внимание", "Пустые поля", NotificationType.Warning);
+				return;
+			}
+
+			if (initName.Equals(ViewModel.AnalysisCategory!.Name))
+			{
+				IsEditing = false;
+				name.IsVisible = true;
+				name_edit.IsVisible = false;
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+				name.Text = name_edit.Text ?? ViewModel!.AnalysisCategory!.Name;
 				return;
 			}
 
 			ActionOnSelect?.Invoke(null);
-			IsEditing = false;
-			name.IsVisible = true;
-			name_edit.IsVisible = false;
-			(edit_btn.Content as Avalonia.Svg.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-			(delete_btn.Content as Avalonia.Svg.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
-			name.Text = name_edit.Text ?? ViewModel!.Category!.Name;
+			
 			try
 			{
-				//await APIService.For<IAnalysisCategory>().UpdateAnalysisCategory(ViewModel!.Category!.Id, ViewModel.Category);
+				using var response = await APIService.For<IAnalysisCategory>().UpdateAnalysisCategory(ViewModel!.AnalysisCategory!);
+				if (!response.IsSuccessful)
+					notification.Show("Ошибка!", $"Не удалось редактировать: {response.StatusCode}", NotificationType.Error);
+				else
+				{
+					IsEditing = false;
+					name.IsVisible = true;
+					name_edit.IsVisible = false;
+					(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
+					(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+					name.Text = name_edit.Text ?? ViewModel!.AnalysisCategory!.Name;
+					notification.Show("Успех!", "Успешно отредактировано", NotificationType.Success);
+					initName = ViewModel.AnalysisCategory!.Name;
+				}
 			}
 			catch (Exception ex)
 			{
-				new WindowNotificationManager(CategoriesWindow_Admin.Instance) { Position = NotificationPosition.BottomRight }
-					.Show(new Notification("Ошибка", ex.StackTrace, NotificationType.Error));
+				notification.Show("Ошибка", ex.StackTrace!, NotificationType.Error);
 			}
-		}*/
+		}
 	}
 
 	async void Delete_btn_Click(object? sender, RoutedEventArgs e)
 	{
-		/*ActionOnSelect?.Invoke(null);
-		name_edit.Text = name.Text ?? ViewModel!.Category!.Name;
+		ActionOnSelect?.Invoke(null);
+		name_edit.Text = name.Text ?? ViewModel!.AnalysisCategory!.Name;
 		if (!IsEditing)
 		{
-			if (ViewModel!.Category!.Analyses.Count != 0)
+			if (ViewModel!.AnalysisCategory!.AnalysisCategoriesLists.Count != 0)
 			{
-				new WindowNotificationManager(CategoriesWindow_Admin.Instance) { Position = NotificationPosition.BottomRight }
-					.Show(new Notification("Ошибка", "Вы не можете удалить, т.к. она привязана", NotificationType.Error));
+				notification.Show("Ошибка", "Вы не можете удалить, т.к. она привязана", NotificationType.Error);
 				return;
 			}
 			try
 			{
-				await APIService.For<IAnalysisCategory>().DeleteAnalysisCategory(ViewModel!.Category!.Id);
+				using var response = await APIService.For<IAnalysisCategory>().DeleteAnalysisCategory(ViewModel!.AnalysisCategory!.Id);
+				if (!response.IsSuccessful)
+					notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
+				else notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
 			}
 			catch (Exception ex)
 			{
-				new WindowNotificationManager(CategoriesWindow_Admin.Instance)
-					.Show(new Notification("Ошибка", ex.StackTrace, NotificationType.Error));
+				notification.Show("Ошибка", ex.StackTrace!, NotificationType.Error);
 			}
 		}
 		else
@@ -98,9 +129,9 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 			IsEditing = false;
 			name.IsVisible = true;
 			name_edit.IsVisible = false;
-			(edit_btn.Content as Avalonia.Svg.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-			(delete_btn.Content as Avalonia.Svg.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
-		}*/
+			(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
+			(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+		}
 	}
 
 	public AnalysisCategoryItemAdminUserControl SetActionOnSelect(Action<AnalysisCategory?> action)

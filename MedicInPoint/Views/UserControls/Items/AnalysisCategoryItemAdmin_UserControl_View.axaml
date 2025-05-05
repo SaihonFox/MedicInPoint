@@ -15,30 +15,30 @@
 	</Design.DataContext>
 
 	<Border ClipToBounds="False">
-		<Border Background="White" CornerRadius="16" ClipToBounds="False" Padding="10">
+		<Border Background="White" CornerRadius="16" ClipToBounds="False" Padding="8">
 			<Border.Effect>
 				<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
 			</Border.Effect>
 			<Grid>
-				<Grid IsVisible="true" ColumnDefinitions="*,10,auto,10,auto">
-					<TextBlock Grid.Column="0" IsVisible="{Binding !., Source={x:Static Design.IsDesignMode}}" Name="name" Text="{CompiledBinding AnalysisCategory.Name}" FontSize="24" TextAlignment="Center" VerticalAlignment="Center" />
-					<TextBlock Grid.Column="0" IsVisible="{Binding ., Source={x:Static Design.IsDesignMode}}" Text="analysis category" FontSize="24" TextAlignment="Center" VerticalAlignment="Center" />
-					<TextBox Grid.Column="0" IsVisible="False" Name="name_edit" Text="{CompiledBinding AnalysisCategory.Name, Mode=TwoWay}" BorderThickness="0" FontSize="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-					<Button Grid.Column="2" Name="edit_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+				<Grid IsVisible="true" ColumnDefinitions="*,auto,auto" ColumnSpacing="10">
+					<TextBlock Grid.Column="0" IsVisible="{Binding !., Source={x:Static Design.IsDesignMode}}" Name="name" Text="{CompiledBinding AnalysisCategory.Name}" FontSize="24" LineHeight="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" />
+					<TextBlock Grid.Column="0" IsVisible="{Binding ., Source={x:Static Design.IsDesignMode}}" Text="analysis category" FontSize="24" LineHeight="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" />
+					<TextBox Grid.Column="0" IsVisible="False" Name="name_edit" Text="{CompiledBinding AnalysisCategory.Name, Mode=TwoWay}" CornerRadius="8" BorderThickness="0" FontSize="24" LineHeight="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+					<Button Grid.Column="1" Name="edit_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 						<Button.Styles>
 							<Style Selector="Button:pressed">
 								<Setter Property="RenderTransform" Value="scale(0.95)" />
 							</Style>
 						</Button.Styles>
-						<Svg Path="Assets/SVGs/buttons/edit_category.svg" />
+						<Svg Path="avares://MedicInPoint/Assets/SVGs/buttons/edit_category.svg" />
 					</Button>
-					<Button Grid.Column="4" Name="delete_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+					<Button Grid.Column="2" Name="delete_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 						<Button.Styles>
 							<Style Selector="Button:pressed">
 								<Setter Property="RenderTransform" Value="scale(0.95)" />
 							</Style>
 						</Button.Styles>
-						<Svg Path="Assets/SVGs/buttons/delete_category.svg" Stretch="Fill" />
+						<Svg Path="avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg" Stretch="Fill" />
 					</Button>
 				</Grid>
 			</Grid>

@@ -27,42 +27,10 @@ public partial class AnalysisCategoriesAdminViewModel() : ViewModelBase
 		Title = "Список категорий анализов";
 		_router = router;
 		_notificationService = notificationService;
-
-		FillCategories();
 	}
 
 	[RelayCommand]
 	private void Back() => _router.Back();
-
-	[ObservableProperty]
-	private string _searchText = string.Empty;
-
-	partial void OnSearchTextChanged(string value)
-	{
-		value = value.Trim();
-		if (value.IsNullOrWhiteSpace())
-		{
-			Categories = [.. AllCategories];
-			return;
-		}
-
-		Categories = [.. AllCategories.Where(x => x.Name.Equals(SearchText, StringComparison.CurrentCultureIgnoreCase))];
-	}
-
-	[ObservableProperty]
-	private ObservableCollection<AnalysisCategory> _allCategories = [];
-	[ObservableProperty]
-	private ObservableCollection<AnalysisCategory> _categories = [];
-
-	async Task FillCategories()
-	{
-		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
-		if (!response?.IsSuccessful ?? false)
-			return;
-
-		AllCategories = [.. response.Content!];
-		Categories = [.. AllCategories];
-	}
 
 	[ObservableProperty]
 	private AnalysisCategory _analysisCategory = new();
@@ -84,17 +52,6 @@ public partial class AnalysisCategoriesAdminViewModel() : ViewModelBase
 		}
 
 		Dispatcher.UIThread.Invoke(() => _notificationService.Show("Успех!", "Категория успешно добавлена!"));
-		AnalysisCategory.Name = string.Empty;
+		AnalysisCategory = new();
 	}
-
-	private async Task DeleteCategory()
-	{
-
-	}
-
-	[ObservableProperty]
-	private AnalysisCategory? _editableCategory;
-
-	[ObservableProperty]
-	private AnalysisCategory? _removableCategory;
 }

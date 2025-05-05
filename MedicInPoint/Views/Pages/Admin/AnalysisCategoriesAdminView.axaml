@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
 			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:converter="using:MedicInPoint.Converters"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
@@ -14,57 +15,27 @@
 	<Design.DataContext>
 		<vm:AnalysisCategoriesAdminViewModel />
 	</Design.DataContext>
+	<UserControl.Resources>
+		<converter:IntConverter x:Key="IntConverter" />
+	</UserControl.Resources>
 
 	<Panel>
 		<Grid>
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
-			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Text="{Binding SearchText, Mode=TwoWay}" Watermark="Искать пациента" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
+			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Watermark="Искать категорию" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
 				<i:Interaction.Behaviors>
 					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
 				</i:Interaction.Behaviors>
 			</AutoCompleteBox>
 
+			<TextBlock Name="centerText" Text="Загрузка категорий" FontSize="40" Margin="30,125" HorizontalAlignment="Center" VerticalAlignment="Center" />
 			<ScrollViewer Margin="30,125">
-				<ItemsControl Name="categories_list" ItemsSource="{CompiledBinding Categories}">
+				<ItemsControl Name="categories_list">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
 							<WrapPanel ItemsAlignment="Center" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
-					<ItemsControl.DataTemplates>
-						<DataTemplate DataType="model:AnalysisCategory">
-							<Grid Margin="5">
-								<Border Background="White" CornerRadius="16" ClipToBounds="False" Padding="8">
-									<Border.Effect>
-										<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
-									</Border.Effect>
-									<Grid>
-										<Grid ColumnDefinitions="*,auto,auto" ColumnSpacing="10">
-											<TextBlock Grid.Column="0" Name="name" Text="{CompiledBinding Name}" FontSize="24" TextAlignment="Center" VerticalAlignment="Center" />
-											<TextBox Grid.Column="0" IsVisible="False" Name="name_edit" Text="{CompiledBinding Name, Mode=TwoWay}" BorderThickness="0" FontSize="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-											<Button Grid.Column="1" Name="edit_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-												<Button.Styles>
-													<Style Selector="Button:pressed">
-														<Setter Property="RenderTransform" Value="scale(0.95)" />
-													</Style>
-												</Button.Styles>
-												<Svg Path="/Assets/SVGs/buttons/edit_category.svg" />
-											</Button>
-											<Button Grid.Column="2" Name="delete_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-												<Button.Styles>
-													<Style Selector="Button:pressed">
-														<Setter Property="RenderTransform" Value="scale(0.95)" />
-													</Style>
-												</Button.Styles>
-												<Svg Path="/Assets/SVGs/buttons/delete_category.svg" Stretch="Fill" />
-											</Button>
-										</Grid>
-									</Grid>
-								</Border>
-
-							</Grid>
-						</DataTemplate>
-					</ItemsControl.DataTemplates>
 				</ItemsControl>
 			</ScrollViewer>
 

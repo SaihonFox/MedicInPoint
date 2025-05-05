@@ -93,7 +93,7 @@ public class PortCheckJob : IJob
 	private async Task CheckPortAsync(IJobExecutionContext context)
 	{
 		bool currentState = await IsPortOpenAsync(context);
-		await File.AppendAllTextAsync(@"C:\Users\ILNAR\Desktop\ping.txt", $"1|time: {context.ScheduledFireTimeUtc:HH.mm.ss.ffffff} | available: {client.Connected}\n");
+		//await File.AppendAllTextAsync(@"C:\Users\ILNAR\Desktop\ping.txt", $"1|time: {context.ScheduledFireTimeUtc:HH.mm.ss.ffffff} | available: {client.Connected}\n");
 
 		if (currentState != _previousState)
 		{
