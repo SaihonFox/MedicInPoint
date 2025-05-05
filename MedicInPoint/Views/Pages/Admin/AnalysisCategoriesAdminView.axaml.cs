@@ -74,7 +74,8 @@ public partial class AnalysisCategoriesAdminView : UserControl
 
 		categories_list.Items.Clear();
 
-		var searchList = acb.Text.IsNullOrWhiteSpace() ? AllCategories : AllCategories.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase));
+		var searchList = acb.Text.IsNullOrWhiteSpace() ? AllCategories : AllCategories.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList();
+		centerText.IsVisible = searchList.Count == 0;
 		foreach (var category in searchList)
 		{
 			categories_list.Items.Add(new AnalysisCategoryItemAdminUserControl
@@ -116,19 +117,22 @@ public partial class AnalysisCategoriesAdminView : UserControl
 		if (!response.IsSuccessful)
 			return;
 		AllCategories = [..response.Content];
+		var categories = Dispatcher.UIThread.Invoke(() => AllCategories.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList());
 		Dispatcher.UIThread.Invoke(() => {
 			centerText.IsVisible = AllCategories.Count == 0;
 			centerText.Text = "Пустой список";
 		});
-		foreach (var category in response.Content)
+		foreach (var category in categories)
 		{
-			await Dispatcher.UIThread.InvokeAsync(() => categories_list.Items.Add(new AnalysisCategoryItemAdminUserControl
-			{
-				DataContext = new AnalysisCategoryItem_UserControl_ViewModel
+			Dispatcher.UIThread.Invoke(() => {
+				categories_list.Items.Add(new AnalysisCategoryItemAdminUserControl
 				{
-					AnalysisCategory = category
-				}
-			}));
+					DataContext = new AnalysisCategoryItem_UserControl_ViewModel
+					{
+						AnalysisCategory = category
+					}
+				});
+			});
 		}
 	}
 }

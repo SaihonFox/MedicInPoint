@@ -29,7 +29,7 @@
 					<ItemsControl Name="patients_list" ClipToBounds="False" ItemsSource="{CompiledBinding PatientsList}">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<WrapPanel Orientation="Horizontal" ClipToBounds="False" />
+								<WrapPanel ItemsAlignment="Center" />
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
 						<ItemsControl.ItemTemplate>
@@ -52,9 +52,7 @@
 													<TextBlock Grid.Row="1" Text="{CompiledBinding Birthday, StringFormat=dd.MM.yyyy}" FontSize="16" />
 												</Grid>
 
-												<ToggleButton Grid.Column="1" Classes="uc_tb" Padding="10">
-
-												</ToggleButton>
+												<ToggleButton Grid.Column="1" Command="{}" Classes="uc_tb" Padding="10" />
 											</Grid>
 										</Grid>
 									</Border>
@@ -64,7 +62,7 @@
 					</ItemsControl>
 				</ScrollViewer>
 
-				<drawer:PatientDrawerView Grid.Column="2" />
+				<drawer:PatientDrawerView Grid.Column="2" Width="0" />
 			</Grid>
 		</Grid>
 	</Panel>
