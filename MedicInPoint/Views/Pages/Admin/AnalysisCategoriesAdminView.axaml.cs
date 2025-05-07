@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
@@ -23,7 +25,7 @@ namespace MedicInPoint.Views.Pages.Admin;
 
 public partial class AnalysisCategoriesAdminView : UserControl
 {
-	private List<AnalysisCategory> AllCategories = [];
+	private ObservableCollection<AnalysisCategory> AllCategories = [];
 
 	public AnalysisCategoriesAdminView()
 	{
@@ -45,20 +47,15 @@ public partial class AnalysisCategoriesAdminView : UserControl
 		if(!Design.IsDesignMode)
 			Loaded += (s, e) => FillCategories();
 
-		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryAdded", category =>
-			Dispatcher.UIThread.Invoke(() => categories_list.Items.Add(new AnalysisCategoryItemAdminUserControl
-			{
-				DataContext = new AnalysisCategoryItem_UserControl_ViewModel
-				{
-					AnalysisCategory = category
-				}
-			}))
-		);
+		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryAdded", category => {
+			AllCategories.Add(category);
+			FillWithSearch();
+		});
 		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryDeleted", category =>
 		{
-			var c = categories_list.Items.ToList().First(c => (c as AnalysisCategory)!.Id == category.Id);
-			Dispatcher.UIThread.Invoke(() => categories_list.Items.Remove(c));
-			centerText.IsVisible = categories_list.Items.Count == 0;
+			var c = categories_list.Items.ToList().First(c => (c as AnalysisCategory)!.Id == category.Id) as AnalysisCategory;
+			AllCategories.Remove(c!);
+			FillWithSearch();
 		});
 	}
 
@@ -72,20 +69,7 @@ public partial class AnalysisCategoriesAdminView : UserControl
 			return;
 		}
 
-		categories_list.Items.Clear();
-
-		var searchList = acb.Text.IsNullOrWhiteSpace() ? AllCategories : AllCategories.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList();
-		centerText.IsVisible = searchList.Count == 0;
-		foreach (var category in searchList)
-		{
-			categories_list.Items.Add(new AnalysisCategoryItemAdminUserControl
-			{
-				DataContext = new AnalysisCategoryItem_UserControl_ViewModel
-				{
-					AnalysisCategory = category
-				}
-			});
-		}
+		FillWithSearch();
 	}
 
 	async void acb_KeyDown(object? source, KeyEventArgs e)
@@ -110,14 +94,21 @@ public partial class AnalysisCategoriesAdminView : UserControl
 
 	async void FillCategories()
 	{
-		categories_list.Items.Clear();
 		if (Design.IsDesignMode)
 			return;
 		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
+
 		AllCategories = [..response.Content];
-		var categories = Dispatcher.UIThread.Invoke(() => AllCategories.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList());
+
+		FillWithSearch();
+	}
+
+	async void FillWithSearch()
+	{
+		categories_list.Items.Clear();
+		var categories = await Dispatcher.UIThread.InvokeAsync(() => AllCategories.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList());
 		Dispatcher.UIThread.Invoke(() => {
 			centerText.IsVisible = AllCategories.Count == 0;
 			centerText.Text = "Пустой список";

@@ -28,7 +28,7 @@
 				</i:Interaction.Behaviors>
 			</AutoCompleteBox>
 
-			<TextBlock Name="centerText" Text="Загрузка категорий" FontSize="40" Margin="30,125" HorizontalAlignment="Center" VerticalAlignment="Center" />
+			<TextBlock Name="centerText" Text="Загрузка данных о категориях" FontSize="40" Margin="30,125" HorizontalAlignment="Center" VerticalAlignment="Center" />
 			<ScrollViewer Margin="30,125">
 				<ItemsControl Name="categories_list">
 					<ItemsControl.ItemsPanel>

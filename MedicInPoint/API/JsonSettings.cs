@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
 
-using MedicInPoint.Converters.Json;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -12,6 +10,7 @@ public static class JsonSettings
 	public static JsonSerializerSettings Settings => new JsonSerializerSettings
 	{
 		ContractResolver = new CamelCasePropertyNamesContractResolver(),
+		
 		Formatting = Formatting.Indented,
 		DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
 		ReferenceLoopHandling = ReferenceLoopHandling.Ignore,

@@ -1,9 +1,10 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		 	 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
 			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:sys="using:System"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
@@ -18,51 +19,25 @@
 	<Panel>
 		<Grid>
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
-			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Text="{Binding SearchText, Mode=TwoWay}" Watermark="Искать пациента" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
+			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Watermark="Искать пациента" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
 				<i:Interaction.Behaviors>
 					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
 				</i:Interaction.Behaviors>
 			</AutoCompleteBox>
 
+			<TextBlock Name="centerText" Text="Загрузка данных о пациентах" FontSize="40" Margin="30,125" HorizontalAlignment="Center" VerticalAlignment="Center" />
 			<Grid ColumnDefinitions="*,10,auto" Margin="20,125">
 				<ScrollViewer Grid.Column="0">
-					<ItemsControl Name="patients_list" ClipToBounds="False" ItemsSource="{CompiledBinding PatientsList}">
+					<ItemsControl Name="patients_list">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
 								<WrapPanel ItemsAlignment="Center" />
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Grid ClipToBounds="False" Margin="10">
-									<Border Background="White" ClipToBounds="False" CornerRadius="12" Padding="16" MinWidth="335" MinHeight="135">
-										<Border.Effect>
-											<DropShadowEffect BlurRadius="20" Color="#E4E8F5" OffsetX="0" OffsetY="0" />
-										</Border.Effect>
-
-										<Grid RowDefinitions="*,auto">
-											<TextBlock Grid.Row="0" Text="{CompiledBinding FullName}" FontSize="24" TextAlignment="Center" />
-											<Grid Grid.Row="1" ColumnDefinitions="*,auto">
-												<Grid RowDefinitions="auto,auto">
-													<StackPanel Orientation="Horizontal" Spacing="5">
-														<Border CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" Margin="0,2" Width="5" />
-														<Border CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" Margin="0,2" Width="5" />
-														<TextBlock Text="{CompiledBinding Sex}" FontSize="16" />
-													</StackPanel>
-													<TextBlock Grid.Row="1" Text="{CompiledBinding Birthday, StringFormat=dd.MM.yyyy}" FontSize="16" />
-												</Grid>
-
-												<ToggleButton Grid.Column="1" Command="{}" Classes="uc_tb" Padding="10" />
-											</Grid>
-										</Grid>
-									</Border>
-								</Grid>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
 					</ItemsControl>
 				</ScrollViewer>
 
-				<drawer:PatientDrawerView Grid.Column="2" Width="0" />
+				<drawer:PatientDrawerView Grid.Column="2" DataContext="{CompiledBinding SelectedPatient}" Width="0" />
 			</Grid>
 		</Grid>
 	</Panel>

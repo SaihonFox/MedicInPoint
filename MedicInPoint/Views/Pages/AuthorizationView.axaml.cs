@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 
@@ -18,6 +19,9 @@ public partial class AuthorizationView : UserControl
 		onboard1.Click += Onboard_Click;
 		onboard2.Click += Onboard_Click;
 		onboard3.Click += Onboard_Click;
+
+		Loaded += (_, _) =>
+			login.Focus(NavigationMethod.Unspecified);
 	}
 
 	private void Onboard_Click(object? sender, RoutedEventArgs e)

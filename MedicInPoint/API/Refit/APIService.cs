@@ -7,6 +7,7 @@ public class APIService
 	private static readonly RefitSettings settings = new()
 	{
 		ContentSerializer = new NewtonsoftJsonContentSerializer(JsonSettings.Settings),
+		Buffered = true
 	};
 
 	public static T For<T>(TimeSpan? timeout) => RestService.For<T>(

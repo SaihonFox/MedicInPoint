@@ -4,5 +4,5 @@ namespace MedicInPoint.Services;
 
 public interface INotificationService
 {
-	Notification Show(string title, string message, NotificationType type = NotificationType.Information);
+	Notification Show(string title, string message, NotificationType type = NotificationType.Information, TimeSpan? expiration = null);
 }
