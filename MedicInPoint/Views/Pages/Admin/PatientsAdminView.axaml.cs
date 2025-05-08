@@ -1,17 +1,10 @@
 using System.Collections.ObjectModel;
 
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml.Templates;
-using Avalonia.Markup.Xaml.XamlIl.Runtime;
 using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 
-using DynamicData;
-
-using MedicInPoint.API.AIMLAPI.Models;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -33,6 +26,7 @@ namespace MedicInPoint.Views.Pages.Admin;
 public partial class PatientsAdminView : UserControl
 {
 	private ObservableCollection<Patient> AllPatients = [];
+	private ObservableCollection<PatientItem_UserControl_View> AllPatientsView = [];
 	public PatientsAdminViewModel ViewModel => (DataContext as PatientsAdminViewModel)!;
 
 	public PatientsAdminView()
@@ -71,8 +65,10 @@ public partial class PatientsAdminView : UserControl
 
 	private PatientItem_UserControl_View? selectedPatient = null;
 
-	void OnSelectPatient(PatientItem_UserControl_View view, bool isSelected) =>
-		Dispatcher.UIThread.Invoke(() => {
+	void OnSelectPatient(PatientItem_UserControl_View view, bool isSelected)
+	{
+		Dispatcher.UIThread.Invoke(() =>
+		{
 			if (selectedPatient != null)
 			{
 				selectedPatient.ViewModel.IsSelected = false;
@@ -81,6 +77,7 @@ public partial class PatientsAdminView : UserControl
 			selectedPatient = isSelected ? view : null;
 			ViewModel.SelectedPatient = selectedPatient?.ViewModel.Patient;
 		});
+	}
 
 	async void acb_KeyDown(object? source, KeyEventArgs e)
 	{
@@ -109,25 +106,11 @@ public partial class PatientsAdminView : UserControl
 			return;
 		
 		AllPatients = [..response.Content!];
-
-		FillWithSearch();
-	}
-
-	async void FillWithSearch()
-	{
-		await Dispatcher.UIThread.InvokeAsync(patients_list.Items.Clear);
-		var patients = await Dispatcher.UIThread.InvokeAsync(() => AllPatients.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList());
-
-		if (patients.Find(x => x.Id == selectedPatient?.ViewModel.Patient?.Id) == null && selectedPatient != null)
+		foreach (var patient in AllPatients)
 		{
-			selectedPatient.ViewModel.IsSelected = false;
-			selectedPatient = null;
-		}
-
-		foreach (var patient in patients)
-		{
-			Dispatcher.UIThread.Invoke(() => {
-				patients_list.Items.Add(new PatientItem_UserControl_View
+			await Dispatcher.UIThread.InvokeAsync(() =>
+			{
+				var view = new PatientItem_UserControl_View
 				{
 					DataContext = new PatientItem_UserControl_ViewModel
 					{
@@ -135,11 +118,41 @@ public partial class PatientsAdminView : UserControl
 						IsSelected = patient.Id == selectedPatient?.ViewModel.Patient?.Id
 					},
 					OnToggle = OnSelectPatient
-				});
+				};
+				AllPatientsView.Add(view);
+				patients_list.Items.Add(view);
 			});
 		}
 
-		Dispatcher.UIThread.Invoke(() => {
+		FillWithSearch();
+	}
+
+	async void FillWithSearch()
+	{
+		await Dispatcher.UIThread.InvokeAsync(patients_list.Items.Clear);
+		var patients = await Dispatcher.UIThread.InvokeAsync(() =>
+			AllPatientsView.Where(x =>
+				x.ViewModel.Patient!.FullName.Contains(Dispatcher.UIThread.Invoke(() => acb.Text!), StringComparison.CurrentCultureIgnoreCase))
+			.ToList()
+		);
+
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			if (patients.Find(x => x.ViewModel.Patient!.Id == selectedPatient?.ViewModel.Patient?.Id) == null && selectedPatient != null)
+			{
+				selectedPatient.ViewModel.IsSelected = false;
+				selectedPatient = null;
+			}
+		});
+
+		foreach (var patient in patients)
+		{
+			Dispatcher.UIThread.Invoke(() => {
+				patients_list.Items.Add(patient);
+			});
+		}
+
+		await Dispatcher.UIThread.InvokeAsync(() => {
 			centerText.IsVisible = AllPatients.Count == 0;
 			centerText.Text = "Пустой список";
 		});

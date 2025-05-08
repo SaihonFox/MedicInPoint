@@ -18,28 +18,25 @@
 	<Panel>
 		<Grid>
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
-			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Text="{Binding SearchText, Mode=TwoWay}" Watermark="Искать сотрудника" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
+			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Watermark="Искать сотрудника" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
 				<i:Interaction.Behaviors>
 					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
 				</i:Interaction.Behaviors>
 			</AutoCompleteBox>
 
+			<TextBlock Name="centerText" Text="Загрузка данных о сотрудниках" FontSize="40" Margin="30,125" HorizontalAlignment="Center" VerticalAlignment="Center" />
 			<Grid ColumnDefinitions="*,10,auto" Margin="20,125">
 				<ScrollViewer Grid.Column="0">
-					<ItemsControl Name="patients_list">
+					<ItemsControl Name="users_list">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<WrapPanel Orientation="Horizontal" />
+								<WrapPanel ItemsAlignment="Center" />
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
-						<ItemsControl.ItemTemplate>
-							<DataTemplate DataType="model:User">
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
 					</ItemsControl>
 				</ScrollViewer>
 
-				<drawer:UserDrawerView Grid.Column="2" />
+				<drawer:UserDrawerView Grid.Column="2" Name="drawer" Width="0" />
 			</Grid>
 		</Grid>
 	</Panel>

@@ -3,15 +3,30 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Items"
+			 ClipToBounds="False"
 			 mc:Ignorable="d"
 			 d:DesignWidth="335" d:DesignHeight="135"
 			 MinWidth="335" MinHeight="135"
+			 Margin="5"
 			 x:Class="MedicInPoint.UserItem_UserControl_View"
 			 x:DataType="vm:UserItem_UserControl_ViewModel">
 	<Design.DataContext>
 		<vm:UserItem_UserControl_ViewModel />
 	</Design.DataContext>
 
-	<Border>
+	<Border ClipToBounds="False">
+		<Border Background="White" CornerRadius="12" Padding="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="335" MinHeight="135">
+			<Border.Effect>
+				<DropShadowEffect BlurRadius="20" Color="#E4E8F5" OffsetX="0" OffsetY="0" />
+			</Border.Effect>
+
+			<Grid RowDefinitions="*,auto">
+				<TextBlock Grid.Row="0" Text="{CompiledBinding User.FullName}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+				<Grid Grid.Row="1" ColumnDefinitions="*,*" VerticalAlignment="Bottom">
+					<TextBlock Text="{CompiledBinding User.Birthday, StringFormat=dd.MM.yyyy}" />
+					<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+				</Grid>
+			</Grid>
+		</Border>
 	</Border>
 </UserControl>

@@ -2,14 +2,34 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Drawers"
+			 xmlns:model="using:MedicInPoint.Models"
 			 xmlns:btn="using:MedicInPoint.Views.UserControls.Drawers.Buttons"
+			 xmlns:converter="using:MedicInPoint.Converters"
+			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Drawers"
+			 xmlns:medic="https://github.com/saihonfox"
 			 mc:Ignorable="d"
 			 d:DesignWidth="300" d:DesignHeight="750"
 			 ClipToBounds="False"
-			 Width="300" Height="750"
+			 Width="300"
 			 x:Class="MedicInPoint.Views.UserControls.Drawers.UserDrawerView"
 			 x:DataType="vm:UserDrawerViewModel">
+	<UserControl.Transitions>
+		<Transitions>
+			<DoubleTransition Property="Width" Duration="00:00:00.45" Easing="QuadraticEaseInOut" />
+			<DoubleTransition Property="Height" Duration="00:00:00.45" Easing="QuadraticEaseInOut" />
+			<DoubleTransition Property="Opacity" Duration="00:00:00.45" Easing="QuadraticEaseInOut" />
+		</Transitions>
+	</UserControl.Transitions>
+	<UserControl.Resources>
+		<converter:OpacityByWidthConverter x:Key="OpacityByWidthConverter" />
+		<converter:WidthByObjectNullableConverter x:Key="WidthByObjectNullableConverter" />
+	</UserControl.Resources>
+	<UserControl.Width>
+		<Binding Path="$self.DataContext" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="300" />
+	</UserControl.Width>
+	<UserControl.Opacity>
+		<Binding Path="$self.Width" Converter="{StaticResource OpacityByWidthConverter}" ConverterParameter="300" />
+	</UserControl.Opacity>
 	<Design.DataContext>
 		<vm:UserDrawerViewModel />
 	</Design.DataContext>

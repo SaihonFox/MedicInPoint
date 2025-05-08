@@ -5,6 +5,7 @@
 			 xmlns:model="using:MedicInPoint.Models"
 			 xmlns:btn="using:MedicInPoint.Views.UserControls.Drawers.Buttons"
 			 xmlns:converter="using:MedicInPoint.Converters"
+			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Drawers"
 			 xmlns:medic="https://github.com/saihonfox"
 			 mc:Ignorable="d"
 			 d:DesignWidth="300" d:DesignHeight="750"

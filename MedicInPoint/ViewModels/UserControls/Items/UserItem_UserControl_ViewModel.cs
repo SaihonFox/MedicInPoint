@@ -8,4 +8,7 @@ public partial class UserItem_UserControl_ViewModel : ViewModelBase
 {
 	[ObservableProperty]
 	private User? _user;
+
+	[ObservableProperty]
+	private bool _isSelected = false;
 }

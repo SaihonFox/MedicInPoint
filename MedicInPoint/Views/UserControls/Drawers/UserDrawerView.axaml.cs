@@ -6,11 +6,10 @@ namespace MedicInPoint.Views.UserControls.Drawers;
 
 public partial class UserDrawerView : UserControl
 {
-    public static UserDrawerViewModel ViewModel = new();
+    public UserDrawerViewModel ViewModel => DataContext as UserDrawerViewModel;
 
     public UserDrawerView()
     {
-        DataContext = ViewModel;
         InitializeComponent();
     }
 }
