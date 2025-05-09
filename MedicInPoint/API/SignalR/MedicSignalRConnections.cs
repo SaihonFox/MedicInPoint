@@ -11,6 +11,7 @@ public class MedicSignalRConnections : IAsyncDisposable
 	public readonly HubConnection MessagesMessageConnection;
 	public readonly HubConnection PatientConnection;
 	public readonly HubConnection RequestConnection;
+	public readonly HubConnection UserConnection;
 
 	public MedicSignalRConnections()
 	{
@@ -38,6 +39,10 @@ public class MedicSignalRConnections : IAsyncDisposable
 			.WithUrl(MedicConfiguration.URL + "hub/request")
 			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
 			.Build();
+		UserConnection = new HubConnectionBuilder()
+			.WithUrl(MedicConfiguration.URL + "hub/user")
+			.ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Trace))
+			.Build();
 
 		Task.WhenAll([
 			AnalysisConnection.StartAsync(),
@@ -45,7 +50,8 @@ public class MedicSignalRConnections : IAsyncDisposable
 			MessageConnection.StartAsync(),
 			MessagesMessageConnection.StartAsync(),
 			PatientConnection.StartAsync(),
-			RequestConnection.StartAsync()
+			RequestConnection.StartAsync(),
+			UserConnection.StartAsync()
 		]);
 	}
 
@@ -63,6 +69,8 @@ public class MedicSignalRConnections : IAsyncDisposable
 			await PatientConnection.DisposeAsync();
 		if (RequestConnection != null)
 			await RequestConnection.DisposeAsync();
+		if (UserConnection != null)
+			await UserConnection.DisposeAsync();
 		GC.SuppressFinalize(this);
 	}
 }

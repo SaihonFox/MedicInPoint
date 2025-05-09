@@ -13,4 +13,8 @@ public class NotificationService(INotificationManager manager) : INotificationSe
 		Dispatcher.UIThread.Invoke(() => _manager.Show(notification));
 		return notification;
 	}
+
+	public void CloseAll() => Dispatcher.UIThread.Invoke(_manager.CloseAll);
+
+	public void Close(INotification notification) => Dispatcher.UIThread.Invoke(() => _manager.Close(notification));
 }

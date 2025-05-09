@@ -11,4 +11,7 @@ public interface IUser
 
 	[Get("/users/allusers")]
 	Task<IApiResponse<List<User>>> GetUsers();
+
+	[Put("/users/block")]
+	Task<IApiResponse<User>> ChangeBlockStatus([Query]int userId, [Query]bool isBlocked);
 }

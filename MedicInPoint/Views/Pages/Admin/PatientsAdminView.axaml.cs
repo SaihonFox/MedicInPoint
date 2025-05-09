@@ -10,7 +10,6 @@ using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
 using MedicInPoint.Extensions;
 using MedicInPoint.Models;
-using MedicInPoint.Services;
 using MedicInPoint.ViewModels.Pages.Admin;
 using MedicInPoint.ViewModels.UserControls.Items;
 using MedicInPoint.Views.UserControls.Items;

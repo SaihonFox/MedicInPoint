@@ -7,13 +7,16 @@ using Avalonia.Xaml.Interactivity;
 
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
+using MedicInPoint.API.SignalR;
 using MedicInPoint.Extensions;
 using MedicInPoint.Models;
 using MedicInPoint.ViewModels.Pages.Admin;
 using MedicInPoint.ViewModels.UserControls.Drawers;
 using MedicInPoint.ViewModels.UserControls.Items;
 
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 using MIP.LocalDB;
 
@@ -46,6 +49,20 @@ public partial class UsersAdminView : UserControl
 
 		if (!Design.IsDesignMode)
 			Loaded += (s, e) => FillUsers();
+
+		App.services.GetRequiredService<MedicSignalRConnections>().UserConnection.On<User>("UserUpdated", user =>
+		{
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				var userView = AllUsersView.FirstOrDefault(x => x.ViewModel.User?.Id == user.Id);
+				if (userView != null)
+					userView.ViewModel.User = user;
+				if(selectedUser != null)
+					selectedUser.ViewModel.User = user;
+				if(ViewModel.SelectedUser != null)
+					ViewModel.SelectedUser = user;
+			});
+		});
 	}
 
 	private void acb_TextChanged(object? sender, TextChangedEventArgs e) => FillWithSearch();

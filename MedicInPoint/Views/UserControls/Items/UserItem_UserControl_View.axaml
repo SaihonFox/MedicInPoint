@@ -23,7 +23,7 @@
 			<Grid RowDefinitions="*,auto">
 				<TextBlock Grid.Row="0" Text="{CompiledBinding User.FullName}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
 				<Grid Grid.Row="1" ColumnDefinitions="*,*" VerticalAlignment="Bottom">
-					<TextBlock Text="{CompiledBinding User.Birthday, StringFormat=dd.MM.yyyy}" />
+					<TextBlock Text="{CompiledBinding User.Birthday, StringFormat=dd.MM.yyyy}" VerticalAlignment="Center" />
 					<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
 				</Grid>
 			</Grid>

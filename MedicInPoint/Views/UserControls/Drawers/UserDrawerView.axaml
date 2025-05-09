@@ -25,7 +25,7 @@
 		<converter:WidthByObjectNullableConverter x:Key="WidthByObjectNullableConverter" />
 	</UserControl.Resources>
 	<UserControl.Width>
-		<Binding Path="$self.DataContext" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="300" />
+		<Binding Path="$self.((vm:UserDrawerViewModel)DataContext).User" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="300" />
 	</UserControl.Width>
 	<UserControl.Opacity>
 		<Binding Path="$self.Width" Converter="{StaticResource OpacityByWidthConverter}" ConverterParameter="300" />
@@ -34,31 +34,35 @@
 		<vm:UserDrawerViewModel />
 	</Design.DataContext>
 
-	<Border Background="White" CornerRadius="24" Padding="16">
-		<Border.Effect>
-			<DropShadowEffect Color="#DADADA" BlurRadius="10" OffsetX="0" OffsetY="0" />
-		</Border.Effect>
+	<Border Classes="drawerbg" Padding="16">
+		<Grid RowDefinitions="auto,auto,*,auto,auto" RowSpacing="10">
+			<TextBlock Grid.Row="0" IsVisible="{CompiledBinding !User, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding User.FullName}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+			<TextBlock Grid.Row="0" IsVisible="{Binding User, Converter={x:Static ObjectConverters.IsNull}}" Text="Фамилия Имя Отчество" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+			<Border Grid.Row="1" Background="#DBDBDC" CornerRadius="100" Height="1" />
 
-		<Grid RowDefinitions="auto,10,auto,10,*,10,auto,10,auto">
-			<TextBlock Grid.Row="0" Text="{Binding User.FullName}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
-			<Border Grid.Row="2" Background="#DBDBDC" CornerRadius="100" Height="1" />
-
-			<StackPanel Grid.Row="4" Orientation="Vertical">
-
+			<StackPanel Grid.Row="2" IsVisible="{Binding !User, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="10">
+				<medic:Pill IsVisible="{CompiledBinding !User.Phone, Converter={x:Static ObjectConverters.IsNull}}" Value="{CompiledBinding User.Phone, Mode=TwoWay}" Title="Номер телефона" />
+				<medic:Pill IsVisible="{CompiledBinding !User.Passport, Converter={x:Static ObjectConverters.IsNull}}" Value="{CompiledBinding User.Passport, Mode=TwoWay}" Title="Паспорт" />
+				<medic:Pill Value="{CompiledBinding User.Birthday, Mode=TwoWay}" Title="Дата рождения" />
 			</StackPanel>
+			<TextBlock Grid.Row="2" IsVisible="{CompiledBinding User, Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-			<Border Grid.Row="6" Background="#DBDBDC" CornerRadius="100" Height="1" />
-			<Border Grid.Row="8">
+			<Border Grid.Row="3" IsVisible="{CompiledBinding !User, Converter={x:Static ObjectConverters.IsNull}}" Background="#DBDBDC" CornerRadius="100" Height="1" />
+			<Border Grid.Row="4" IsVisible="{CompiledBinding !User, Converter={x:Static ObjectConverters.IsNull}}">
+				<!--
 				<Border Background="White" CornerRadius="18" Padding="8" HorizontalAlignment="Center" MinWidth="100" Height="50">
 					<Border.Effect>
 						<DropShadowEffect Color="#DADEDA" BlurRadius="10" OffsetX="0" OffsetY="0" />
 					</Border.Effect>
 
-					<StackPanel Orientation="Horizontal">
-						<btn:UserFireBtn IsVisible="{Binding !User.IsBlocked}" />
-						<btn:UserReturnBtn IsVisible="{Binding User.IsBlocked}" />
-					</StackPanel>
+
 				</Border>
+				-->
+
+				<StackPanel Name="fire_return_btns" IsVisible="{CompiledBinding IsFireReturnVisible}" Orientation="Horizontal" HorizontalAlignment="Center">
+					<btn:UserFireBtn Name="fire_user" IsVisible="{Binding !User.IsBlocked}" />
+					<btn:UserReturnBtn Name="return_user" IsVisible="{Binding User.IsBlocked}" />
+				</StackPanel>
 			</Border>
 		</Grid>
 	</Border>
