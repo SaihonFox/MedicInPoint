@@ -1,15 +1,16 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+
+using CommunityToolkit.Mvvm.ComponentModel;
 
 using Lucdem.Avalonia.SourceGenerators.Attributes;
+
+using MedicInPoint.ViewModels.UserControls.Items;
 
 namespace MedicInPoint.Views.UserControls.Items;
 
 public partial class AnalysisItem_UserControl_View : UserControl
 {
-    [AvaStyledProperty]
-    private bool _isSelected = false;
+    public AnalysisItem_UserControl_ViewModel ViewModel => DataContext as AnalysisItem_UserControl_ViewModel;
 
     public AnalysisItem_UserControl_View()
     {

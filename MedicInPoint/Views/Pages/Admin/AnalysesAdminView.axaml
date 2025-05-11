@@ -20,6 +20,7 @@
 	</Design.DataContext>
 	<UserControl.Resources>
 		<converter:AnalysisToggleButtonConverter x:Key="AnalysisToggleButtonConverter" />
+		<converter:IntConverter x:Key="IntConverter" />
 	</UserControl.Resources>
 
 	<Panel>
@@ -34,7 +35,44 @@
 
 			<Grid ColumnDefinitions="*,auto" Margin="30,125">
 				<Grid Grid.Column="0" RowDefinitions="auto,*">
-					<TextBlock Grid.Row="1" IsVisible="{Binding Path=AnalysesList.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}" Text="Данных нет" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					<ScrollViewer Grid.Row="0" IsVisible="{Binding Path=AnalysesList.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+						<ItemsControl Name="categories_list">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal" Spacing="10" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.Styles>
+								<Style Selector="ListBoxItem">
+									<Setter Property="Background" Value="#F5F5F9" />
+									<Setter Property="Foreground" Value="#7E7E9A" />
+									<Setter Property="Padding" Value="{DynamicResource ListBoxItemPadding}" />
+									<Setter Property="Template">
+										<ControlTemplate>
+											<Border Name="PART_Background" Background="{TemplateBinding Background}" CornerRadius="10" Padding="20,15">
+												<ContentPresenter Name="PART_ContentPresenter"
+																  ContentTemplate="{TemplateBinding ContentTemplate}"
+																  Content="{TemplateBinding Content}" FontSize="20" LineHeight="20"
+																  Foreground="{TemplateBinding Foreground}"
+																  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+																  HorizontalAlignment="Center" VerticalAlignment="Center" />
+											</Border>
+										</ControlTemplate>
+									</Setter>
+									<Style Selector="^:selected">
+										<Setter Property="Background" Value="#1A6FEE" />
+										<Setter Property="Foreground" Value="White" />
+									</Style>
+								</Style>
+							</ItemsControl.Styles>
+							<ItemsControl.DataTemplates>
+								<DataTemplate DataType="model:AnalysisCategory">
+									<TextBlock Text="{CompiledBinding Name}" />
+								</DataTemplate>
+							</ItemsControl.DataTemplates>
+						</ItemsControl>
+					</ScrollViewer>
+					<TextBlock Grid.Row="1" Name="centerText" Text="Данных нет" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 					<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Padding="5" HorizontalContentAlignment="Center">
 						<ItemsControl Name="analyses_list" ClipToBounds="False">
 							<ItemsControl.ItemsPanel>
@@ -42,15 +80,11 @@
 									<WrapPanel ItemsAlignment="Center" />
 								</ItemsPanelTemplate>
 							</ItemsControl.ItemsPanel>
-							<ItemsControl.DataTemplates>
-								<DataTemplate DataType="model:Analysis">
-								</DataTemplate>
-							</ItemsControl.DataTemplates>
 						</ItemsControl>
 					</ScrollViewer>
 				</Grid>
 
-				<drawer:AnalysisDrawerView Grid.Column="1" DataContext="{Binding Analysis}" />
+				<drawer:AnalysisDrawerView Grid.Column="1" DataContext="{CompiledBinding SelectedAnalysis}" Width="0" />
 			</Grid>
 		</Grid>
 	</Panel>

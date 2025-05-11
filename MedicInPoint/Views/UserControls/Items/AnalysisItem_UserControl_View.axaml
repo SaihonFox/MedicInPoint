@@ -3,27 +3,32 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:model="using:MedicInPoint.Models"
-			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
-			 xmlns:view="using:MedicInPoint.Views.Pages.Admin"
+			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Items"
 			 mc:Ignorable="d"
+			 ClipToBounds="False"
 			 d:DesignWidth="335" d:DesignHeight="135"
+			 Margin="10"
 			 MinWidth="335" MinHeight="135"
 			 x:Class="MedicInPoint.Views.UserControls.Items.AnalysisItem_UserControl_View"
-			 x:DataType="model:Analysis">
+			 x:DataType="vm:AnalysisItem_UserControl_ViewModel">
+	<Design.DataContext>
+		<vm:AnalysisItem_UserControl_ViewModel />
+	</Design.DataContext>
+
 	<Border>
 		<Grid>
-			<Border ClipToBounds="False" CornerRadius="12" Background="White" Padding="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="335" MinHeight="135">
-				<Border.Effect>
-					<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
-				</Border.Effect>
+			<Border Classes="drawerbg" ClipToBounds="False" HorizontalAlignment="Center" VerticalAlignment="Center" Width="335" MinHeight="135">
 				<Grid RowDefinitions="*,5,*">
-					<TextBlock Grid.Row="0" Text="{CompiledBinding Name}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
+					<TextBlock Grid.Row="0" IsVisible="{CompiledBinding !Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="{CompiledBinding Analysis.Name}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
+					<TextBlock Grid.Row="0" IsVisible="{CompiledBinding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Название анализа" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
 					<Grid Grid.Row="2" ColumnDefinitions="*,*" VerticalAlignment="Bottom">
 						<Grid Grid.Column="0" RowDefinitions="*,*" VerticalAlignment="Center">
-							<TextBlock Grid.Row="0" Text="{Binding ResultsAfter}" FontSize="14" Foreground="#939396" />
-							<TextBlock Grid.Row="1" Text="{Binding Price, StringFormat=#.## руб\\.}" FontSize="17" />
+							<TextBlock Grid.Row="0" IsVisible="{CompiledBinding !Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding Analysis.ResultsAfter}" FontSize="14" Foreground="#939396" />
+							<TextBlock Grid.Row="0" IsVisible="{CompiledBinding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Результаты через" FontSize="14" Foreground="#939396" />
+							<TextBlock Grid.Row="1" IsVisible="{CompiledBinding !Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding Analysis.Price, StringFormat=0.00 руб\\.}" FontSize="17" />
+							<TextBlock Grid.Row="1" IsVisible="{CompiledBinding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Цена" FontSize="17" />
 						</Grid>
-						<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding $parent[view:AnalysesAdminView].((vm:AnalysesAdminViewModel)DataContext).IsSelected}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+						<ToggleButton Grid.Column="1" Name="select_tb" Classes="uc_tb" IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
 					</Grid>
 				</Grid>
 			</Border>

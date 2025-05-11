@@ -77,5 +77,5 @@ public partial class AnalysesAdminViewModel() : ViewModelBase
 	private bool _isSelected = false;
 
 	[ObservableProperty]
-	public Analysis? _analysis = null;//Design.IsDesignMode ? null : new() { Name = "Какое то имя", Price = 169, Biomaterial = "Венозная кровь", ResultsAfter = "2 дня", Preparation = "Подготовка к анализу" };
+	private Analysis? _selectedAnalysis = null;//Design.IsDesignMode ? null : new() { Name = "Какое то имя", Price = 169, Biomaterial = "Венозная кровь", ResultsAfter = "2 дня", Preparation = "Подготовка к анализу" };
 }

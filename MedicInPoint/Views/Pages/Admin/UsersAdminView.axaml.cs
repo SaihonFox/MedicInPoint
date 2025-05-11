@@ -54,6 +54,10 @@ public partial class UsersAdminView : UserControl
 		{
 			Dispatcher.UIThread.Invoke(() =>
 			{
+				var user1 = AllUsers.FirstOrDefault(x => x.Id == user.Id);
+				if (user1 != null)
+					user1 = user;
+
 				var userView = AllUsersView.FirstOrDefault(x => x.ViewModel.User?.Id == user.Id);
 				if (userView != null)
 					userView.ViewModel.User = user;
@@ -61,6 +65,8 @@ public partial class UsersAdminView : UserControl
 					selectedUser.ViewModel.User = user;
 				if(ViewModel.SelectedUser != null)
 					ViewModel.SelectedUser = user;
+				if (drawer.ViewModel.User != null)
+					drawer.ViewModel.User = user;
 			});
 		});
 	}
@@ -114,7 +120,7 @@ public partial class UsersAdminView : UserControl
 		AllUsers = [.. response.Content!];
 		foreach (var user in AllUsers)
 		{
-			await Dispatcher.UIThread.InvokeAsync(() =>
+			Dispatcher.UIThread.Invoke(() =>
 			{
 				var view = new UserItem_UserControl_View
 				{

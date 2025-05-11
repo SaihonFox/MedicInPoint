@@ -39,7 +39,7 @@ public partial class UserDrawerView : UserControl
 			return;
 		}
 
-		var notification = notificationService.Show("Уведомление", $"Увольнение");
+		var notification = notificationService.Show("Уведомление", $"Увольнение {ViewModel.User.FullName}");
 		using var response = await APIService.For<IUser>().ChangeBlockStatus(ViewModel.User!.Id, true);
 		if (!response.IsSuccessful)
 		{
@@ -62,7 +62,7 @@ public partial class UserDrawerView : UserControl
 			return;
 		}
 
-		var notification = notificationService.Show("Уведомление", $"Возвращение");
+		var notification = notificationService.Show("Уведомление", $"Возвращение {ViewModel.User.FullName}");
 		using var response = await APIService.For<IUser>().ChangeBlockStatus(ViewModel.User!.Id, false);
 		if (!response.IsSuccessful)
 		{

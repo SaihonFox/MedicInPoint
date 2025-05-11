@@ -8,4 +8,7 @@ public partial class AnalysisDrawerViewModel : ViewModelBase
 {
 	[ObservableProperty]
 	private Analysis? _analysis;
+
+	[ObservableProperty]
+	private bool _isEditable = false;
 }

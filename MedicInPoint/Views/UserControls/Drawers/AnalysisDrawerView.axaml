@@ -5,13 +5,17 @@
 			 xmlns:model="using:MedicInPoint.Models"
 			 xmlns:btn="using:MedicInPoint.Views.UserControls.Drawers.Buttons"
 			 xmlns:converter="using:MedicInPoint.Converters"
+			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Drawers"
 			 xmlns:medic="https://github.com/saihonfox"
 			 mc:Ignorable="d"
 			 d:DesignWidth="400" d:DesignHeight="750"
-			 ClipToBounds="False"
+			 
 			 Width="400" Height="750"
 			 x:Class="MedicInPoint.Views.UserControls.Drawers.AnalysisDrawerView"
-			 x:DataType="model:Analysis">
+			 x:DataType="vm:AnalysisDrawerViewModel">
+	<Design.DataContext>
+		<vm:AnalysisDrawerViewModel />
+	</Design.DataContext>
 	<UserControl.Transitions>
 		<Transitions>
 			<DoubleTransition Property="Width" Duration="00:00:00.45" Easing="QuadraticEaseInOut" />
@@ -24,34 +28,38 @@
 		<converter:WidthByObjectNullableConverter x:Key="WidthByObjectNullableConverter" />
 	</UserControl.Resources>
 	<UserControl.Width>
-		<Binding Path="$self.DataContext" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="400" />
+		<Binding Path="$self.((vm:AnalysisDrawerViewModel)DataContext).Analysis" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="400" />
 	</UserControl.Width>
 	<UserControl.Opacity>
 		<Binding Path="$self.Width" Converter="{StaticResource OpacityByWidthConverter}" ConverterParameter="400" />
 	</UserControl.Opacity>
 
-	<Border Classes="drawerbg" Padding="16">
+	<!--<Border Classes="drawerbg" Padding="16">
 		<Grid RowDefinitions="auto,10,auto,10,*,10,auto,10,auto">
-			<TextBlock Grid.Row="0" IsVisible="{Binding !., Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding Name}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
-			<TextBlock Grid.Row="0" IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNull}}" Text="Наименование" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+			<TextBlock Grid.Row="0" IsVisible="{Binding !Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding Analysis.Name}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+			<TextBlock Grid.Row="0" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Наименование" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
 			<Border Grid.Row="2" Background="#DBDBDC" CornerRadius="100" Height="1" />
 
 			<StackPanel Grid.Row="4" Orientation="Vertical" Spacing="10">
 				<Grid ColumnDefinitions="*,10,*">
-					<medic:Pill Grid.Column="0" Value="{CompiledBinding Price, StringFormat=#.## руб\\.}" Title="Цена" PillPadding="10" HorizontalAlignment="Stretch"  />
-					<medic:Pill Grid.Column="2" Value="{CompiledBinding ResultsAfter}" Title="Результаты через" PillPadding="10" HorizontalAlignment="Stretch" />
+					<medic:Pill Grid.Column="0" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Price, StringFormat=0.00 руб\\.}" Title="Цена" PillPadding="10" HorizontalAlignment="Stretch"  />
+					<medic:Pill Grid.Column="2" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.ResultsAfter}" Title="Результаты через" PillPadding="10" HorizontalAlignment="Stretch" />
 				</Grid>
-				<medic:Pill Value="{CompiledBinding Biomaterial}" Title="Биоматериал" PillPadding="45,10" />
-				<StackPanel IsVisible="{CompiledBinding !Description, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
+				<medic:Pill IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Biomaterial}" Title="Биоматериал" PillPadding="45,10" />
+				<StackPanel IsVisible="{CompiledBinding !Analysis.Description, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Описание" FontSize="16" LineHeight="16" Foreground="#939396" />
-					<TextBlock Text="{CompiledBinding Description}" FontSize="16" LineHeight="16" />
+					<TextBlock IsVisible="{CompiledBinding !IsEditable}" Text="{CompiledBinding Analysis.Description}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+					<TextBox IsVisible="{CompiledBinding IsEditable}" Text="{CompiledBinding Analysis.Description, Mode=TwoWay}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
+					</TextBox>
 				</StackPanel>
-				<StackPanel IsVisible="{CompiledBinding !Preparation, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
+				<StackPanel IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Подготовка" FontSize="16" LineHeight="16" Foreground="#939396" />
-					<TextBlock Text="{CompiledBinding Preparation}" FontSize="16" LineHeight="16" />
+					<TextBlock IsVisible="{CompiledBinding !IsEditable}" Text="{CompiledBinding Analysis.Preparation}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+					<TextBox IsVisible="{CompiledBinding IsEditable}" Text="{CompiledBinding Analysis.Preparation, Mode=TwoWay}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
+					</TextBox>
 				</StackPanel>
 			</StackPanel>
-			<TextBlock Grid.Row="4" IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+			<TextBlock Grid.Row="4" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
 			<Border Grid.Row="6" Background="#DBDBDC" CornerRadius="100" Height="1" />
 			<Border Grid.Row="8">
@@ -61,12 +69,12 @@
 					</Border.Effect>
 
 					<Grid ColumnDefinitions="auto,7.5,auto,7.5,auto">
-						<btn:AnalysisEditBtn Grid.Column="0" Background="#1A6FEE" />
+						<btn:AnalysisEditBtn Grid.Column="0" Name="" Background="#1A6FEE" />
 						<Border Grid.Column="2" Background="#DBDBDC" CornerRadius="100" Width="1" />
 						<btn:AnalysisDeleteBtn Grid.Column="4" />
 					</Grid>
 				</Border>
 			</Border>
 		</Grid>
-	</Border>
+	</Border>-->
 </UserControl>

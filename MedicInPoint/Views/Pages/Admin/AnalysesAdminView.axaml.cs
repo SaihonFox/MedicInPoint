@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 
 using MedicInPoint.Extensions;
+using MedicInPoint.ViewModels.Pages.Admin;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,8 @@ namespace MedicInPoint.Views.Pages.Admin;
 
 public partial class AnalysesAdminView : UserControl
 {
+	public AnalysesAdminViewModel ViewModel => DataContext as AnalysesAdminViewModel;
+
 	public AnalysesAdminView()
 	{
 		InitializeComponent();

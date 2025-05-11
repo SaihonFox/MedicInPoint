@@ -8,4 +8,7 @@ public partial class AnalysisItem_UserControl_ViewModel : ViewModelBase
 {
 	[ObservableProperty]
 	private Analysis? _analysis;
+
+	[ObservableProperty]
+	private bool _isSelected = false;
 }
