@@ -103,8 +103,8 @@ public partial class AnalysesAdminView : UserControl
 				selectedAnalysis = null;
 			}
 			selectedAnalysis = isSelected ? view : null;
-			ViewModel.SelectedAnalysis = selectedAnalysis?.ViewModel.Analysis;
-			drawer.ViewModel.Analysis = selectedAnalysis?.ViewModel.Analysis;
+			ViewModel.SelectedAnalysis = selectedAnalysis?.ViewModel?.Analysis;
+			drawer.ViewModel.Analysis = selectedAnalysis?.ViewModel?.Analysis;
 		});
 	}
 
@@ -220,7 +220,7 @@ public partial class AnalysesAdminView : UserControl
 		});
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
-			ViewModel.SelectedAnalysis = selectedAnalysis?.ViewModel.Analysis;
+			ViewModel.SelectedAnalysis = selectedAnalysis?.ViewModel?.Analysis;
 			drawer.ViewModel.Analysis = ViewModel.SelectedAnalysis;
 		});
 	}

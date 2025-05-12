@@ -17,18 +17,18 @@ namespace MedicInPoint.Views.UserControls.Items;
 
 public partial class AnalysisCategoryItemAdminUserControl : UserControl
 {
-	public AnalysisCategoryItem_UserControl_ViewModel ViewModel { get; set; } = null!;
+	public AnalysisCategoryItem_UserControl_ViewModel ViewModel => (DataContext as AnalysisCategoryItem_UserControl_ViewModel)!;
 
 	public readonly INotificationService notification = null!;
 
 	public Action<AnalysisCategory?>? ActionOnSelect = null;
+	public Action<AnalysisCategoryItemAdminUserControl>? ActionOnDelete = null;
 
 	public bool IsEditing { get; set; } = false;
 	private string initName = string.Empty;
 
 	public AnalysisCategoryItemAdminUserControl()
 	{
-		ViewModel = (DataContext as AnalysisCategoryItem_UserControl_ViewModel)!;
 		notification = App.services.GetRequiredService<INotificationService>();
 
 		InitializeComponent();
@@ -42,7 +42,6 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 
 	async void Edit_btn_Click(object? sender, RoutedEventArgs e)
 	{
-		ViewModel = (DataContext as AnalysisCategoryItem_UserControl_ViewModel)!;
 		if (!IsEditing)
 		{
 			ActionOnSelect?.Invoke(ViewModel!.AnalysisCategory);
@@ -106,7 +105,7 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 		name_edit.Text = name.Text ?? ViewModel!.AnalysisCategory!.Name;
 		if (!IsEditing)
 		{
-			if (ViewModel!.AnalysisCategory!.AnalysisCategoriesLists.Count != 0)
+			if (ViewModel!.AnalysisCategoriesList.Count != 0)
 			{
 				notification.Show("Ошибка", "Вы не можете удалить, т.к. она привязана", NotificationType.Error);
 				return;
@@ -116,7 +115,11 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 				using var response = await APIService.For<IAnalysisCategory>().DeleteAnalysisCategory(ViewModel!.AnalysisCategory!.Id);
 				if (!response.IsSuccessful)
 					notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
-				else notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
+				else
+				{
+					notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
+					ActionOnDelete?.Invoke(this);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -131,29 +134,5 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 			(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
 			(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
 		}
-	}
-
-	public AnalysisCategoryItemAdminUserControl SetActionOnSelect(Action<AnalysisCategory?> action)
-	{
-		ActionOnSelect = action;
-		return this;
-	}
-
-	public AnalysisCategoryItemAdminUserControl SetCategory(AnalysisCategory? category, int? selectedId = 0)
-	{
-		/*ViewModel!.Category = category;
-		IsEditing = selectedId == category?.Id;*/
-		return this;
-	}
-
-	public AnalysisCategoryItemAdminUserControl With(Action<AnalysisCategoryItemAdminUserControl> action)
-	{
-		action.Invoke(this);
-		return this;
-	}
-
-	void Border_PointerPressed(object? sender, PointerPressedEventArgs e)
-	{
-
 	}
 }

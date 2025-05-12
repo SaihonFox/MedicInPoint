@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 
+using MedicInPoint.API.AIMLAPI.Models;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -21,11 +22,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 using MIP.LocalDB;
 
+using Newtonsoft.Json;
+
 namespace MedicInPoint.Views.Pages.Admin;
 
 public partial class AnalysisCategoriesAdminView : UserControl
 {
 	private ObservableCollection<AnalysisCategory> AllCategories = [];
+	private ObservableCollection<AnalysisCategoryItemAdminUserControl> AllCategoriesView = [];
 
 	public AnalysisCategoriesAdminView()
 	{
@@ -47,15 +51,36 @@ public partial class AnalysisCategoriesAdminView : UserControl
 		if(!Design.IsDesignMode)
 			Loaded += (s, e) => FillCategories();
 
-		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryAdded", category => {
-			AllCategories.Add(category);
+		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryAdded", category =>
+		{
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				var categoryView = new AnalysisCategoryItemAdminUserControl
+				{
+					DataContext = new AnalysisCategoryItem_UserControl_ViewModel
+					{
+						AnalysisCategory = category,
+						AnalysisCategoriesList = category.AnalysisCategoriesLists
+					}
+				};
+				categories_list.Items.Add(categoryView);
+				AllCategories.Add(category);
+				AllCategoriesView.Add(categoryView);
+				FillWithSearch();
+			});
+		});
+		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryUpdated", category =>
+		{
 			FillWithSearch();
 		});
 		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryDeleted", category =>
 		{
-			var c = categories_list.Items.ToList().First(c => (c as AnalysisCategory)!.Id == category.Id) as AnalysisCategory;
-			AllCategories.Remove(c!);
-			FillWithSearch();
+			/*var c = AllCategoriesView.First(x => x.ViewModel.AnalysisCategory!.Id == category.Id);
+			int index = AllCategoriesView.IndexOf(c);
+			categories_list.Items.RemoveAt(index);
+			AllCategories.Remove(c.ViewModel.AnalysisCategory!);
+			AllCategoriesView.Remove(c);
+			FillWithSearch();*/
 		});
 	}
 
@@ -100,7 +125,28 @@ public partial class AnalysisCategoriesAdminView : UserControl
 		if (!response.IsSuccessful)
 			return;
 
+		await File.WriteAllTextAsync(@"C:\Users\ILNAR\Desktop\content.txt", JsonConvert.SerializeObject(response.Content, Formatting.Indented));
 		AllCategories = [..response.Content];
+		foreach(var category in AllCategories) {
+			Dispatcher.UIThread.Invoke(() => {
+				var categoryView = new AnalysisCategoryItemAdminUserControl
+				{
+					DataContext = new AnalysisCategoryItem_UserControl_ViewModel
+					{
+						AnalysisCategory = category,
+						AnalysisCategoriesList = category.AnalysisCategoriesLists,
+					},
+					ActionOnDelete = uc => {
+						categories_list.Items.Remove(uc);
+						categories_list.UpdateLayout();
+						AllCategoriesView.Remove(uc);
+						AllCategories.Remove(uc.ViewModel.AnalysisCategory!);
+					}
+				};
+				categories_list.Items.Add(categoryView);
+				AllCategoriesView.Add(categoryView);
+			});
+		}
 
 		FillWithSearch();
 	}
@@ -108,21 +154,16 @@ public partial class AnalysisCategoriesAdminView : UserControl
 	async void FillWithSearch()
 	{
 		categories_list.Items.Clear();
-		var categories = await Dispatcher.UIThread.InvokeAsync(() => AllCategories.Where(x => x.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList());
+		var categories = await Dispatcher.UIThread.InvokeAsync(() => AllCategoriesView.Where(x => x.ViewModel.AnalysisCategory!.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList());
 		Dispatcher.UIThread.Invoke(() => {
 			centerText.IsVisible = AllCategories.Count == 0;
 			centerText.Text = "Пустой список";
 		});
 		foreach (var category in categories)
 		{
-			Dispatcher.UIThread.Invoke(() => {
-				categories_list.Items.Add(new AnalysisCategoryItemAdminUserControl
-				{
-					DataContext = new AnalysisCategoryItem_UserControl_ViewModel
-					{
-						AnalysisCategory = category
-					}
-				});
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				categories_list.Items.Add(category);
 			});
 		}
 	}

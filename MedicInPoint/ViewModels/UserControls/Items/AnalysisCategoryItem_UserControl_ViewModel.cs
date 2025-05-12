@@ -8,4 +8,7 @@ public partial class AnalysisCategoryItem_UserControl_ViewModel() : ViewModelBas
 {
 	[ObservableProperty]
 	private AnalysisCategory? _analysisCategory;
+
+	[ObservableProperty]
+	private ICollection<AnalysisCategoriesList> analysisCategoriesList;
 }
