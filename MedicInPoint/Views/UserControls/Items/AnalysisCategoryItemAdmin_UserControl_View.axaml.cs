@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Svg.Skia;
 using Avalonia.Threading;
 
 using MedicInPoint.API.Refit;

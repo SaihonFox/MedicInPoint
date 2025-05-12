@@ -152,7 +152,7 @@ public partial class PatientsAdminView : UserControl
 		}
 
 		await Dispatcher.UIThread.InvokeAsync(() => {
-			centerText.IsVisible = AllPatients.Count == 0;
+			centerText.IsVisible = patients.Count == 0;
 			centerText.Text = "Пустой список";
 		});
 		await Dispatcher.UIThread.InvokeAsync(() =>

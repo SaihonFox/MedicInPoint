@@ -7,9 +7,10 @@
 			 xmlns:converter="using:MedicInPoint.Converters"
 			 xmlns:vm="using:MedicInPoint.ViewModels.UserControls.Drawers"
 			 xmlns:medic="https://github.com/saihonfox"
+			 xmlns:sys="using:System"
 			 mc:Ignorable="d"
+			 ClipToBounds="False"
 			 d:DesignWidth="400" d:DesignHeight="750"
-			 
 			 Width="400" Height="750"
 			 x:Class="MedicInPoint.Views.UserControls.Drawers.AnalysisDrawerView"
 			 x:DataType="vm:AnalysisDrawerViewModel">
@@ -24,57 +25,186 @@
 		</Transitions>
 	</UserControl.Transitions>
 	<UserControl.Resources>
+		<converter:IntConverter x:Key="IntConverter" />
 		<converter:OpacityByWidthConverter x:Key="OpacityByWidthConverter" />
 		<converter:WidthByObjectNullableConverter x:Key="WidthByObjectNullableConverter" />
 	</UserControl.Resources>
 	<UserControl.Width>
-		<Binding Path="$self.((vm:AnalysisDrawerViewModel)DataContext).Analysis" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="400" />
+		<CompiledBinding Path="$self.((vm:AnalysisDrawerViewModel)DataContext).Analysis" Converter="{StaticResource WidthByObjectNullableConverter}" ConverterParameter="400" />
 	</UserControl.Width>
 	<UserControl.Opacity>
-		<Binding Path="$self.Width" Converter="{StaticResource OpacityByWidthConverter}" ConverterParameter="400" />
+		<CompiledBinding Path="$self.Width" Converter="{StaticResource OpacityByWidthConverter}" ConverterParameter="400" />
 	</UserControl.Opacity>
 
-	<!--<Border Classes="drawerbg" Padding="16">
-		<Grid RowDefinitions="auto,10,auto,10,*,10,auto,10,auto">
+	<Border Classes="drawerbg">
+		<Border.Transitions>
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="00:00:00.1" Easing="QuadraticEaseOut" />
+			</Transitions>
+		</Border.Transitions>
+		<Border.Opacity>
+			<CompiledBinding Path="$parent[UserControl].Width" Converter="{StaticResource OpacityByWidthConverter}" ConverterParameter="400" />
+		</Border.Opacity>
+
+		<Grid RowDefinitions="auto,auto,*,auto,auto" RowSpacing="10">
 			<TextBlock Grid.Row="0" IsVisible="{Binding !Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding Analysis.Name}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
 			<TextBlock Grid.Row="0" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Наименование" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
-			<Border Grid.Row="2" Background="#DBDBDC" CornerRadius="100" Height="1" />
+			<Border Grid.Row="1" Background="#DBDBDC" CornerRadius="100" Height="1" />
 
-			<StackPanel Grid.Row="4" Orientation="Vertical" Spacing="10">
+			<StackPanel Grid.Row="2" Orientation="Vertical" Spacing="10">
 				<Grid ColumnDefinitions="*,10,*">
 					<medic:Pill Grid.Column="0" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Price, StringFormat=0.00 руб\\.}" Title="Цена" PillPadding="10" HorizontalAlignment="Stretch"  />
 					<medic:Pill Grid.Column="2" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.ResultsAfter}" Title="Результаты через" PillPadding="10" HorizontalAlignment="Stretch" />
 				</Grid>
 				<medic:Pill IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Biomaterial}" Title="Биоматериал" PillPadding="45,10" />
+
+				<!-- Description -->
 				<StackPanel IsVisible="{CompiledBinding !Analysis.Description, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
-					<TextBlock Text="Описание" FontSize="16" LineHeight="16" Foreground="#939396" />
-					<TextBlock IsVisible="{CompiledBinding !IsEditable}" Text="{CompiledBinding Analysis.Description}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+					<TextBlock Text="Описание" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+					<TextBlock Text="{CompiledBinding Analysis.Description}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
+						<TextBlock.IsVisible>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<CompiledBinding Path="!IsEditable" />
+								<CompiledBinding Path="!Analysis.Description.Length" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
+							</MultiBinding>
+						</TextBlock.IsVisible>
+					</TextBlock>
+					<TextBlock Text="Отсутствует" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" HorizontalAlignment="Center">
+						<TextBlock.IsVisible>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<CompiledBinding Path="!IsEditable" />
+								<CompiledBinding Path="Analysis.Description.Length" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
+							</MultiBinding>
+						</TextBlock.IsVisible>
+					</TextBlock>
 					<TextBox IsVisible="{CompiledBinding IsEditable}" Text="{CompiledBinding Analysis.Description, Mode=TwoWay}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
 					</TextBox>
 				</StackPanel>
+
+				<!-- Preparation -->
 				<StackPanel IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
-					<TextBlock Text="Подготовка" FontSize="16" LineHeight="16" Foreground="#939396" />
-					<TextBlock IsVisible="{CompiledBinding !IsEditable}" Text="{CompiledBinding Analysis.Preparation}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+					<TextBlock Text="Подготовка" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+					<TextBlock IsVisible="{CompiledBinding !IsEditable}" Text="Отсутствует" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
+						<TextBlock.IsVisible>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<CompiledBinding Path="!IsEditable" />
+								<CompiledBinding Path="!Analysis.Description.Length" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
+							</MultiBinding>
+						</TextBlock.IsVisible>
+					</TextBlock>
+					<TextBlock Text="Отсутствует" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" HorizontalAlignment="Center">
+						<TextBlock.IsVisible>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<CompiledBinding Path="!IsEditable" />
+								<CompiledBinding Path="Analysis.Description.Length" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
+							</MultiBinding>
+						</TextBlock.IsVisible>
+					</TextBlock>
 					<TextBox IsVisible="{CompiledBinding IsEditable}" Text="{CompiledBinding Analysis.Preparation, Mode=TwoWay}" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
 					</TextBox>
 				</StackPanel>
-			</StackPanel>
-			<TextBlock Grid.Row="4" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-			<Border Grid.Row="6" Background="#DBDBDC" CornerRadius="100" Height="1" />
-			<Border Grid.Row="8">
-				<Border Background="White" CornerRadius="18" Padding="8" HorizontalAlignment="Center" MinWidth="100" Height="50">
+				<!-- Categories -->
+				<StackPanel IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Категории" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+					<ScrollViewer IsVisible="{CompiledBinding !IsEditable}">
+						<ItemsControl Name="categories_in_analysis_list" ItemsSource="{CompiledBinding Analysis.AnalysisCategoriesLists}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.DataTemplates>
+								<DataTemplate DataType="model:AnalysisCategoriesList">
+									<Border Background="#F5F5F9" CornerRadius="16" Margin="5" Padding="16,2">
+										<TextBlock Text="{CompiledBinding AnalysisCategory.Name}" FontSize="18" LineHeight="18" />
+									</Border>
+								</DataTemplate>
+							</ItemsControl.DataTemplates>
+						</ItemsControl>
+					</ScrollViewer>
+				</StackPanel>
+			</StackPanel>
+			<TextBlock Grid.Row="2" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+			<Border Grid.Row="3" Background="#DBDBDC" CornerRadius="100" Height="1" />
+			<Border Grid.Row="4">
+				<Border Background="White" CornerRadius="18" Padding="8" HorizontalAlignment="Center" MinWidth="100">
 					<Border.Effect>
 						<DropShadowEffect Color="#DADEDA" BlurRadius="10" OffsetX="0" OffsetY="0" />
 					</Border.Effect>
 
-					<Grid ColumnDefinitions="auto,7.5,auto,7.5,auto">
-						<btn:AnalysisEditBtn Grid.Column="0" Name="" Background="#1A6FEE" />
-						<Border Grid.Column="2" Background="#DBDBDC" CornerRadius="100" Width="1" />
-						<btn:AnalysisDeleteBtn Grid.Column="4" />
-					</Grid>
+					<StackPanel Orientation="Vertical" Spacing="7.5">
+						<Grid ColumnDefinitions="auto,auto,auto" ColumnSpacing="7.5">
+							<btn:AnalysisEditBtn Grid.Column="0" Name="edit_btn" />
+							<btn:AnalysisApplyBtn Grid.Column="0" Name="apply_btn" IsVisible="False" />
+							<Border Grid.Column="1" Background="#DBDBDC" CornerRadius="100" Width="1" />
+							<btn:AnalysisDeleteBtn Grid.Column="2" Name="delete_btn" />
+							<btn:AnalysisDeclineBtn Grid.Column="2" Name="reject_btn" IsVisible="False" />
+						</Grid>
+						<Border Background="#DBDBDC" CornerRadius="100" Height="1" />
+						<Button Name="add_order" Content="Добавить" Padding="6" HorizontalAlignment="Center">
+							<Button.Styles>
+								<Style Selector="Button">
+									<Setter Property="CornerRadius" Value="10" />
+									<Setter Property="Background" Value="#00B712" />
+									<Setter Property="Foreground" Value="White" />
+
+									<Setter Property="RenderTransform" Value="none" />
+									<Setter Property="Transitions">
+										<Transitions>
+											<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+										</Transitions>
+									</Setter>
+
+									<Style Selector="^:pointerover">
+										<Setter Property="Background" Value="#00B712" />
+										<Style.Animations>
+											<Animation Duration="0:0:.2">
+												<KeyFrame Cue="0%">
+													<Setter Property="Effect">
+														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
+													</Setter>
+												</KeyFrame>
+												<KeyFrame Cue="100%">
+													<Setter Property="Effect">
+														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+													</Setter>
+												</KeyFrame>
+											</Animation>
+										</Style.Animations>
+										<Setter Property="Effect">
+											<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+										</Setter>
+									</Style>
+									<Style Selector="^:not(:pointerover)">
+										<Setter Property="Background" Value="#00B712" />
+										<Style.Animations>
+											<Animation Duration="0:0:.2">
+												<KeyFrame Cue="0%">
+													<Setter Property="Effect">
+														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+													</Setter>
+												</KeyFrame>
+												<KeyFrame Cue="100%">
+													<Setter Property="Effect">
+														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
+													</Setter>
+												</KeyFrame>
+											</Animation>
+										</Style.Animations>
+									</Style>
+								</Style>
+							</Button.Styles>
+
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<Svg Path="avares://MedicInPoint/Assets/SVGs/add_analysis_order.svg" Width="22" Height="22" />
+								<TextBlock Text="Добавить" FontSize="16" LineHeight="16" VerticalAlignment="Center" />
+							</StackPanel>
+						</Button>
+					</StackPanel>
 				</Border>
 			</Border>
 		</Grid>
-	</Border>-->
+	</Border>
 </UserControl>

@@ -3,20 +3,24 @@
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Design.PreviewWith>
 		<StackPanel Orientation="Vertical" Margin="10">
-			<TextBlock Text="{DynamicResource DETAILED}" />
+			<TextBlock Text="{DynamicResource APPLY}" />
 			<TextBlock Text="{DynamicResource BACK}" />
-			<TextBlock Text="{DynamicResource MENU}" />
-			<TextBlock Text="{DynamicResource ENTER}" />
-			<TextBlock Text="{DynamicResource EDIT}" />
+			<TextBlock Text="{DynamicResource CANCEL}" />
+			<TextBlock Text="{DynamicResource DETAILED}" />
 			<TextBlock Text="{DynamicResource DELETE}" />
+			<TextBlock Text="{DynamicResource EDIT}" />
+			<TextBlock Text="{DynamicResource ENTER}" />
+			<TextBlock Text="{DynamicResource MENU}" />
 		</StackPanel>
 	</Design.PreviewWith>
 
 	<!-- Add Resources Here -->
-	<x:String x:Key="DETAILED">Подробнее</x:String>
+	<x:String x:Key="APPLY">Подтвердить</x:String>
 	<x:String x:Key="BACK">Назад</x:String>
-	<x:String x:Key="MENU">Меню</x:String>
-	<x:String x:Key="ENTER">Войти</x:String>
-	<x:String x:Key="EDIT">Изменить</x:String>
+	<x:String x:Key="CANCEL">Отменить</x:String>
 	<x:String x:Key="DELETE">Удалить</x:String>
+	<x:String x:Key="DETAILED">Подробнее</x:String>
+	<x:String x:Key="EDIT">Изменить</x:String>
+	<x:String x:Key="ENTER">Войти</x:String>
+	<x:String x:Key="MENU">Меню</x:String>
 </ResourceDictionary>

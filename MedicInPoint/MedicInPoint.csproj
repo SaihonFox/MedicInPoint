@@ -105,6 +105,12 @@
 		<Compile Update="Views\Pages\FlyoutMenuView.axaml.cs">
 		  <DependentUpon>FlyoutMenuView.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\UserControls\Drawers\Buttons\AnalysisApplyBtn.axaml.cs">
+		  <DependentUpon>AnalysisApplyBtn.axaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\UserControls\Drawers\Buttons\AnalysisDeclineBtn.axaml.cs">
+		  <DependentUpon>AnalysisDeclineBtn.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\UserControls\Drawers\Buttons\UserReturnBtn.axaml.cs">
 		  <DependentUpon>UserReturnBtn.axaml</DependentUpon>
 		</Compile>

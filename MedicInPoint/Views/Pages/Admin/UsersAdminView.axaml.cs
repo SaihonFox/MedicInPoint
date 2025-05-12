@@ -142,7 +142,7 @@ public partial class UsersAdminView : UserControl
 	async void FillWithSearch()
 	{
 		await Dispatcher.UIThread.InvokeAsync(users_list.Items.Clear);
-		var patients = await Dispatcher.UIThread.InvokeAsync(() =>
+		var users = await Dispatcher.UIThread.InvokeAsync(() =>
 			AllUsersView.Where(x =>
 				x.ViewModel.User!.FullName.Contains(Dispatcher.UIThread.Invoke(() => acb.Text!), StringComparison.CurrentCultureIgnoreCase))
 			.ToList()
@@ -150,22 +150,22 @@ public partial class UsersAdminView : UserControl
 
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
-			if (patients.Find(x => x.ViewModel.User!.Id == selectedUser?.ViewModel.User?.Id) == null && selectedUser != null)
+			if (users.Find(x => x.ViewModel.User!.Id == selectedUser?.ViewModel.User?.Id) == null && selectedUser != null)
 			{
 				selectedUser.ViewModel.IsSelected = false;
 				selectedUser = null;
 			}
 		});
 
-		foreach (var patient in patients)
+		foreach (var user in users)
 		{
 			Dispatcher.UIThread.Invoke(() => {
-				users_list.Items.Add(patient);
+				users_list.Items.Add(user);
 			});
 		}
 
 		await Dispatcher.UIThread.InvokeAsync(() => {
-			centerText.IsVisible = AllUsers.Count == 0;
+			centerText.IsVisible = users.Count == 0;
 			centerText.Text = "Пустой список";
 		});
 		await Dispatcher.UIThread.InvokeAsync(() =>

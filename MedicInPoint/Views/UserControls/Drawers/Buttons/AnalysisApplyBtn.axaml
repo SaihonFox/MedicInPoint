@@ -1,0 +1,89 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:local="using:MedicInPoint.Views.UserControls.Drawers.Buttons"
+					xmlns:sys="using:System">
+	<Design.PreviewWith>
+		<StackPanel Orientation="Vertical" Margin="10">
+			<local:AnalysisApplyBtn />
+		</StackPanel>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type local:AnalysisApplyBtn}" TargetType="local:AnalysisApplyBtn">
+		<Setter Property="Background" Value="#00B712" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="ClipToBounds" Value="False" />
+		<Setter Property="CornerRadius" Value="10" />
+ 
+		<Setter Property="HorizontalAlignment" Value="Left" />
+		<Setter Property="VerticalAlignment" Value="Top" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+
+		<Setter Property="Margin" Value="0" />
+		<Setter Property="Padding" Value="6" />
+
+		<Setter Property="MinWidth" Value="34" />
+		<Setter Property="Height" Value="34" />
+
+		<Setter Property="Transitions">
+			<Transitions>
+				<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" Easing="CubicEaseInOut" />
+			</Transitions>
+		</Setter>
+
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Name="PART_Background"
+						Background="{TemplateBinding Background}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
+						HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+					<StackPanel Orientation="Horizontal" Spacing="6">
+						<Svg Path="/Assets/SVGs/buttons/confirm.svg" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}" Width="22" Height="22" />
+						<TextBlock Text="{DynamicResource APPLY}" FontSize="16" FontWeight="Bold" Foreground="White" />
+					</StackPanel>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+		
+		<Style Selector="^:pointerover /template/ Border#PART_Background">
+			<Style.Animations>
+				<Animation Duration="0:0:.2">
+					<KeyFrame Cue="0%">
+						<Setter Property="Effect">
+							<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
+						</Setter>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="Effect">
+							<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+						</Setter>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+			<Setter Property="Effect">
+				<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+			</Setter>
+		</Style>
+		<Style Selector="^:not(:pointerover) /template/ Border#PART_Background">
+			<Style.Animations>
+				<Animation Duration="0:0:.2">
+					<KeyFrame Cue="0%">
+						<Setter Property="Effect">
+							<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+						</Setter>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="Effect">
+							<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
+						</Setter>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+
+		<Style Selector="^:pressed">
+			<Setter Property="RenderTransform" Value="scale(0.96)" />
+		</Style>
+	</ControlTheme>
+</ResourceDictionary>

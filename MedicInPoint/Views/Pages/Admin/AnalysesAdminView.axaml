@@ -35,7 +35,7 @@
 
 			<Grid ColumnDefinitions="*,auto" Margin="30,125">
 				<Grid Grid.Column="0" RowDefinitions="auto,*">
-					<ScrollViewer Grid.Row="0" IsVisible="{Binding Path=AnalysesList.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+					<ScrollViewer Grid.Row="0">
 						<ItemsControl Name="categories_list">
 							<ItemsControl.ItemsPanel>
 								<ItemsPanelTemplate>
@@ -84,7 +84,7 @@
 					</ScrollViewer>
 				</Grid>
 
-				<drawer:AnalysisDrawerView Grid.Column="1" DataContext="{CompiledBinding SelectedAnalysis}" Width="0" />
+				<drawer:AnalysisDrawerView Grid.Column="1" Name="drawer" Width="0" />
 			</Grid>
 		</Grid>
 	</Panel>
