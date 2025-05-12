@@ -26,6 +26,7 @@ namespace MedicInPoint.Views.Pages.Admin;
 public partial class AnalysesAdminView : UserControl
 {
 	private ObservableCollection<Analysis> AllAnalyses = [];
+	private ObservableCollection<AnalysisCategory> AllCategories = [];
 	private ObservableCollection<AnalysisItem_UserControl_View> AllAnalysesView = [];
 	public AnalysesAdminViewModel ViewModel => (DataContext as AnalysesAdminViewModel)!;
 
@@ -48,12 +49,19 @@ public partial class AnalysesAdminView : UserControl
 		acb.KeyDown += acb_KeyDown;
 		acb.TextChanged += acb_TextChanged;
 
-		if (!Design.IsDesignMode)
-			Loaded += (s, e) => FillPatients();
+		categories_list.SelectionChanged += async(_, _) => await FillWithSearch();
 
-		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<Analysis>("AnalysisAdded", analysis => {
+		if (!Design.IsDesignMode)
+		{
+			Loaded += async(s, e) =>
+			{
+				await FillCategories().ContinueWith(async t => await FillAnalyses());
+			};
+		}
+
+		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<Analysis>("AnalysisAdded", async analysis => {
 			AllAnalyses.Add(analysis);
-			FillWithSearch();
+			await FillWithSearch();
 		});
 		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<Analysis>("AnalysisUpdated", analysis => {
 			Dispatcher.UIThread.Invoke(() =>
@@ -73,15 +81,15 @@ public partial class AnalysesAdminView : UserControl
 					drawer.ViewModel.Analysis = analysis;
 			});
 		});
-		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<Analysis>("AnalysisDeleted", analysis =>
+		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<Analysis>("AnalysisDeleted", async analysis =>
 		{
 			var c = analyses_list.Items.ToList().First(c => (c as Analysis)!.Id == analysis.Id) as Analysis;
 			AllAnalyses.Remove(c!);
-			FillWithSearch();
+			await FillWithSearch();
 		});
 	}
 
-	private void acb_TextChanged(object? sender, TextChangedEventArgs e) => FillWithSearch();
+	private async void acb_TextChanged(object? sender, TextChangedEventArgs e) => await FillWithSearch();
 
 	private AnalysisItem_UserControl_View? selectedAnalysis = null;
 
@@ -120,7 +128,29 @@ public partial class AnalysesAdminView : UserControl
 		await context.DisposeAsync();
 	}
 
-	async void FillPatients()
+	async Task FillCategories()
+	{
+		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
+		if (!response.IsSuccessful)
+			return;
+
+		AllCategories = [.. response.Content!];
+
+		var allCategory = new AnalysisCategory { Id = 0, Name = "Все" };
+		AllCategories.Insert(0, allCategory);
+		foreach (var category in AllCategories)
+		{
+			await Dispatcher.UIThread.InvokeAsync(() =>
+			{
+				categories_list.Items.Add(category);
+			});
+		}
+
+		categories_list.SelectedItem = allCategory;
+		categories_list.UpdateLayout();
+	}
+
+	async Task FillAnalyses()
 	{
 		using var response = await APIService.For<IAnalysis>().GetAnalyses().ConfigureAwait(false);
 		if (!response.IsSuccessful)
@@ -145,17 +175,28 @@ public partial class AnalysesAdminView : UserControl
 			});
 		}
 
-		FillWithSearch();
+		await FillWithSearch();
 	}
 
-	async void FillWithSearch()
+	async Task FillWithSearch()
 	{
 		await Dispatcher.UIThread.InvokeAsync(analyses_list.Items.Clear);
-		var analyses = await Dispatcher.UIThread.InvokeAsync(() =>
-			AllAnalysesView.Where(x =>
+		var analyses = await Dispatcher.UIThread.InvokeAsync(() => {
+			var list = AllAnalysesView.Where(x =>
 				x.ViewModel.Analysis!.Name.Contains(Dispatcher.UIThread.Invoke(() => acb.Text!), StringComparison.CurrentCultureIgnoreCase))
-			.ToList()
-		);
+			.ToList();
+
+			if (categories_list.SelectedIndex == 0)
+				return list;
+
+			list = [.. list.Where(x =>
+				x.ViewModel.Analysis!.AnalysisCategoriesLists.Any(x =>
+					x.AnalysisCategory.Name.Contains((categories_list.SelectedItem as AnalysisCategory)?.Name ?? "", StringComparison.CurrentCultureIgnoreCase)
+				)
+			)];
+
+			return list;
+		});
 
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
@@ -180,7 +221,7 @@ public partial class AnalysesAdminView : UserControl
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			ViewModel.SelectedAnalysis = selectedAnalysis?.ViewModel.Analysis;
-				drawer.ViewModel.Analysis = ViewModel.SelectedAnalysis;
+			drawer.ViewModel.Analysis = ViewModel.SelectedAnalysis;
 		});
 	}
 }

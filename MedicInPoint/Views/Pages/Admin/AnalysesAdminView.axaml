@@ -35,14 +35,14 @@
 
 			<Grid ColumnDefinitions="*,auto" Margin="30,125">
 				<Grid Grid.Column="0" RowDefinitions="auto,*">
-					<ScrollViewer Grid.Row="0">
-						<ItemsControl Name="categories_list">
-							<ItemsControl.ItemsPanel>
+					<ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden">
+						<ListBox Name="categories_list" SelectedIndex="0">
+							<ListBox.ItemsPanel>
 								<ItemsPanelTemplate>
 									<StackPanel Orientation="Horizontal" Spacing="10" />
 								</ItemsPanelTemplate>
-							</ItemsControl.ItemsPanel>
-							<ItemsControl.Styles>
+							</ListBox.ItemsPanel>
+							<ListBox.Styles>
 								<Style Selector="ListBoxItem">
 									<Setter Property="Background" Value="#F5F5F9" />
 									<Setter Property="Foreground" Value="#7E7E9A" />
@@ -64,13 +64,13 @@
 										<Setter Property="Foreground" Value="White" />
 									</Style>
 								</Style>
-							</ItemsControl.Styles>
-							<ItemsControl.DataTemplates>
+							</ListBox.Styles>
+							<ListBox.DataTemplates>
 								<DataTemplate DataType="model:AnalysisCategory">
 									<TextBlock Text="{CompiledBinding Name}" />
 								</DataTemplate>
-							</ItemsControl.DataTemplates>
-						</ItemsControl>
+							</ListBox.DataTemplates>
+						</ListBox>
 					</ScrollViewer>
 					<TextBlock Grid.Row="1" Name="centerText" Text="Данных нет" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 					<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Padding="5" HorizontalContentAlignment="Center">
