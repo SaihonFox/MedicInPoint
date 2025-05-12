@@ -107,6 +107,14 @@
 				<!-- Categories -->
 				<StackPanel IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Категории" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+					<TextBlock Text="Отсутствуют" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" HorizontalAlignment="Center">
+						<TextBlock.IsVisible>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<CompiledBinding Path="!IsEditable" />
+								<CompiledBinding Path="Analysis.AnalysisCategoriesLists.Count" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
+							</MultiBinding>
+						</TextBlock.IsVisible>
+					</TextBlock>
 					<ScrollViewer IsVisible="{CompiledBinding !IsEditable}">
 						<ItemsControl Name="categories_in_analysis_list" ItemsSource="{CompiledBinding Analysis.AnalysisCategoriesLists}">
 							<ItemsControl.ItemsPanel>
