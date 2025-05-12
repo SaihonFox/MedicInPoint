@@ -10,6 +10,7 @@ using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
 using MedicInPoint.Extensions;
 using MedicInPoint.Models;
+using MedicInPoint.Services;
 using MedicInPoint.ViewModels.Pages.Admin;
 using MedicInPoint.ViewModels.UserControls.Drawers;
 using MedicInPoint.ViewModels.UserControls.Items;
@@ -113,6 +114,7 @@ public partial class UsersAdminView : UserControl
 
 	async void FillUsers()
 	{
+		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка");
 		using var response = await APIService.For<IUser>().GetUsers().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;

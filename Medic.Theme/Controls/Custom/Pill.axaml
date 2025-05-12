@@ -45,7 +45,7 @@
 													 Background="Transparent" Foreground="{TemplateBinding ValueForeground}"
 													 VerticalAlignment="Center" />
 								<TextBox Name="PART_TextBoxValue" IsVisible="{Binding IsEditable}"
-										 Text="{Binding Value, Mode=TwoWay}" FontSize="{TemplateBinding ValueFontSize}"
+										 Text="{TemplateBinding Value, Mode=TwoWay}" FontSize="{TemplateBinding ValueFontSize}"
 										 IsReadOnly="{Binding !IsEditable}"
 										 LineHeight="{TemplateBinding ValueFontSize}"
 										 TextAlignment="Center" TextWrapping="WrapWithOverflow"

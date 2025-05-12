@@ -14,7 +14,7 @@
 		<vm:AnalysisCategoryItem_UserControl_ViewModel />
 	</Design.DataContext>
 
-	<Border ClipToBounds="False">
+	<Border ClipToBounds="False" VerticalAlignment="Top">
 		<Border Background="White" CornerRadius="16" ClipToBounds="False" Padding="8">
 			<Border.Effect>
 				<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
@@ -23,7 +23,7 @@
 				<Grid IsVisible="true" ColumnDefinitions="*,auto,auto" ColumnSpacing="10">
 					<TextBlock Grid.Column="0" IsVisible="{Binding !., Source={x:Static Design.IsDesignMode}}" Name="name" Text="{CompiledBinding AnalysisCategory.Name}" FontSize="24" LineHeight="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" />
 					<TextBlock Grid.Column="0" IsVisible="{Binding ., Source={x:Static Design.IsDesignMode}}" Text="analysis category" FontSize="24" LineHeight="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" />
-					<TextBox Grid.Column="0" IsVisible="False" Name="name_edit" Text="{CompiledBinding AnalysisCategory.Name, Mode=TwoWay}" CornerRadius="8" BorderThickness="0" FontSize="24" LineHeight="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+					<TextBox Grid.Column="0" IsVisible="False" Name="name_edit" Text="{CompiledBinding AnalysisCategory.Name, Mode=TwoWay}" MaxLength="40" CornerRadius="8" BorderThickness="0" FontSize="24" LineHeight="24" TextAlignment="Center" Padding="5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
 					<Button Grid.Column="1" Name="edit_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 						<Button.Styles>
 							<Style Selector="Button:pressed">

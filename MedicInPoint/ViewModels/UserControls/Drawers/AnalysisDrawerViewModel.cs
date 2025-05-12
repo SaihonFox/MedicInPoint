@@ -10,5 +10,8 @@ public partial class AnalysisDrawerViewModel : ViewModelBase
 	private Analysis? _analysis;
 
 	[ObservableProperty]
+	private List<AnalysisCategory> _analysisCategories = [];
+
+	[ObservableProperty]
 	private bool _isEditable = false;
 }

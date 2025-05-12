@@ -10,6 +10,7 @@
 		WindowStartupLocation="CenterScreen"
 		Title="{Binding Content.Title}"
 		Background="{StaticResource WindowBackground}"
+		Icon="/Assets/icon.ico"
 		d:DesignWidth="1500" d:DesignHeight="850"
 		MinWidth="1500" MinHeight="850"
 		x:Class="MedicInPoint.Views.MainWindow"

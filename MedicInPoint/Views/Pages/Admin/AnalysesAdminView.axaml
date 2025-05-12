@@ -36,7 +36,7 @@
 			<Grid ColumnDefinitions="*,auto" Margin="30,125">
 				<Grid Grid.Column="0" RowDefinitions="auto,*">
 					<ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden">
-						<ListBox Name="categories_list" SelectedIndex="0">
+						<ListBox Name="categories_list">
 							<ListBox.ItemsPanel>
 								<ItemsPanelTemplate>
 									<StackPanel Orientation="Horizontal" Spacing="10" />

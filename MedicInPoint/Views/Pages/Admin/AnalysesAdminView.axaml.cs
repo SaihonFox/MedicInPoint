@@ -10,9 +10,11 @@ using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
 using MedicInPoint.Extensions;
 using MedicInPoint.Models;
+using MedicInPoint.Services;
 using MedicInPoint.ViewModels.Pages.Admin;
 using MedicInPoint.ViewModels.UserControls.Drawers;
 using MedicInPoint.ViewModels.UserControls.Items;
+using MedicInPoint.Views.UserControls.Drawers;
 using MedicInPoint.Views.UserControls.Items;
 
 using Microsoft.AspNetCore.SignalR.Client;
@@ -130,6 +132,7 @@ public partial class AnalysesAdminView : UserControl
 
 	async Task FillCategories()
 	{
+		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка");
 		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
@@ -148,6 +151,9 @@ public partial class AnalysesAdminView : UserControl
 
 		categories_list.SelectedItem = allCategory;
 		categories_list.UpdateLayout();
+
+		foreach(var category in AllCategories)
+			AnalysisDrawerView.AllCategories.Add(category);
 	}
 
 	async Task FillAnalyses()

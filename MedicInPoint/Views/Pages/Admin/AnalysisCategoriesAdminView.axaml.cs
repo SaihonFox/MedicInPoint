@@ -6,7 +6,6 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 
-using MedicInPoint.API.AIMLAPI.Models;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -14,6 +13,7 @@ using MedicInPoint.Extensions;
 using MedicInPoint.Models;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels.UserControls.Items;
+using MedicInPoint.Views.UserControls.Drawers;
 using MedicInPoint.Views.UserControls.Items;
 
 using Microsoft.AspNetCore.SignalR.Client;
@@ -21,8 +21,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using MIP.LocalDB;
-
-using Newtonsoft.Json;
 
 namespace MedicInPoint.Views.Pages.Admin;
 
@@ -67,20 +65,18 @@ public partial class AnalysisCategoriesAdminView : UserControl
 				AllCategories.Add(category);
 				AllCategoriesView.Add(categoryView);
 				FillWithSearch();
+
+				AnalysisDrawerView.AllCategories.Add(category);
 			});
 		});
 		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryUpdated", category =>
 		{
-			FillWithSearch();
-		});
-		App.services.GetRequiredService<MedicSignalRConnections>().AnalysisCategoryConnection.On<AnalysisCategory>("AnalysisCategoryDeleted", category =>
-		{
-			/*var c = AllCategoriesView.First(x => x.ViewModel.AnalysisCategory!.Id == category.Id);
-			int index = AllCategoriesView.IndexOf(c);
-			categories_list.Items.RemoveAt(index);
-			AllCategories.Remove(c.ViewModel.AnalysisCategory!);
-			AllCategoriesView.Remove(c);
-			FillWithSearch();*/
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				var c = AllCategoriesView.First(x => x.ViewModel.AnalysisCategory!.Id == category.Id);
+				c.ViewModel.AnalysisCategory = category;
+				FillWithSearch();
+			});
 		});
 	}
 
@@ -117,15 +113,18 @@ public partial class AnalysisCategoriesAdminView : UserControl
 		await context.DisposeAsync();
 	}
 
+	private AnalysisCategoryItemAdminUserControl? selectedCategory = null;
+
 	async void FillCategories()
 	{
 		if (Design.IsDesignMode)
 			return;
+
+		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка");
 		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
 
-		await File.WriteAllTextAsync(@"C:\Users\ILNAR\Desktop\content.txt", JsonConvert.SerializeObject(response.Content, Formatting.Indented));
 		AllCategories = [..response.Content];
 		foreach(var category in AllCategories) {
 			Dispatcher.UIThread.Invoke(() => {
@@ -136,11 +135,47 @@ public partial class AnalysisCategoriesAdminView : UserControl
 						AnalysisCategory = category,
 						AnalysisCategoriesList = category.AnalysisCategoriesLists,
 					},
-					ActionOnDelete = uc => {
-						categories_list.Items.Remove(uc);
-						categories_list.UpdateLayout();
-						AllCategoriesView.Remove(uc);
+					ActionOnSelect = uc =>
+					{
+						if (selectedCategory != null)
+						{
+							selectedCategory.IsDeleting = false;
+							selectedCategory.IsEditing = false;
+							selectedCategory.name.IsVisible = true;
+							selectedCategory.name_edit.IsVisible = false;
+							(selectedCategory.edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
+							(selectedCategory.delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+						}
+						selectedCategory = uc;
+					},
+					ActionOnPreDelete = uc =>
+					{
+						if (selectedCategory != null)
+						{
+							selectedCategory.IsDeleting = false;
+							selectedCategory.IsEditing = false;
+							selectedCategory.name.IsVisible = true;
+							selectedCategory.name_edit.IsVisible = false;
+							(selectedCategory.edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
+							(selectedCategory.delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+						}
+						selectedCategory = uc;
+					},
+					ActionOnDelete = uc =>
+					{
 						AllCategories.Remove(uc.ViewModel.AnalysisCategory!);
+						AllCategoriesView.Remove(uc);
+
+						int index = categories_list.Items.IndexOf(uc);
+						categories_list.Items.RemoveAt(index);
+						categories_list.UpdateLayout();
+
+						if (uc == selectedCategory)
+							selectedCategory = null;
+
+						var advCategory = AnalysisDrawerView.AllCategories.FirstOrDefault(x => x.Id == uc.ViewModel.AnalysisCategory!.Id);
+						if(advCategory != null)
+							AnalysisDrawerView.AllCategories.Remove(advCategory);
 					}
 				};
 				categories_list.Items.Add(categoryView);
@@ -156,7 +191,7 @@ public partial class AnalysisCategoriesAdminView : UserControl
 		categories_list.Items.Clear();
 		var categories = await Dispatcher.UIThread.InvokeAsync(() => AllCategoriesView.Where(x => x.ViewModel.AnalysisCategory!.Name.Contains(acb.Text!, StringComparison.CurrentCultureIgnoreCase)).ToList());
 		Dispatcher.UIThread.Invoke(() => {
-			centerText.IsVisible = AllCategories.Count == 0;
+			centerText.IsVisible = categories.Count == 0;
 			centerText.Text = "Пустой список";
 		});
 		foreach (var category in categories)

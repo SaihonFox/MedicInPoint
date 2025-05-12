@@ -47,16 +47,16 @@
 		</Border.Opacity>
 
 		<Grid RowDefinitions="auto,auto,*,auto,auto" RowSpacing="10">
-			<TextBlock Grid.Row="0" IsVisible="{Binding !Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding Analysis.Name}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+			<TextBlock Grid.Row="0" Name="name" IsVisible="{Binding !Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding Analysis.Name}" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
 			<TextBlock Grid.Row="0" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Наименование" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
 			<Border Grid.Row="1" Background="#DBDBDC" CornerRadius="100" Height="1" />
 
 			<StackPanel Grid.Row="2" Orientation="Vertical" Spacing="10">
 				<Grid ColumnDefinitions="*,10,*">
-					<medic:Pill Grid.Column="0" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Price, StringFormat=0.00 руб\\.}" Title="Цена" PillPadding="10" HorizontalAlignment="Stretch"  />
-					<medic:Pill Grid.Column="2" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.ResultsAfter}" Title="Результаты через" PillPadding="10" HorizontalAlignment="Stretch" />
+					<medic:Pill Grid.Column="0" Name="price" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Price, StringFormat=0.00 руб\\.}" Title="Цена" PillPadding="10" HorizontalAlignment="Stretch"  />
+					<medic:Pill Grid.Column="2" Name="results_after" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.ResultsAfter}" Title="Результаты через" PillPadding="10" HorizontalAlignment="Stretch" />
 				</Grid>
-				<medic:Pill IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Biomaterial}" Title="Биоматериал" PillPadding="45,10" />
+				<medic:Pill Name="biomaterial" IsEditable="{CompiledBinding IsEditable}" Value="{CompiledBinding Analysis.Biomaterial}" Title="Биоматериал" PillPadding="45,10" />
 
 				<!-- Description -->
 				<StackPanel IsVisible="{CompiledBinding !Analysis.Description, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
@@ -131,6 +131,52 @@
 							</ItemsControl.DataTemplates>
 						</ItemsControl>
 					</ScrollViewer>
+
+					<!-- Add Categories -->
+					<StackPanel IsVisible="{CompiledBinding IsEditable}" Orientation="Vertical" Spacing="10">
+						<Grid ColumnDefinitions="*,10,auto" VerticalAlignment="Center">
+							<ComboBox Name="all_categories_cb" SelectedIndex="0" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+								<ComboBox.ItemTemplate>
+									<DataTemplate DataType="model:AnalysisCategory">
+										<TextBlock Text="{CompiledBinding Name}" TextWrapping="Wrap" FontSize="20" />
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+								<ComboBox.Styles>
+									<Style Selector="ComboBoxItem">
+										<Setter Property="CornerRadius" Value="10" />
+										<Setter Property="Margin" Value="5" />
+									</Style>
+								</ComboBox.Styles>
+							</ComboBox>
+							<Button Grid.Column="2" Name="add_category" Content="Добавить" Padding="6">
+								<Button.Styles>
+									<Style Selector="Button">
+										<Setter Property="CornerRadius" Value="10" />
+										<Setter Property="Background" Value="#00B712" />
+										<Setter Property="Foreground" Value="White" />
+
+										<Setter Property="RenderTransform" Value="none" />
+										<Setter Property="Transitions">
+											<Transitions>
+												<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+											</Transitions>
+										</Setter>
+
+										<Style Selector="^:pointerover">
+											<Setter Property="Background" Value="#0A8D17" />
+										</Style>
+									</Style>
+								</Button.Styles>
+
+								<StackPanel Orientation="Horizontal" Spacing="6">
+									<Svg Path="avares://MedicInPoint/Assets/SVGs/add_analysis_order.svg" Width="22" Height="22" />
+									<TextBlock Text="Добавить" FontSize="16" LineHeight="16" VerticalAlignment="Center" />
+								</StackPanel>
+							</Button>
+						</Grid>
+						<ListBox>
+						</ListBox>
+					</StackPanel>
 				</StackPanel>
 			</StackPanel>
 			<TextBlock Grid.Row="2" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -150,7 +196,7 @@
 							<btn:AnalysisDeleteBtn Grid.Column="2" Name="delete_btn" />
 							<btn:AnalysisDeclineBtn Grid.Column="2" Name="reject_btn" IsVisible="False" />
 						</Grid>
-						<Border Background="#DBDBDC" CornerRadius="100" Height="1" />
+						<Border Background="#DBDBDC" IsVisible="{CompiledBinding #add_order.IsVisible}" CornerRadius="100" Height="1" />
 						<Button Name="add_order" Content="Добавить" Padding="6" HorizontalAlignment="Center">
 							<Button.Styles>
 								<Style Selector="Button">

@@ -1,13 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.Extensions;
-using MedicInPoint.Models;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels.UserControls.Items;
 
@@ -21,10 +19,12 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 
 	public readonly INotificationService notification = null!;
 
-	public Action<AnalysisCategory?>? ActionOnSelect = null;
+	public Action<AnalysisCategoryItemAdminUserControl>? ActionOnSelect = null;
 	public Action<AnalysisCategoryItemAdminUserControl>? ActionOnDelete = null;
+	public Action<AnalysisCategoryItemAdminUserControl>? ActionOnPreDelete = null;
 
 	public bool IsEditing { get; set; } = false;
+	public bool IsDeleting { get; set; } = false;
 	private string initName = string.Empty;
 
 	public AnalysisCategoryItemAdminUserControl()
@@ -44,15 +44,45 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 	{
 		if (!IsEditing)
 		{
-			ActionOnSelect?.Invoke(ViewModel!.AnalysisCategory);
-			IsEditing = true;
-			name.IsVisible = false;
-			name_edit.IsVisible = true;
-			name_edit.Focus();
-			name_edit.SelectionStart = ViewModel!.AnalysisCategory!.Name.Length;
-			name_edit.SelectionEnd = ViewModel!.AnalysisCategory!.Name.Length;
-			(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/confirm_edit.svg";
-			(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/reject_edit.svg";
+			if (IsDeleting)
+			{
+				if (ViewModel!.AnalysisCategoriesList.Count != 0)
+				{
+					notification.Show("Ошибка", "Вы не можете удалить, т.к. она привязана", NotificationType.Error);
+					return;
+				}
+				try
+				{
+					using var response = await APIService.For<IAnalysisCategory>().DeleteAnalysisCategory(ViewModel!.AnalysisCategory!.Id);
+					if (!response.IsSuccessful)
+						notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
+					else
+					{
+						notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
+						IsDeleting = false;
+						(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
+						(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+
+						ActionOnDelete?.Invoke(this);
+					}
+				}
+				catch (Exception ex)
+				{
+					notification.Show("Ошибка", ex.StackTrace!, NotificationType.Error);
+				}
+			}
+			else
+			{
+				ActionOnSelect?.Invoke(this);
+				IsEditing = true;
+				name.IsVisible = false;
+				name_edit.IsVisible = true;
+				name_edit.Focus();
+				name_edit.SelectionStart = ViewModel!.AnalysisCategory!.Name.Length;
+				name_edit.SelectionEnd = ViewModel!.AnalysisCategory!.Name.Length;
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/confirm_edit.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/reject_edit.svg";
+			}
 		}
 		else
 		{
@@ -105,25 +135,18 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 		name_edit.Text = name.Text ?? ViewModel!.AnalysisCategory!.Name;
 		if (!IsEditing)
 		{
-			if (ViewModel!.AnalysisCategoriesList.Count != 0)
+			if (!IsDeleting)
 			{
-				notification.Show("Ошибка", "Вы не можете удалить, т.к. она привязана", NotificationType.Error);
-				return;
+				ActionOnPreDelete?.Invoke(this);
+				IsDeleting = true;
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/confirm_edit.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/reject_edit.svg";
 			}
-			try
+			else
 			{
-				using var response = await APIService.For<IAnalysisCategory>().DeleteAnalysisCategory(ViewModel!.AnalysisCategory!.Id);
-				if (!response.IsSuccessful)
-					notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
-				else
-				{
-					notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
-					ActionOnDelete?.Invoke(this);
-				}
-			}
-			catch (Exception ex)
-			{
-				notification.Show("Ошибка", ex.StackTrace!, NotificationType.Error);
+				IsDeleting = false;
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
 			}
 		}
 		else
