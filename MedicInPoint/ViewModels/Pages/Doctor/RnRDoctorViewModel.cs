@@ -13,6 +13,7 @@ using CommunityToolkit.Mvvm.Input;
 
 using Medic.API.Refit.Placeholders;
 
+using MedicInPoint.API;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -21,6 +22,8 @@ using MedicInPoint.Models;
 using MedicInPoint.Services;
 
 using Microsoft.AspNetCore.SignalR.Client;
+
+using Newtonsoft.Json;
 
 namespace MedicInPoint.ViewModels.Pages.Doctor;
 
@@ -216,9 +219,6 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	private AnalysisOrder _orderRecord = new();
 
 	[ObservableProperty]
-	private PatientAnalysisAddress _orderRecordAddress = new();
-
-	[ObservableProperty]
 	public decimal _analysesInRecordTotalPrice = 0;
 
 	[ObservableProperty]
@@ -226,10 +226,29 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	[ObservableProperty]
 	private TimeSpan? _selectedTime = null;
 
+
+	#region Address
+	[ObservableProperty]
+	private string _address = string.Empty;
+
+	[ObservableProperty]
+	private string _room = string.Empty;
+
+	[ObservableProperty]
+	private string _entrance = string.Empty;
+
+	[ObservableProperty]
+	private string _floor = string.Empty;
+
+	[ObservableProperty]
+	private string? _intercome = null;
+	#endregion Address
+
+
 	[RelayCommand]
 	private async Task NewOrder()
 	{
-		if(SelectedDate == null || SelectedTime == null || OrderRecordAddress.Address.IsNullOrWhiteSpace() || AnalysesInRecord.Count == 0)
+		if(SelectedDate == null || SelectedTime == null || Address.IsNullOrWhiteSpace() || AnalysesInRecord.Count == 0)
 		{
 			_notificationService.Show("Ошибка", "Поля 'Адрес', 'Дата и время', 'Анализы' не могут быть пустыми", NotificationType.Error);
 			return;
@@ -237,21 +256,40 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 		IsRecordButtonEnabled = false;
 
-		OrderRecord.UserId = _appService.CurrentUser!.Id;
-		OrderRecord.PatientId = SelectedPatient!.Id;
-		OrderRecord.RegistrationDate = DateTime.Now;
-		OrderRecord.AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.Date), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes));
+		var address = new PatientAnalysisAddress
+		{
+			Address = Address,
+			Intercome = Intercome,
+			Entrance = Entrance.IsNullOrWhiteSpace() ? null : int.Parse(Entrance),
+			Floor = Floor.IsNullOrWhiteSpace() ? null : int.Parse(Floor),
+			Room = Room.IsNullOrWhiteSpace() ? null : int.Parse(Room),
+		};
 
-		var response = await APIService.For<IAnalysisOrder>().NewOrder((OrderRecord, OrderRecordAddress, AnalysesInRecord.ToList()));
-		if (response.IsSuccessful)
+		using var addressResponse = await APIService.For<IPatientAnalysisAddress>().Post(address).ConfigureAwait(false);
+		using var cartResponse = await APIService.For<IPatientAnalysisCart>().Post(new PatientAnalysisCart { PatientId = SelectedPatient.Id }).ConfigureAwait(false);
+		foreach (var item in AnalysesInRecord)
+			await APIService.For<IPatientAnalysisCartItem>().Post(new PatientAnalysisCartItem { AnalysisId = item.Id, PatientAnalysisCartId = cartResponse.Content!.Id });
+		using var orderResponse = await APIService.For<IAnalysisOrder>().Post(new AnalysisOrder
+		{
+			PatientAnalysisCartId = cartResponse.Content!.Id,
+			PatientId = SelectedPatient.Id,
+			UserId = _appService.CurrentUser!.Id,
+			Comment = OrderRecord.Comment,
+			PatientAnalysisAddressId = addressResponse.Content!.Id,
+			RegistrationDate = DateTime.Now,
+			AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.Date), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes))
+		}).ConfigureAwait(false);
+
+		//using var response = await APIService.For<IAnalysisOrder>().NewOrder((OrderRecord, OrderRecordAddress, AnalysesInRecord.ToList()));
+		if (orderResponse.IsSuccessful)
 		{
 			_notificationService.Show("Успех!", $"Пациент успешно записан на {OrderRecord.AnalysisDatetime:D H:m}");
 			//_appService.CurrentUser = response.Content;
 		}
 		else
 		{
-			_notificationService.Show("Ошибка!", $"Возникли некоторые ошибки: {response.Error.Content}");
-			Logger.Sink!.Log(LogEventLevel.Error, "NewOrder", this, $"Message: {response.Error.Content}");
+			_notificationService.Show("Ошибка!", $"Возникли некоторые ошибки: {orderResponse.Error.Content}");
+			Logger.Sink!.Log(LogEventLevel.Error, "NewOrder", this, $"Message: {orderResponse.Error.Content}");
 		}
 
 		IsRecordButtonEnabled = true;

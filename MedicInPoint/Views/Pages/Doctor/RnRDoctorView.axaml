@@ -170,7 +170,7 @@
 
 									<StackPanel Orientation="Vertical" Spacing="5">
 										<TextBlock Text="Адрес" Foreground="#7E7E9A" Margin="8,0" />
-										<TextBox FontSize="20" Text="{CompiledBinding OrderRecordAddress.Address, Mode=TwoWay}" Padding="10" />
+										<TextBox FontSize="20" Text="{CompiledBinding Address, Mode=TwoWay}" Padding="10" />
 
 										<Grid ColumnDefinitions="*,5,*,5,*,5,*">
 											<Grid.Styles>
@@ -188,19 +188,19 @@
 
 											<StackPanel Grid.Column="0" Orientation="Vertical" Spacing="5">
 												<TextBlock Text="Квартира" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="address_nup" AllowSpin="True" Text="{CompiledBinding OrderRecordAddress.Room, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
+												<NumericUpDown Name="address_nup" AllowSpin="True" Text="{CompiledBinding Room, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
 											</StackPanel>
 											<StackPanel Grid.Column="2" Orientation="Vertical" Spacing="5">
 												<TextBlock Text="Подъезд" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="entrance_nup" Text="{CompiledBinding OrderRecordAddress.Entrance, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
+												<NumericUpDown Name="entrance_nup" Text="{CompiledBinding Entrance, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
 											</StackPanel>
 											<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
 												<TextBlock Text="Этаж" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="floor_nup" Text="{CompiledBinding OrderRecordAddress.Floor, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
+												<NumericUpDown Name="floor_nup" Text="{CompiledBinding Floor, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
 											</StackPanel>
 											<StackPanel Grid.Column="6" Orientation="Vertical" Spacing="5">
 												<TextBlock Text="Домофон" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="intercome_nup" Text="{CompiledBinding OrderRecordAddress.Intercome, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
+												<NumericUpDown Name="intercome_nup" Text="{CompiledBinding Intercome, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
 											</StackPanel>
 										</Grid>
 									</StackPanel>

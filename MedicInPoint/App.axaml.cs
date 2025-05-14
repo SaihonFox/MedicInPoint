@@ -81,7 +81,7 @@ public partial class App : Application
 			return new WindowNotificationManager(mainWindow)
 			{
 				Position = NotificationPosition.BottomRight,
-				MaxItems = 2
+				MaxItems = 3
 			};
 		});
 

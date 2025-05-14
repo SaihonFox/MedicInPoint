@@ -7,7 +7,7 @@ namespace MedicInPoint.API;
 
 public static class JsonSettings
 {
-	public static JsonSerializerSettings Settings => new JsonSerializerSettings
+	public static JsonSerializerSettings Settings => new()
 	{
 		ContractResolver = new CamelCasePropertyNamesContractResolver(),
 		
