@@ -46,6 +46,8 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		});
 	}
 
+	public string CurrentUser => _appService.CurrentUser!.FullName;
+
 	async void FillPatients()
 	{
 		var response = await APIService.For<IPatient>().GetPatients();

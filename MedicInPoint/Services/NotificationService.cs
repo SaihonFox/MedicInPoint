@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls.Notifications;
+using Avalonia.Logging;
 using Avalonia.Threading;
 
 namespace MedicInPoint.Services;

@@ -60,8 +60,8 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 					{
 						notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
 						IsDeleting = false;
-						(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-						(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+						(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/edit_category.svg";
+						(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg";
 
 						ActionOnDelete?.Invoke(this);
 					}
@@ -80,8 +80,8 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 				name_edit.Focus();
 				name_edit.SelectionStart = ViewModel!.AnalysisCategory!.Name.Length;
 				name_edit.SelectionEnd = ViewModel!.AnalysisCategory!.Name.Length;
-				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/confirm_edit.svg";
-				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/reject_edit.svg";
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/confirm_edit.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/reject_edit.svg";
 			}
 		}
 		else
@@ -97,13 +97,13 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 				IsEditing = false;
 				name.IsVisible = true;
 				name_edit.IsVisible = false;
-				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/edit_category.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg";
 				name.Text = name_edit.Text ?? ViewModel!.AnalysisCategory!.Name;
 				return;
 			}
 
-			ActionOnSelect?.Invoke(null);
+			ActionOnSelect?.Invoke(this);
 			
 			try
 			{
@@ -115,8 +115,8 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 					IsEditing = false;
 					name.IsVisible = true;
 					name_edit.IsVisible = false;
-					(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-					(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+					(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/edit_category.svg";
+					(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg";
 					name.Text = name_edit.Text ?? ViewModel!.AnalysisCategory!.Name;
 					notification.Show("Успех!", "Успешно отредактировано", NotificationType.Success);
 					initName = ViewModel.AnalysisCategory!.Name;
@@ -131,7 +131,7 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 
 	async void Delete_btn_Click(object? sender, RoutedEventArgs e)
 	{
-		ActionOnSelect?.Invoke(null);
+		ActionOnSelect?.Invoke(this);
 		name_edit.Text = name.Text ?? ViewModel!.AnalysisCategory!.Name;
 		if (!IsEditing)
 		{
@@ -139,23 +139,24 @@ public partial class AnalysisCategoryItemAdminUserControl : UserControl
 			{
 				ActionOnPreDelete?.Invoke(this);
 				IsDeleting = true;
-				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/confirm_edit.svg";
-				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/reject_edit.svg";
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/confirm_edit.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/reject_edit.svg";
 			}
 			else
 			{
 				IsDeleting = false;
-				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+				(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/edit_category.svg";
+				(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg";
 			}
 		}
 		else
 		{
 			IsEditing = false;
+			IsDeleting = true;
 			name.IsVisible = true;
 			name_edit.IsVisible = false;
-			(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-			(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
+			(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/edit_category.svg";
+			(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg";
 		}
 	}
 }

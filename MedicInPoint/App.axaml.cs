@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
-using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using Avalonia.SimpleRouter;
 
@@ -12,7 +11,9 @@ using MedicInPoint.Services;
 using MedicInPoint.ViewModels;
 using MedicInPoint.ViewModels.Pages;
 using MedicInPoint.ViewModels.Pages.Admin;
+using MedicInPoint.ViewModels.Pages.Admin.Documents;
 using MedicInPoint.ViewModels.Pages.Doctor;
+using MedicInPoint.ViewModels.Pages.Doctor.Documents;
 
 //using HotAvalonia;
 
@@ -104,8 +105,14 @@ public partial class App : Application
 		services.AddTransient<PatientDoctorViewModel>();
 		services.AddTransient<RnRDoctorViewModel>();
 
-		// UserControls
-		// Items
+		// Documents
+		// Admin
+		services.AddTransient<AnalysesAdminDocumentsViewModel>();
+		services.AddTransient<PatientsAdminDocumentsViewModel>();
+		services.AddTransient<UsersAdminDocumentsViewModel>();
+
+		// Doctor
+		services.AddTransient<AnalysesDoctorDocumentsViewModel>();
 		
 		return services.BuildServiceProvider();
 	}

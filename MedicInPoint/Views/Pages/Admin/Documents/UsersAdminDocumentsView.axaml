@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:medic="https://github.com/saihonfox"
+			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin.Documents"
+			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:converter="using:MedicInPoint.Converters"
+			 mc:Ignorable="d"
+			 d:DesignWidth="1500" d:DesignHeight="1000"
+			 x:Class="MedicInPoint.Views.Pages.Admin.Documents.UsersAdminDocumentsView"
+			 x:DataType="vm:UsersAdminDocumentsViewModel">
+	<Design.DataContext>
+		<vm:UsersAdminDocumentsViewModel />
+	</Design.DataContext>
+	<UserControl.Resources>
+		<converter:IntConverter x:Key="IntConverter" />
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid>
+			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,40,0,0" HorizontalAlignment="Left" />
+			<TextBlock Text="{CompiledBinding CurrentUser}" FontSize="30" LineHeight="30" Margin="0,40,30,0" HorizontalAlignment="Right" />
+
+			<TextBlock IsVisible="{CompiledBinding Documents.Count, Converter={StaticResource IntConverter}, ConverterParameter=0}" Text="Пустой список" FontSize="44" Margin="20,100" HorizontalAlignment="Center" VerticalAlignment="Center" />
+			<ScrollViewer Margin="20,100">
+				<ItemsControl ItemsSource="{CompiledBinding Documents}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel ItemsAlignment="Center" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate DataType="model:AnalysisOrder">
+							<Border Classes="drawerbg" Margin="10">
+								<Grid RowDefinitions="*,auto" RowSpacing="5">
+									<TextBlock Grid.Row="0" Text="{CompiledBinding User.FullName, StringFormat='ФИО: {0}'}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+
+									<Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10" VerticalAlignment="Bottom">
+										<TextBlock Text="{CompiledBinding User.FullName, StringFormat='Врач: {0}'}" FontSize="18" VerticalAlignment="Center" />
+										<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).OutDocumentCommand}" CommandParameter="{CompiledBinding $self.DataContext}" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinHeight="40">
+											<Button.Styles>
+												<Style Selector="Button">
+													<Setter Property="Background" Value="#1A6FEE" />
+													<Setter Property="Foreground" Value="White" />
+
+													<Setter Property="Padding" Value="10" />
+
+													<Setter Property="Template">
+														<ControlTemplate>
+															<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="0" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+																<ContentPresenter Name="PART_Content" Content="Подробнее" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
+															</Border>
+														</ControlTemplate>
+													</Setter>
+
+													<Style Selector="^:pointerover">
+														<Setter Property="Background" Value="#1457bb" />
+													</Style>
+												</Style>
+											</Button.Styles>
+										</Button>
+									</Grid>
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
+		</Grid>
+	</Grid>
+</UserControl>

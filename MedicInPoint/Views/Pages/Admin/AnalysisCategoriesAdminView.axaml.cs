@@ -80,7 +80,7 @@ public partial class AnalysisCategoriesAdminView : UserControl
 		});
 	}
 
-	private void acb_TextChanged(object? sender, TextChangedEventArgs e)
+	void acb_TextChanged(object? sender, TextChangedEventArgs e)
 	{
 		centerText.IsVisible = AllCategories.Count == 0;
 

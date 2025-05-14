@@ -57,11 +57,14 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		AnalysesInRecord.CollectionChanged += (s, e) => AnalysesInRecordTotalPrice = AnalysesInRecord.Sum(x => x.Price);
 	}
 
+	public string CurrentUser => _appService.CurrentUser!.FullName;
+
 	#region Fill Methods
 	async Task FillPatients()
 	{
 		try
 		{
+			_notificationService.Show("Уведомление", "Загрузка списка пациентов");
 			using var response = await APIService.For<IPatient>().GetPatients().ConfigureAwait(false);
 			if (!response.IsSuccessful)
 				return;
@@ -90,6 +93,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	{
 		try
 		{
+			_notificationService.Show("Уведомление", "Загрузка списка запросов");
 			using var response = await APIService.For<IRequest>().GetRequests().ConfigureAwait(false);
 			if (!response?.IsSuccessful ?? false)
 				return;
@@ -118,6 +122,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	{
 		try
 		{
+			_notificationService.Show("Уведомление", "Загрузка списка анализов");
 			using var response = await APIService.For<IAnalysis>().GetAnalyses().ConfigureAwait(false);
 			if (!response?.IsSuccessful ?? false)
 				return;
@@ -224,13 +229,18 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	[RelayCommand]
 	private async Task NewOrder()
 	{
+		if(SelectedDate == null || SelectedTime == null || OrderRecordAddress.Address.IsNullOrWhiteSpace())
+		{
+			_notificationService.Show("Ошибка", "Поля 'Адрес', 'Дата и время' не могут быть пустыми", NotificationType.Error);
+			return;
+		}
+
 		IsRecordButtonEnabled = false;
 
 		OrderRecord.UserId = _appService.CurrentUser!.Id;
 		OrderRecord.PatientId = SelectedPatient!.Id;
 		OrderRecord.RegistrationDate = DateTime.Now;
-		_notificationService.Show("Дата", DateOnly.FromDateTime(SelectedDate!.Value.DateTime).ToString());
-		OrderRecord.AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.DateTime), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes));
+		OrderRecord.AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.Date), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes));
 
 		var response = await APIService.For<IAnalysisOrder>().NewOrder((OrderRecord, OrderRecordAddress, AnalysesInRecord.ToList()));
 		if (response.IsSuccessful)

@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 
 using Lucdem.Avalonia.SourceGenerators.Attributes;
 
@@ -21,8 +22,27 @@ public partial class Pill : TemplatedControl
 	private bool isEditable = false;
 	public bool IsEditable
 	{
-		get => isEditable;
+		get => GetValue(IsEditableProperty);
 		set => SetValue(IsEditableProperty, value);
+	}
+
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		switch(change.Property.Name)
+		{
+			case nameof(IsEditable):
+				foreach(var child in ((VisualChildren.First() as Grid)!.Children.First(x => x.GetType() == typeof(Border)) as Border)!.Child!.GetVisualChildren() )
+				{
+					if(child.Name == "PART_TextBlockValue" || child is SelectableTextBlock stb)
+						(child as SelectableTextBlock).IsVisible = !IsEditable;
+                    if (child.Name == "PART_TextBoxValue" || child is TextBox tb)
+                        (child as TextBox).IsVisible = IsEditable;
+					//File.AppendAllText(@"C:\Users\ILNAR\Desktop\control.txt", $"{child.Name} - {child.GetType().FullName} - {IsEditable}\n");
+				}
+				
+				break;
+		}
+		base.OnPropertyChanged(change);
 	}
 
 	[AvaStyledProperty]

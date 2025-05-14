@@ -1,7 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 
-using MedicInPoint.API.AIMLAPI.Models;
+using Medic.Theme.Controls.Custom;
+
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -13,6 +14,7 @@ using MedicInPoint.Views.UserControls.Items;
 
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 
 namespace MedicInPoint.Views.Pages.Doctor;
 
@@ -21,6 +23,7 @@ public partial class RnRDoctorView : UserControl
 	public RnRDoctorViewModel ViewModel { get; private set; } = null!;
 
 	private readonly MedicSignalRConnections connections = App.services.GetRequiredService<MedicSignalRConnections>();
+	private readonly INotificationService notification = App.services.GetRequiredService<INotificationService>();
 
 	public RnRDoctorView()
 	{
@@ -36,13 +39,67 @@ public partial class RnRDoctorView : UserControl
 		datepicker.MinYear = DateTimeOffset.Now;
 		datepicker.MaxYear = DateTimeOffset.Now.AddMonths(6);
 		
-		timepicker.SelectedTimeChanged += (s, e) =>
+		timepicker.SelectedTimeChanged += (_, e) =>
 		{
-			if (e.NewTime!.Value < TimeSpan.FromHours(8))
-				timepicker.SelectedTime = TimeSpan.FromHours(8);
-			if (e.NewTime.Value > TimeSpan.FromHours(20))
-				timepicker.SelectedTime = TimeSpan.FromHours(20);
+            if (e.NewTime!.Value < TimeSpan.FromHours(8))
+                timepicker.SelectedTime = TimeSpan.FromHours(8);
+            if (e.NewTime.Value > TimeSpan.FromHours(20))
+                timepicker.SelectedTime = TimeSpan.FromHours(20);
+            if (datepicker.SelectedDate.HasValue && timepicker.SelectedTime.HasValue)
+			{
+                var checkTime = new TimeSpan(timepicker.SelectedTime.Value.Hours, timepicker.SelectedTime.Value.Minutes, 0);
+                var currentTime = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+                if (datepicker.SelectedDate.Value.Date == DateTime.Today &&
+                    checkTime <= currentTime
+                )
+                {
+                    var nextTime = checkTime.Add(new TimeSpan(0, 30, 0));
+                    while (nextTime <= currentTime)
+                        nextTime = nextTime.Add(new TimeSpan(0, 30, 0));
+
+                    timepicker.SelectedTime = nextTime;
+                }
+            }
 		};
+		datepicker.SelectedDateChanged += (_, e) =>
+		{
+			if (datepicker.SelectedDate.HasValue && timepicker.SelectedTime.HasValue)
+			{
+				var checkTime = new TimeSpan(timepicker.SelectedTime.Value.Hours, timepicker.SelectedTime.Value.Minutes, 0);
+				var currentTime = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+                if (datepicker.SelectedDate.Value.Date == DateTime.Today &&
+					checkTime <= currentTime
+				)
+				{
+					var nextTime = checkTime.Add(new TimeSpan(0, 30, 0));
+					while (nextTime <= currentTime)
+						nextTime = nextTime.Add(new TimeSpan(0, 30, 0));
+
+					timepicker.SelectedTime = nextTime;
+				}
+			}
+		};
+		SystemEvents.TimeChanged += (_, e) =>
+		{
+            if (datepicker.SelectedDate.HasValue && timepicker.SelectedTime.HasValue)
+            {
+                var checkTime = new TimeSpan(timepicker.SelectedTime.Value.Hours, timepicker.SelectedTime.Value.Minutes, 0);
+                var currentTime = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+                if (datepicker.SelectedDate.Value.Date == DateTime.Today &&
+                    checkTime <= currentTime
+                )
+                {
+                    var nextTime = checkTime.Add(new TimeSpan(0, 30, 0));
+                    while (nextTime <= currentTime)
+                        nextTime = nextTime.Add(new TimeSpan(0, 30, 0));
+
+                    timepicker.SelectedTime = nextTime;
+                }
+            }
+        };
 
 		patients_lb.SelectionChanged += Patients_lb_SelectionChanged;
 	}

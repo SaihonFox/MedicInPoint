@@ -19,18 +19,22 @@ public partial class AnalysisCategoriesAdminViewModel() : ViewModelBase
 {
 	private readonly NestedHistoryRouter<ViewModelBase, MainViewModel> _router = null!;
 	public readonly INotificationService _notificationService = null!;
+	private readonly IAppStateService _appService = null!;
 
 	public ObservableCollection<AnalysisCategory> AnalysisCategoriesList = [];
 	
-	public AnalysisCategoriesAdminViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService notificationService) : this()
+	public AnalysisCategoriesAdminViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService notificationService, IAppStateService appService) : this()
 	{
 		Title = "Список категорий анализов";
 		_router = router;
 		_notificationService = notificationService;
+		_appService = appService;
 	}
 
 	[RelayCommand]
 	private void Back() => _router.Back();
+
+	public string CurrentUser => _appService.CurrentUser!.FullName;
 
 	[ObservableProperty]
 	private AnalysisCategory _analysisCategory = new();

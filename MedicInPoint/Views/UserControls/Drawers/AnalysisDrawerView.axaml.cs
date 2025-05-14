@@ -29,6 +29,7 @@ public partial class AnalysisDrawerView : UserControl
 	public Action<AnalysisDrawerView>? ActionOnDelete = null;
 	public Action<AnalysisDrawerView>? ActionOnPreDelete = null;
 
+	public bool IsAdding { get; set; } = false;
 	public bool IsEditing { get; set; } = false;
 	public bool IsDeleting { get; set; } = false;
 	private Analysis? initData = null;
@@ -52,6 +53,7 @@ public partial class AnalysisDrawerView : UserControl
 		Loaded += (_, _) =>
 		{
 			CategoriesInAnalysis.AddRange(ViewModel.AnalysisCategories);
+			
 		};
 	}
 
@@ -88,9 +90,8 @@ public partial class AnalysisDrawerView : UserControl
 						else
 						{
 							notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
+
 							IsDeleting = false;
-							(edit_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/edit_category.svg";
-							(delete_btn.Content as Avalonia.Svg.Skia.Svg)!.Path = "/Assets/SVGs/buttons/delete_category.svg";
 
 							ActionOnDelete?.Invoke(this);
 
@@ -106,11 +107,16 @@ public partial class AnalysisDrawerView : UserControl
 						notification.Show("Ошибка", ex.StackTrace!, NotificationType.Error);
 					}
 				}
+				else if (IsAdding)
+				{
+
+				}
 				else
 				{
 					ActionOnSelect?.Invoke(this);
 
-					initData = new() {
+					initData = new()
+					{
 						Name = ViewModel.Analysis!.Name,
 						Biomaterial = ViewModel.Analysis!.Biomaterial,
 						ResultsAfter = ViewModel.Analysis!.ResultsAfter,
@@ -146,6 +152,8 @@ public partial class AnalysisDrawerView : UserControl
 						notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
 					else
 					{
+						notification.Show("Успех!", $"Успешно обновлено!", NotificationType.Success);
+
 						IsEditing = false;
 						ViewModel.IsEditable = false;
 
@@ -168,9 +176,10 @@ public partial class AnalysisDrawerView : UserControl
 	{
 		await Dispatcher.UIThread.Invoke(async () =>
 		{
-			if (IsEditing)
+			if (IsEditing || IsAdding)
 			{
 				IsEditing = false;
+				IsAdding = false;
 				ViewModel.IsEditable = false;
 
 				edit_btn.IsVisible = true;
@@ -209,6 +218,17 @@ public partial class AnalysisDrawerView : UserControl
 		Dispatcher.UIThread.Invoke(() =>
 		{
 			ViewModel.Analysis = new Analysis { Id = 0 };
+
+			ViewModel.IsEditable = true;
+			IsAdding = true;
+
+			edit_btn.IsVisible = false;
+			delete_btn.IsVisible = false;
+			apply_btn.IsVisible = true;
+			reject_btn.IsVisible = true;
+			add_order.IsVisible = false;
+
+
 		});
 	}
 

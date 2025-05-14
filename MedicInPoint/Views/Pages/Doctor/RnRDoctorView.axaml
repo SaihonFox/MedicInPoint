@@ -26,6 +26,7 @@
 	<Grid>
 		<Grid>
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,45,0,0" HorizontalAlignment="Left" />
+			<TextBlock Text="{CompiledBinding CurrentUser}" FontSize="30" LineHeight="30" Margin="0,40,30,0" HorizontalAlignment="Right" />
 
 			<Grid ColumnDefinitions="300,*,300" Margin="25,100">
 				<AutoCompleteBox Grid.Column="0" Name="acb" Classes="search" IsDropDownOpen="False" Text="{CompiledBinding SearchText, Mode=TwoWay}" Watermark="Искать пациента" FilterMode="ContainsOrdinal" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="300" Height="50">

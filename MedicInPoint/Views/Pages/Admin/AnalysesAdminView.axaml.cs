@@ -186,8 +186,9 @@ public partial class AnalysesAdminView : UserControl
 
 	async Task FillWithSearch()
 	{
-		await Dispatcher.UIThread.InvokeAsync(analyses_list.Items.Clear);
-		var analyses = await Dispatcher.UIThread.InvokeAsync(() => {
+		var ViewModel = (DataContext as AnalysesAdminViewModel)!;
+		Dispatcher.UIThread.Invoke(analyses_list.Items.Clear);
+		var analyses = Dispatcher.UIThread.Invoke(() => {
 			var list = AllAnalysesView.Where(x =>
 				x.ViewModel.Analysis!.Name.Contains(Dispatcher.UIThread.Invoke(() => acb.Text!), StringComparison.CurrentCultureIgnoreCase))
 			.ToList();
@@ -203,8 +204,12 @@ public partial class AnalysesAdminView : UserControl
 
 			return list;
 		});
+		Dispatcher.UIThread.Invoke(() => {
+			//centerText.IsVisible = analyses.Count == 0;
+			centerText.Text = "Пустой список";
+		});
 
-		await Dispatcher.UIThread.InvokeAsync(() =>
+		Dispatcher.UIThread.Invoke(() =>
 		{
 			if (analyses.Find(x => x.ViewModel.Analysis!.Id == selectedAnalysis?.ViewModel.Analysis?.Id) == null && selectedAnalysis != null)
 			{
@@ -217,13 +222,14 @@ public partial class AnalysesAdminView : UserControl
 		{
 			Dispatcher.UIThread.Invoke(() => {
 				analyses_list.Items.Add(analysis);
+				centerText.IsVisible = false;
 			});
 		}
 
-		await Dispatcher.UIThread.InvokeAsync(() => {
+		/*Dispatcher.UIThread.Invoke(() => {
 			centerText.IsVisible = analyses.Count == 0;
 			centerText.Text = "Пустой список";
-		});
+		});*/
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			ViewModel.SelectedAnalysis = selectedAnalysis?.ViewModel?.Analysis;

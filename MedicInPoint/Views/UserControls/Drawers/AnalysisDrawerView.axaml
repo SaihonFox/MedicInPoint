@@ -174,7 +174,12 @@
 								</StackPanel>
 							</Button>
 						</Grid>
-						<ListBox>
+						<btn:AnalysisDeleteBtn Name="delete_category_btn" />
+						<ListBox Name="categories_in_analysis_lb">
+							<ListBox.Styles>
+								<Style Selector="ListBoxItem">
+								</Style>
+							</ListBox.Styles>
 						</ListBox>
 					</StackPanel>
 				</StackPanel>

@@ -18,6 +18,7 @@
 	<Panel>
 		<Grid>
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
+			<TextBlock Text="{CompiledBinding CurrentUser}" FontSize="30" LineHeight="30" Margin="0,40,30,0" HorizontalAlignment="Right" />
 			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Watermark="Искать сотрудника" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
 				<i:Interaction.Behaviors>
 					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />

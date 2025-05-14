@@ -25,13 +25,15 @@
 
 			<TextBlock Grid.Row="0" Text="Меню" FontSize="100" Foreground="#1A6FEE" Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-			<ItemsControl Grid.Row="1" ItemsSource="{CompiledBinding Menu}" ClipToBounds="False" HorizontalAlignment="Center" VerticalAlignment="Center">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel Orientation="Vertical" Spacing="20" VerticalAlignment="Center" />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
+			<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center">
+				<ItemsControl ItemsSource="{CompiledBinding Menu}" ClipToBounds="False">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Vertical" Spacing="20" VerticalAlignment="Center" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
+			</ScrollViewer>
 
 			<Grid Grid.Row="2" Margin="0,0,0,30" Height="{Binding $parent[Grid].Children[0].Bounds.Height}">
 				<Button Grid.Row="2" Classes="back" Command="{Binding BackCommand}" HotKey="Escape" HorizontalAlignment="Center" VerticalAlignment="Bottom" />

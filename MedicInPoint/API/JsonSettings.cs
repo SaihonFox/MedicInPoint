@@ -17,7 +17,6 @@ public static class JsonSettings
 		DateParseHandling = DateParseHandling.DateTime,
 		//DateFormatString = "dd.MM.yyyy'T'HH:mm:ss.fff",
 		Culture = CultureInfo.GetCultureInfo("ru-RU"),
-		DateTimeZoneHandling = DateTimeZoneHandling.Local,
 		/*Converters = [
 			new DateOnlyConverter(),
 			new TimeOnlyConverter(),

@@ -22,6 +22,7 @@
 		<Folder Include="AI\**" />
 		<AvaloniaResource Include="Assets\**" />
 		<Folder Include="API\AIMLAPI\ChatModels\TextModels\" />
+		<Folder Include="Views\Pages\Doctor\Documents\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -93,6 +94,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="Views\Pages\Admin\Documents\PatientsAdminDocumentsView.axaml.cs">
+		  <DependentUpon>PatientsAdminDocumentsView.axaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Pages\Admin\Documents\UsersAdminDocumentsView.axaml.cs">
+		  <DependentUpon>UsersAdminDocumentsView.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\SettingsView.axaml.cs">
 		  <DependentUpon>SettingsView.axaml</DependentUpon>
 		</Compile>
