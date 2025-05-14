@@ -229,9 +229,9 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	[RelayCommand]
 	private async Task NewOrder()
 	{
-		if(SelectedDate == null || SelectedTime == null || OrderRecordAddress.Address.IsNullOrWhiteSpace())
+		if(SelectedDate == null || SelectedTime == null || OrderRecordAddress.Address.IsNullOrWhiteSpace() || AnalysesInRecord.Count == 0)
 		{
-			_notificationService.Show("Ошибка", "Поля 'Адрес', 'Дата и время' не могут быть пустыми", NotificationType.Error);
+			_notificationService.Show("Ошибка", "Поля 'Адрес', 'Дата и время', 'Анализы' не могут быть пустыми", NotificationType.Error);
 			return;
 		}
 
@@ -250,8 +250,8 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		}
 		else
 		{
-			_notificationService.Show("Ошибка!", $"Возникли некоторые ошибки: {response.Error.Message}");
-			Logger.Sink!.Log(LogEventLevel.Error, "NewOrder", this, $"Message: {response.Error.Content}, Source: {await response.Error.GetContentAsAsync<object>()}");
+			_notificationService.Show("Ошибка!", $"Возникли некоторые ошибки: {response.Error.Content}");
+			Logger.Sink!.Log(LogEventLevel.Error, "NewOrder", this, $"Message: {response.Error.Content}");
 		}
 
 		IsRecordButtonEnabled = true;
