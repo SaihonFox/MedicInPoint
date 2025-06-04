@@ -9,5 +9,5 @@ public partial class RequestState
 
     public string Name { get; set; } = null!;
 
-    public ICollection<Request> Requests { get; set; } = [];
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 }

@@ -4,7 +4,7 @@ public static class MedicConfiguration
 {
 	public const bool USE_LOCALHOST = true;
 	
-	public const string LOCALHOST_URL = "http://localhost:5033/";
+	public const string LOCALHOST_URL = "http://localhost:5034/";
 	
 	public const string RENDER_URL = "https://medicapi.onrender.com/";
 

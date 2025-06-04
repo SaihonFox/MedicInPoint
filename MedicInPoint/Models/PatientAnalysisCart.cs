@@ -7,11 +7,13 @@ public partial class PatientAnalysisCart
 {
     public int Id { get; set; }
 
-    public int PatientId { get; set; }
+    public int? PatientId { get; set; }
 
-    public ICollection<AnalysisOrder> AnalysisOrders { get; set; } = [];
+    public virtual ICollection<AnalysisOrder> AnalysisOrders { get; set; } = new List<AnalysisOrder>();
 
-    public Patient Patient { get; set; } = null!;
+    public virtual Patient? Patient { get; set; }
 
-    public ICollection<PatientAnalysisCartItem> PatientAnalysisCartItems { get; set; } = [];
+    public virtual ICollection<PatientAnalysisCartItem> PatientAnalysisCartItems { get; set; } = new List<PatientAnalysisCartItem>();
+
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 }

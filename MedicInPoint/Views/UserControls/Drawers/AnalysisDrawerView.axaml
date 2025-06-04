@@ -11,7 +11,7 @@
 			 mc:Ignorable="d"
 			 ClipToBounds="False"
 			 d:DesignWidth="400" d:DesignHeight="750"
-			 Width="400" Height="750"
+			 Height="750"
 			 x:Class="MedicInPoint.Views.UserControls.Drawers.AnalysisDrawerView"
 			 x:DataType="vm:AnalysisDrawerViewModel">
 	<Design.DataContext>
@@ -84,7 +84,7 @@
 				<!-- Preparation -->
 				<StackPanel IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Подготовка" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
-					<TextBlock IsVisible="{CompiledBinding !IsEditable}" Text="Отсутствует" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
+					<TextBlock Text="Отсутствует" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16">
 						<TextBlock.IsVisible>
 							<MultiBinding Converter="{x:Static BoolConverters.And}">
 								<CompiledBinding Path="!IsEditable" />
@@ -105,7 +105,8 @@
 				</StackPanel>
 
 				<!-- Categories -->
-				<StackPanel IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" Orientation="Vertical" Spacing="5">
+				<!-- IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" -->
+				<StackPanel IsVisible="False" Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Категории" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
 					<TextBlock Text="Отсутствуют" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" HorizontalAlignment="Center">
 						<TextBlock.IsVisible>
@@ -148,7 +149,7 @@
 									</Style>
 								</ComboBox.Styles>
 							</ComboBox>
-							<Button Grid.Column="2" Name="add_category" Content="Добавить" Padding="6">
+							<Button Grid.Column="2" Name="add_category" Padding="6">
 								<Button.Styles>
 									<Style Selector="Button">
 										<Setter Property="CornerRadius" Value="10" />
@@ -186,8 +187,8 @@
 			</StackPanel>
 			<TextBlock Grid.Row="2" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-			<Border Grid.Row="3" Background="#DBDBDC" CornerRadius="100" Height="1" />
-			<Border Grid.Row="4">
+			<Border Grid.Row="3" IsVisible="False" Background="#DBDBDC" CornerRadius="100" Height="1" />
+			<Border Grid.Row="4" IsVisible="False">
 				<Border Background="White" CornerRadius="18" Padding="8" HorizontalAlignment="Center" MinWidth="100">
 					<Border.Effect>
 						<DropShadowEffect Color="#DADEDA" BlurRadius="10" OffsetX="0" OffsetY="0" />
@@ -202,7 +203,7 @@
 							<btn:AnalysisDeclineBtn Grid.Column="2" Name="reject_btn" IsVisible="False" />
 						</Grid>
 						<Border Background="#DBDBDC" IsVisible="{CompiledBinding #add_order.IsVisible}" CornerRadius="100" Height="1" />
-						<Button Name="add_order" Content="Добавить" Padding="6" HorizontalAlignment="Center">
+						<Button Name="add_order" Padding="6" HorizontalAlignment="Center">
 							<Button.Styles>
 								<Style Selector="Button">
 									<Setter Property="CornerRadius" Value="10" />

@@ -113,6 +113,7 @@
 				<!--#region Main Content -->
 				<TextBlock Grid.Column="1" IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNull}}" Text="Для начала выберите пациента из списка слева" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 				<Grid Grid.Column="1" ClipToBounds="False" IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNotNull}}">
+					<TextBlock Name="centerText" Text="Список пуст" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" />
 					<!--#region Requests -->
 					<Grid RowDefinitions="*,10,auto" IsVisible="{CompiledBinding #requests_rb.IsChecked}">
 						<ScrollViewer Grid.Row="0" ClipToBounds="False" HorizontalScrollBarVisibility="Hidden">
@@ -124,7 +125,7 @@
 								</ItemsControl.ItemsPanel>
 							</ItemsControl>
 						</ScrollViewer>
-						<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center">
+						<StackPanel Grid.Row="2" IsVisible="False" Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center">
 							<RadioButton Classes="ac" Grid.Column="0" GroupName="request_group" Name="all_requests_rb"
 										 IsChecked="True"
 										 Content="Запросы на заявку" FontSize="18" TextBlock.LineHeight="18"
@@ -242,7 +243,7 @@
 														</Style>
 													</ComboBox.Styles>
 												</ComboBox>
-												<Button Grid.Column="2" Name="add_order" Command="{CompiledBinding AddAnalysis2RecordCommand}" Content="Добавить" Padding="6">
+												<Button Grid.Column="2" Name="add_order" Command="{CompiledBinding AddAnalysis2RecordCommand}" Padding="6">
 													<Button.Styles>
 														<Style Selector="Button">
 															<Setter Property="CornerRadius" Value="10" />
@@ -284,7 +285,7 @@
 															<DropShadowEffect Color="#E4E8F5" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
 														</Border.Effect>
 														<Grid ColumnDefinitions="auto,5,*,10,auto,10,auto">
-															<Border Grid.Column="0" Background="{CompiledBinding Name, Converter={StaticResource ColorByNameConverter}}" CornerRadius="100" Width="5" Height="{CompiledBinding $parent.Children[1].Bounds.Height}" />
+															<Border Grid.Column="0" Background="{CompiledBinding Name, Converter={StaticResource ColorByNameConverter}}" CornerRadius="100" Width="5" Height="{CompiledBinding $parent[Grid].Children[1].Bounds.Height}" />
 															<TextBlock Grid.Column="2" Text="{CompiledBinding Name}" FontSize="20" LineHeight="20" VerticalAlignment="Center" />
 															<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
 																<TextBlock Text="Цена" Foreground="#7E7E9A" FontSize="14" LineHeight="14" HorizontalAlignment="Center" />
@@ -309,8 +310,8 @@
 									<!--#endregion Добавление нового анализа -->
 								</StackPanel>
 							</ScrollViewer>
-					</Border>
-				</Grid>
+						</Border>
+					</Grid>
 					<!--#endregion Record -->
 				</Grid>
 				<!--#region Main Content -->

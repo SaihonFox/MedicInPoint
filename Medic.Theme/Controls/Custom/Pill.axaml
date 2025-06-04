@@ -10,6 +10,7 @@
 
 	<ControlTheme x:Key="{x:Type medic:Pill}" TargetType="medic:Pill">
 		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="VerticalAlignment" Value="Top" />
 
 		<Setter Property="ValueFontSize" Value="20" />
 		<Setter Property="TitleFontSize" Value="16" />
@@ -35,30 +36,27 @@
 							ClipToBounds="False"
 							Background="{TemplateBinding PillBackground}"
 							Padding="{TemplateBinding PillPadding}"
-							MinWidth="{TemplateBinding PillMinWidth}" MaxWidth="{TemplateBinding PillMaxWidth}">
+							MinWidth="{TemplateBinding PillMinWidth}" MaxWidth="{TemplateBinding PillMaxWidth}"
+							HorizontalAlignment="Center" VerticalAlignment="Center">
 						<Panel>
 							<SelectableTextBlock Name="PART_TextBlockValue" IsVisible="true"
 												 Text="{TemplateBinding Value}" FontSize="{TemplateBinding ValueFontSize}"
-												 LineHeight="{TemplateBinding ValueFontSize}"
-												 TextAlignment="Center" TextWrapping="WrapWithOverflow"
+												 TextAlignment="Center" TextWrapping="Wrap"
 												 Background="Transparent" Foreground="{TemplateBinding ValueForeground}"
-												 VerticalAlignment="Center" />
+												 HorizontalAlignment="Center" VerticalAlignment="Center" />
 							<TextBox Name="PART_TextBoxValue" IsVisible="false"
 									 Text="{TemplateBinding Value, Mode=TwoWay}" FontSize="{TemplateBinding ValueFontSize}"
-									 IsReadOnly="{Binding !IsEditable}"
-									 LineHeight="{TemplateBinding ValueFontSize}"
-									 TextAlignment="Center" TextWrapping="WrapWithOverflow"
+									 TextAlignment="Center" TextWrapping="Wrap"
 									 Background="Transparent" Foreground="{TemplateBinding ValueForeground}"
-									 VerticalAlignment="Center" />
+									 HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Panel>
 					</Border>
 					<TextBlock Grid.Row="2" Name="title"
 							   Text="{TemplateBinding Title}" FontSize="{TemplateBinding TitleFontSize}"
-							   LineHeight="{TemplateBinding TitleFontSize}"
 							   TextAlignment="Center" TextWrapping="WrapWithOverflow"
 							   Foreground="{TemplateBinding TitleForeground}"
 							   Margin="0" Padding="0"
-							   HorizontalAlignment="Center" />
+							   HorizontalAlignment="Center" VerticalAlignment="Center" />
 				</Grid>
 			</ControlTemplate>
 		</Setter>

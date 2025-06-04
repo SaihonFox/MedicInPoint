@@ -109,21 +109,37 @@ public partial class AnalysisDrawerView : UserControl
 				}
 				else if (IsAdding)
 				{
+					try
+					{
+						using var response = await APIService.For<IAnalysis>().AddAnalysis(ViewModel.Analysis);
+						if(!response.IsSuccessful)
+						{
+							notification.Show("Ошибка", $"Сообщение: {response.Error.Message}", NotificationType.Error);
+							return;
+						}
 
+						notification.Show("Успех!", $"Вы успешно добавили анализ", NotificationType.Success);
+					}
+					catch (Exception ex)
+					{
+					}
+					finally
+					{
+						IsAdding = false;
+						ViewModel.IsEditable = false;
+
+						edit_btn.IsVisible = true;
+						delete_btn.IsVisible = true;
+						apply_btn.IsVisible = false;
+						reject_btn.IsVisible = false;
+						add_order.IsVisible = true;
+					}
 				}
 				else
 				{
 					ActionOnSelect?.Invoke(this);
 
-					initData = new()
-					{
-						Name = ViewModel.Analysis!.Name,
-						Biomaterial = ViewModel.Analysis!.Biomaterial,
-						ResultsAfter = ViewModel.Analysis!.ResultsAfter,
-						Preparation = ViewModel.Analysis!.Preparation,
-						Description = ViewModel.Analysis!.Description,
-						Price = ViewModel.Analysis!.Price,
-					};
+					initData = ViewModel.Analysis;
 
 					IsEditing = true;
 					ViewModel.IsEditable = true;
@@ -187,8 +203,6 @@ public partial class AnalysisDrawerView : UserControl
 				apply_btn.IsVisible = false;
 				reject_btn.IsVisible = false;
 				add_order.IsVisible = true;
-
-				ViewModel.Analysis = initData;
 			}
 			else if (!IsDeleting)
 			{
@@ -210,6 +224,8 @@ public partial class AnalysisDrawerView : UserControl
 				reject_btn.IsVisible = false;
 				add_order.IsVisible = true;
 			}
+
+			ViewModel.Analysis = initData;
 		});
 	}
 

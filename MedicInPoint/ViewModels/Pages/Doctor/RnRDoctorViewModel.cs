@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq.Dynamic.Core;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
 using Avalonia.Controls;
@@ -102,7 +103,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 				return;
 
 			AllRequests = [.. response.Content];
-			Requests = [.. AllRequests];
+			Requests = [.. AllRequests.Where(x => x.DoctorId == _appService.CurrentUser!.Id)];
 		}
 		catch (HttpRequestException ex) when (ex.GetBaseException() is SocketException sex)
 		{
@@ -256,41 +257,75 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 
 		IsRecordButtonEnabled = false;
 
-		var address = new PatientAnalysisAddress
-		{
-			Address = Address,
-			Intercome = Intercome,
-			Entrance = Entrance.IsNullOrWhiteSpace() ? null : int.Parse(Entrance),
-			Floor = Floor.IsNullOrWhiteSpace() ? null : int.Parse(Floor),
-			Room = Room.IsNullOrWhiteSpace() ? null : int.Parse(Room),
-		};
+		var analysisDateTime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.Date), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes));
 
-		using var addressResponse = await APIService.For<IPatientAnalysisAddress>().Post(address).ConfigureAwait(false);
-		using var cartResponse = await APIService.For<IPatientAnalysisCart>().Post(new PatientAnalysisCart { PatientId = SelectedPatient.Id }).ConfigureAwait(false);
+		try
+		{
+			using var ordersResponse = await APIService.For<IAnalysisOrder>().GetAnalysisOrders().ConfigureAwait(false);
+			if (ordersResponse.Content!.Any(x =>
+				x.AnalysisDatetime == analysisDateTime &&
+				(x.UserId == _appService.CurrentUser!.Id || x.PatientId == SelectedPatient!.Id)
+			))
+			{
+				_notificationService.Show("Ошибка", "На текущее время уже имеется запись");
+				IsRecordButtonEnabled = true;
+				return;
+			}
+		} catch(ArgumentNullException ex)
+		{
+			_notificationService.Show("Ошибка", $"Message: {ex.Message}, Param Name: {ex.ParamName}");
+			Logger.Sink.Log(LogEventLevel.Error, "SOMEAREA", this, $"Message: {ex.Message}, Param Name: {ex.ParamName}");
+		}
+
+		using var cartResponse = await APIService.For<IPatientAnalysisCart>().Post(new PatientAnalysisCart { PatientId = SelectedPatient!.Id }).ConfigureAwait(false);
 		foreach (var item in AnalysesInRecord)
 			await APIService.For<IPatientAnalysisCartItem>().Post(new PatientAnalysisCartItem { AnalysisId = item.Id, PatientAnalysisCartId = cartResponse.Content!.Id });
 		using var orderResponse = await APIService.For<IAnalysisOrder>().Post(new AnalysisOrder
 		{
+			PatientAnalysisCart = cartResponse.Content,
 			PatientAnalysisCartId = cartResponse.Content!.Id,
+
+			Patient = SelectedPatient,
 			PatientId = SelectedPatient.Id,
+
+			User = _appService.CurrentUser!,
 			UserId = _appService.CurrentUser!.Id,
+
 			Comment = OrderRecord.Comment,
-			PatientAnalysisAddressId = addressResponse.Content!.Id,
+
 			RegistrationDate = DateTime.Now,
-			AnalysisDatetime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.Date), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes))
+			AnalysisDatetime = analysisDateTime
 		}).ConfigureAwait(false);
 
-		//using var response = await APIService.For<IAnalysisOrder>().NewOrder((OrderRecord, OrderRecordAddress, AnalysesInRecord.ToList()));
 		if (orderResponse.IsSuccessful)
 		{
-			_notificationService.Show("Успех!", $"Пациент успешно записан на {OrderRecord.AnalysisDatetime:D H:m}");
-			//_appService.CurrentUser = response.Content;
+			try
+			{
+				_notificationService.Show("Успех!", $"Пациент успешно записан на {analysisDateTime:dd.MM.yyyy HH:mm}");
+				if (!SelectedPatient.Email.IsNullOrWhiteSpace())
+					_notificationService.Show("Уведомление", "Также при подключении к интернету пациенту могло прийти сообщение на почту");
+			}
+			catch (Exception ex)
+			{
+
+			}
 		}
 		else
 		{
 			_notificationService.Show("Ошибка!", $"Возникли некоторые ошибки: {orderResponse.Error.Content}");
 			Logger.Sink!.Log(LogEventLevel.Error, "NewOrder", this, $"Message: {orderResponse.Error.Content}");
 		}
+
+		Address = string.Empty;
+		Intercome = string.Empty;
+		Floor = string.Empty;
+		Entrance = string.Empty;
+		Room = string.Empty;
+		AnalysesInRecord.Clear();
+		SelectedDate = null;
+		SelectedTime = null;
+
+		OrderRecord = new();
 
 		IsRecordButtonEnabled = true;
 	}

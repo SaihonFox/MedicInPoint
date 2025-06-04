@@ -21,7 +21,7 @@ public partial class UsersAdminDocumentsViewModel() : ViewModelBase
 
 	public UsersAdminDocumentsViewModel(NestedHistoryRouter<ViewModelBase, MainViewModel> router, INotificationService notificationService, IAppStateService appService) : this()
 	{
-		Title = "Отчеты врачей";
+		Title = "Отчеты лаборантов";
 		_router = router;
 		_notificationService = notificationService;
 		_appService = appService;

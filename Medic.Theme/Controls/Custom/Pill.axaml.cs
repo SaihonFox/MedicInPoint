@@ -19,7 +19,7 @@ public partial class Pill : TemplatedControl
 		defaultBindingMode: BindingMode.TwoWay,
 		enableDataValidation: true
 	);
-	private bool isEditable = false;
+
 	public bool IsEditable
 	{
 		get => GetValue(IsEditableProperty);
@@ -28,6 +28,7 @@ public partial class Pill : TemplatedControl
 
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
+		if(!Design.IsDesignMode)
 		switch(change.Property.Name)
 		{
 			case nameof(IsEditable):

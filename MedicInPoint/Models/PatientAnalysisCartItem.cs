@@ -11,7 +11,9 @@ public partial class PatientAnalysisCartItem
 
     public int PatientAnalysisCartId { get; set; }
 
-    public Analysis Analysis { get; set; } = null!;
+    public string? ResultsDescription { get; set; }
 
-    public PatientAnalysisCart PatientAnalysisCart { get; set; } = null!;
+    public virtual Analysis Analysis { get; set; } = null!;
+
+    public virtual PatientAnalysisCart PatientAnalysisCart { get; set; } = null!;
 }

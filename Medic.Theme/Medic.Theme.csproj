@@ -45,7 +45,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.3.0" />
-		<PackageReference Include="Avalonia.Svg.Skia" Version="11.2.7.1" />
+		<PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0" />
 		<PackageReference Include="AvaSourceGenerators" Version="0.2.0" />
 		<PackageReference Include="Squircle" Version="2.0.0" />
 		<PackageReference Include="System.Reactive" Version="6.0.1" />

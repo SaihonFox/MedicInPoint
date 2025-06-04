@@ -21,7 +21,6 @@ using MedicInPoint.Services;
 using MedicInPoint.ViewModels.Pages.Admin;
 using MedicInPoint.ViewModels.Pages.Admin.Documents;
 using MedicInPoint.ViewModels.Pages.Doctor;
-using MedicInPoint.ViewModels.Pages.Doctor.Documents;
 
 using MenuItem = Medic.Theme.Controls.Custom.MenuItem;
 
@@ -44,8 +43,8 @@ public partial class MenuViewModel() : ViewModelBase
 		new ScrollViewer {
 			Content = new WrapPanel { ItemsAlignment = WrapPanelItemsAlignment.Center }.Also(x => {
 				x.Children.AddRange([
-					BorderDocument("Отчеты\nврачей", AdminDocumentUsersCommand),
-					BorderDocument("Отчеты\nпациентов", AdminDocumentPatientsCommand),
+					//BorderDocument("Отчеты\nлаборантов", AdminDocumentUsersCommand),
+					//BorderDocument("Отчеты\nпациентов", AdminDocumentPatientsCommand),
 					BorderDocument("Отчеты\nрезультатов\nанализов", AdminDocumentAnalysesCommand),
 				]);
 			}),

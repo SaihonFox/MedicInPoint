@@ -14,7 +14,4 @@ public interface IAnalysisOrder
 
 	[Post("/analysis_orders")]
 	Task<IApiResponse<User>> Post([Body] AnalysisOrder analysisOrder);
-
-	[Post("/analysis_orders/new_order")]
-	Task<IApiResponse<User>> NewOrder([Body](AnalysisOrder analysisOrder, PatientAnalysisAddress address, List<Analysis> analyses) body);
 }

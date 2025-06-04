@@ -6,7 +6,8 @@
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
 			 xmlns:converter="using:MedicInPoint.Converters"
 			 xmlns:medic="https://github.com/saihonfox"
-			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:i="clr-namespace:"
 			 xmlns:bh="using:TestAutoCompleteBehavior.Behaviors"
 			 mc:Ignorable="d"
 			 d:DesignWidth="1500" d:DesignHeight="1000"
@@ -17,6 +18,7 @@
 	</Design.DataContext>
 	<UserControl.Resources>
 		<converter:IntConverter x:Key="IntConverter" />
+		<converter:ColorByNameConverter x:Key="ColorByNameConverter" />
 	</UserControl.Resources>
 
 	<Grid>
@@ -26,9 +28,9 @@
 
 			<Grid ColumnDefinitions="300,*,300" Margin="25,100">
 				<AutoCompleteBox Grid.Column="0" Name="acb" Classes="search" Text="{CompiledBinding SearchText, Mode=TwoWay}" IsDropDownOpen="False" Watermark="Искать пациента" FilterMode="ContainsOrdinal" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="300" Height="50">
-					<i:Interaction.Behaviors>
+					<Interaction.Behaviors>
 						<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
-					</i:Interaction.Behaviors>
+					</Interaction.Behaviors>
 				</AutoCompleteBox>
 
 				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50">
@@ -107,7 +109,73 @@
 				</Grid>
 
 				<Grid Grid.Column="1">
-					<TextBlock IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNotNull}}" Text="Для начала выберите пациента из списка слева" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					<TextBlock Name="centerText" IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNull}}" Text="Для начала выберите пациента из списка слева" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					<TextBlock Text="Список пуст" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock.IsVisible>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<CompiledBinding Path="!#centerText.IsVisible" />
+								<CompiledBinding Path="UserOrders.Count" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
+							</MultiBinding>
+						</TextBlock.IsVisible>
+					</TextBlock>
+
+					<ScrollViewer ClipToBounds="False" HorizontalScrollBarVisibility="Hidden">
+						<ItemsControl Name="requests_ic" ItemsSource="{CompiledBinding UserOrders}" IsVisible="{CompiledBinding SelectedPatient, Converter={x:Static ObjectConverters.IsNotNull}}" ClipToBounds="False" Padding="10">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel ClipToBounds="False" Orientation="Vertical" Spacing="20" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate DataType="model:AnalysisOrder">
+									<Border Classes="drawerbg" Padding="16" HorizontalAlignment="Stretch" MinWidth="500">
+										<StackPanel Orientation="Vertical" Spacing="10">
+											<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
+												<TextBlock Text="Дата и время" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
+												<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
+													<TextBlock Text="{CompiledBinding AnalysisDatetime}" FontSize="20" LineHeight="20" />
+												</Border>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" Spacing="5">
+												<TextBlock Text="Комментарий" FontSize="14" LineHeight="14" Foreground="#7E7E9A" Margin="8,0" />
+												<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
+													<SelectableTextBlock Text="{CompiledBinding Comment, TargetNullValue=Без комментария}" FontSize="20" LineHeight="20" />
+												</Border>
+											</StackPanel>
+											<Border Background="#DBDBDC" CornerRadius="100" Height="1" />
+											<TextBlock Text="Анализы" FontSize="26" LineHeight="26" HorizontalAlignment="Center" />
+											<ItemsControl ItemsSource="{CompiledBinding PatientAnalysisCart.PatientAnalysisCartItems}" ClipToBounds="False">
+												<ItemsControl.ItemsPanel>
+													<ItemsPanelTemplate>
+														<StackPanel ClipToBounds="False" Orientation="Vertical" Spacing="10" />
+													</ItemsPanelTemplate>
+												</ItemsControl.ItemsPanel>
+												<ItemsControl.ItemTemplate>
+													<DataTemplate DataType="model:PatientAnalysisCartItem">
+														<Border ClipToBounds="False" Background="White" CornerRadius="15" Padding="5">
+															<Border.Effect>
+																<DropShadowEffect Color="#E4E8F5" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
+															</Border.Effect>
+															<Grid ColumnDefinitions="auto,5,*,10,auto">
+																<Border Grid.Column="0" Background="{CompiledBinding Analysis.Name, Converter={StaticResource ColorByNameConverter}}" CornerRadius="100" Width="5" Height="{CompiledBinding $parent[Grid].Children[1].Bounds.Height}" />
+																<SelectableTextBlock Grid.Column="2" Text="{CompiledBinding Analysis.Name}" FontSize="20" LineHeight="20" VerticalAlignment="Center" />
+																<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
+																	<TextBlock Text="Цена" Foreground="#7E7E9A" FontSize="14" LineHeight="14" HorizontalAlignment="Center" />
+																	<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
+																		<TextBlock Text="{CompiledBinding Analysis.Price, StringFormat=#.## руб\\.}" FontSize="18" LineHeight="18" HorizontalAlignment="Center" />
+																	</Border>
+																</StackPanel>
+															</Grid>
+														</Border>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
 				</Grid>
 
 				<drawer:PatientDrawerView Grid.Column="2" DataContext="{CompiledBinding SelectedPatient}" HorizontalAlignment="Right" Width="0" />

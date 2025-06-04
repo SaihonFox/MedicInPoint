@@ -1,8 +1,13 @@
-﻿namespace MedicInPoint.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace MedicInPoint.Models;
 
 public partial class AnalysisOrder
 {
     public int Id { get; set; }
+
+    public bool AtHome { get; set; }
 
     public int UserId { get; set; }
 
@@ -16,13 +21,13 @@ public partial class AnalysisOrder
 
     public string? Comment { get; set; }
 
-    public int PatientAnalysisAddressId { get; set; }
+    public int AnalysisOrderStateId { get; set; }
 
-    public Patient Patient { get; set; } = null!;
+    public virtual AnalysisOrderState AnalysisOrderState { get; set; } = null!;
 
-    public PatientAnalysisAddress PatientAnalysisAddress { get; set; } = null!;
+    public virtual Patient Patient { get; set; } = null!;
 
-    public PatientAnalysisCart? PatientAnalysisCart { get; set; }
+    public virtual PatientAnalysisCart? PatientAnalysisCart { get; set; }
 
-    public User User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

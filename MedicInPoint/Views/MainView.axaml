@@ -21,7 +21,7 @@
 		<Menu HorizontalAlignment="Left" VerticalAlignment="Top" Height="30">
 			<MenuItem Header="Меню">
 				<MenuItem Header="Папка конфигураций" Command="{CompiledBinding OpenExplorerCommand}" />
-				<MenuItem Header="Настройки" ToggleType="CheckBox" Command="{CompiledBinding OpenSettingsCommand}" CommandParameter="{CompiledBinding $self.IsChecked}" />
+				<!--<MenuItem Header="Настройки" ToggleType="CheckBox" Command="{CompiledBinding OpenSettingsCommand}" CommandParameter="{CompiledBinding $self.IsChecked}" />-->
 			</MenuItem>
 		</Menu>
 

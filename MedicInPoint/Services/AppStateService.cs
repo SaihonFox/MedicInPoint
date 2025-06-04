@@ -1,13 +1,9 @@
 ﻿using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-using Avalonia.Threading;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using MedicInPoint.Models;
-
-using Microsoft.Extensions.DependencyInjection;
 
 using Quartz;
 using Quartz.Impl;

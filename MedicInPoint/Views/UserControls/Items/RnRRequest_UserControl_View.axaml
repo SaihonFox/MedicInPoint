@@ -32,53 +32,29 @@
 				</Grid>
 				<TextBlock IsVisible="{CompiledBinding Request.RequestStateId, Converter={StaticResource IntConverter}, ConverterParameter=3}" Text="Заявка одобрена" Foreground="#00B712" FontSize="30" LineHeight="30" HorizontalAlignment="Center" />
 				<TextBlock IsVisible="{CompiledBinding Request.RequestStateId, Converter={StaticResource IntConverter}, ConverterParameter=2}" Text="Заявка отклонена" Foreground="#FD3535" FontSize="30" LineHeight="30" HorizontalAlignment="Center" />
+
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Адрес" FontSize="14" LineHeight="14" Foreground="#7E7E9A" Margin="8,0" />
 					<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-						<TextBlock Text="{CompiledBinding Request.PatientAnalysisAddress.Address}" FontSize="20" LineHeight="20" />
+						<TextBlock Text="{CompiledBinding Request.AnalysisDatetime, StringFormat=dd.MM.yyyy HH:mm}" FontSize="20" LineHeight="20" />
 					</Border>
 				</StackPanel>
-				<Grid ColumnDefinitions="*,5,*,5,*,5,*">
-					<StackPanel Grid.Column="0" Orientation="Vertical" Spacing="5" MaxWidth="200">
-						<TextBlock Text="Квартира" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-						<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-							<TextBlock Text="{CompiledBinding Request.PatientAnalysisAddress.Room, TargetNullValue=Не указано}" FontSize="20" LineHeight="20" HorizontalAlignment="Center" />
-						</Border>
-					</StackPanel>
-					<StackPanel Grid.Column="2" Orientation="Vertical" Spacing="5" MaxWidth="200">
-						<TextBlock Text="Подъезд" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-						<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-							<TextBlock Text="{CompiledBinding Request.PatientAnalysisAddress.Entrance, TargetNullValue=Не указано}" FontSize="20" LineHeight="20" HorizontalAlignment="Center" />
-						</Border>
-					</StackPanel>
-					<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5" MaxWidth="200">
-						<TextBlock Text="Этаж" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-						<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-							<TextBlock Text="{CompiledBinding Request.PatientAnalysisAddress.Floor, TargetNullValue=Не указано}" FontSize="20" LineHeight="20" HorizontalAlignment="Center" />
-						</Border>
-					</StackPanel>
-					<StackPanel Grid.Column="6" Orientation="Vertical" Spacing="5" MaxWidth="200">
-						<TextBlock Text="Домофон" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-						<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-							<TextBlock Text="{CompiledBinding Request.PatientAnalysisAddress.Intercome, TargetNullValue=Не указано}" FontSize="20" LineHeight="20" HorizontalAlignment="Center" />
-						</Border>
-					</StackPanel>
-				</Grid>
+				
 				<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
 					<TextBlock Text="Дата и время" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
 					<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-						<TextBlock Text="{CompiledBinding Request.AnalysisDatetime}" FontSize="20" LineHeight="20" />
+						<TextBlock Text="{CompiledBinding Request.AnalysisDatetime, StringFormat=dd.MM.yyyy HH:mm}" FontSize="20" LineHeight="20" />
 					</Border>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Комментарий" FontSize="14" LineHeight="14" Foreground="#7E7E9A" Margin="8,0" />
 					<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-						<TextBlock Text="{CompiledBinding Request.PatientComment, TargetNullValue=Без комментария}" FontSize="20" LineHeight="20" />
+						<TextBlock Text="{CompiledBinding Request.Comment, TargetNullValue=Без комментария}" FontSize="20" LineHeight="20" />
 					</Border>
 				</StackPanel>
 				<Border Background="#DBDBDC" CornerRadius="100" Height="1" />
 				<TextBlock Text="Анализы" FontSize="26" LineHeight="26" HorizontalAlignment="Center" />
-				<ItemsControl ItemsSource="{CompiledBinding Request.RequestAnalyses}" ClipToBounds="False">
+				<ItemsControl ItemsSource="{CompiledBinding Request.PatientAnalysisCart.PatientAnalysisCartItems}" ClipToBounds="False">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
 							<StackPanel ClipToBounds="False" Orientation="Vertical" Spacing="10" />
@@ -91,7 +67,7 @@
 									<DropShadowEffect Color="#E4E8F5" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
 								</Border.Effect>
 								<Grid ColumnDefinitions="auto,5,*,10,auto">
-									<Border Grid.Column="0" Background="{CompiledBinding Analysis.Name, Converter={StaticResource ColorByNameConverter}}" CornerRadius="100" Width="5" Height="{CompiledBinding $parent.Children[1].Bounds.Height}" />
+									<Border Grid.Column="0" Background="{CompiledBinding Analysis.Name, Converter={StaticResource ColorByNameConverter}}" CornerRadius="100" Width="5" Height="{CompiledBinding $parent[Grid].Children[1].Bounds.Height}" />
 									<TextBlock Grid.Column="2" Text="{CompiledBinding Analysis.Name}" FontSize="20" LineHeight="20" VerticalAlignment="Center" />
 									<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
 										<TextBlock Text="Цена" Foreground="#7E7E9A" FontSize="14" LineHeight="14" HorizontalAlignment="Center" />

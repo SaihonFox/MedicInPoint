@@ -24,9 +24,9 @@
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
 			<TextBlock Text="{CompiledBinding CurrentUser}" FontSize="30" LineHeight="30" Margin="0,40,30,0" HorizontalAlignment="Right" />
 			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Watermark="Искать категорию" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
-				<i:Interaction.Behaviors>
+				<Interaction.Behaviors>
 					<bh:AutoCompleteZeroMinimumPrefixLengthDropdownBehavior />
-				</i:Interaction.Behaviors>
+				</Interaction.Behaviors>
 			</AutoCompleteBox>
 
 			<TextBlock Name="centerText" Text="Загрузка данных о категориях" FontSize="40" Margin="30,125" HorizontalAlignment="Center" VerticalAlignment="Center" />

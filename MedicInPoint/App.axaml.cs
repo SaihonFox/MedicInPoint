@@ -13,7 +13,6 @@ using MedicInPoint.ViewModels.Pages;
 using MedicInPoint.ViewModels.Pages.Admin;
 using MedicInPoint.ViewModels.Pages.Admin.Documents;
 using MedicInPoint.ViewModels.Pages.Doctor;
-using MedicInPoint.ViewModels.Pages.Doctor.Documents;
 
 //using HotAvalonia;
 
@@ -112,7 +111,7 @@ public partial class App : Application
 		services.AddTransient<UsersAdminDocumentsViewModel>();
 
 		// Doctor
-		services.AddTransient<AnalysesDoctorDocumentsViewModel>();
+		//services.AddTransient<AnalysesDoctorDocumentsViewModel>();
 		
 		return services.BuildServiceProvider();
 	}

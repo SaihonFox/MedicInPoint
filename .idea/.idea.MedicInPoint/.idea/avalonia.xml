@@ -15,13 +15,22 @@
         <entry key="MedicInPoint/ViewModels/Pages/Admin/AnalysisAdminViewModel.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/MainView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/MainWindow.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/Admin/AnalysesAdminView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/Pages/Admin/AnalysisAdminView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/Admin/AnalysisCategoriesAdminView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/Admin/PatientsAdminView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/Admin/UsersAdminView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/Pages/AuthorizationView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/Doctor/PatientDoctorView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/Pages/Doctor/RnRDoctorView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/Pages/FlyoutMenuView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/Pages/MenuView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/UserControls/Drawers/AnalysisDrawerView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/UserControls/Drawers/Buttons/AnalysisDeleteBtn.axaml" value="MedicInPoint/MedicInPoint.csproj" />
         <entry key="MedicInPoint/Views/UserControls/Drawers/Buttons/AnalysisEditBtn.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/UserControls/Drawers/PatientDrawerView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/UserControls/Drawers/UserDrawerView.axaml" value="MedicInPoint/MedicInPoint.csproj" />
+        <entry key="MedicInPoint/Views/UserControls/Items/RnRRequest_UserControl_View.axaml" value="MedicInPoint/MedicInPoint.csproj" />
       </map>
     </option>
   </component>

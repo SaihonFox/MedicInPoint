@@ -6,6 +6,8 @@ using Avalonia.SimpleRouter;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using Medic.API.Refit.Placeholders;
+
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -30,6 +32,7 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		_notificationService = notificationService;
 		_appService = appService;
 
+		FillAnalysisOrders();
 		FillPatients();
 
 		connections.PatientConnection.On<Patient>("PatientAdded", patient =>
@@ -63,6 +66,16 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		Patients = [.. SearchPatientsText()];
 	}
 
+	async Task FillAnalysisOrders()
+	{
+		var response = await APIService.For<IAnalysisOrder>().GetAnalysisOrders();
+		if (!response.IsSuccessStatusCode)
+			return;
+
+		foreach(var order in response.Content!)
+			AllOrders.Add(order);
+	}
+
 	[ObservableProperty]
 	private string _searchText = string.Empty;
 
@@ -94,8 +107,24 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 	private ObservableCollection<Patient> _patients = [];
 
 	[ObservableProperty]
+	private ObservableCollection<AnalysisOrder> _allOrders = [];
+
+	[ObservableProperty]
+	private ObservableCollection<AnalysisOrder> _userOrders = [];
+
+	[ObservableProperty]
 	private Patient? _selectedPatient = null;
 
 	[ObservableProperty]
 	private int? _selectedPatientIndex = Design.IsDesignMode ? 0 : null;
+
+	partial void OnSelectedPatientChanged(Patient? value)
+	{
+		if (value == null)
+			return;
+
+		UserOrders.Clear();
+		foreach (var order in AllOrders.Where(x => x.PatientId == value.Id))
+			UserOrders.Add(order);
+	}
 }

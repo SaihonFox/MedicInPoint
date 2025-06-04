@@ -29,11 +29,9 @@ public partial class User
 
     public byte[]? Image { get; set; }
 
-    public ICollection<AnalysisOrder> AnalysisOrders { get; set; } = [];
+    public virtual ICollection<AnalysisOrder> AnalysisOrders { get; set; } = new List<AnalysisOrder>();
 
-    public ICollection<MessagesMessage> MessagesMessages { get; set; } = [];
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public ICollection<Request> Requests { get; set; } = [];
-
-    public ICollection<UserLastEnter> UserLastEnters { get; set; } = [];
+    public virtual ICollection<UserStatus> UserStatuses { get; set; } = new List<UserStatus>();
 }
