@@ -201,7 +201,6 @@ public partial class AnalysesAdminView : UserControl
 
 	async Task FillWithSearch()
 	{
-		var ViewModel = (DataContext as AnalysesAdminViewModel)!;
 		Dispatcher.UIThread.Invoke(analyses_list.Items.Clear);
 		var analyses = Dispatcher.UIThread.Invoke(() => {
 			var list = AllAnalysesView.Where(x =>

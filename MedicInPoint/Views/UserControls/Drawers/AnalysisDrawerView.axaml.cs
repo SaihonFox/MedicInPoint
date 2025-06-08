@@ -25,6 +25,7 @@ public partial class AnalysisDrawerView : UserControl
 
 	public Action<AnalysisDrawerView> OnAdding = null!;
 	public Action<AnalysisDrawerView> OnEditing = null!;
+	public Action<AnalysisDrawerView> OnDeleting = null!;
 
 	public Action<AnalysisDrawerView?>? ActionOnSelect = null;
 	public Action<AnalysisDrawerView>? ActionOnDelete = null;
