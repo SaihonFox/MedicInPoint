@@ -1,5 +1,6 @@
 using Avalonia.Animation;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -24,6 +25,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MIP.LocalDB;
 
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace MedicInPoint.Views.Pages.Admin;
 
@@ -281,11 +283,33 @@ public partial class AnalysesAdminView : UserControl
 		dialog.IsVisible = false;
 	}
 
-	void Apply_btn_Click(object? sender, RoutedEventArgs e)
+	async void Apply_btn_Click(object? sender, RoutedEventArgs e)
 	{
+		var notification = App.services.GetRequiredService<INotificationService>();
+
+		if (analysis_name.Text.IsNullOrWhiteSpace() || analysis_price.Text.IsNullOrWhiteSpace() || analysis_results_after.Text.IsNullOrWhiteSpace() || analysis_biomaterial.Text.IsNullOrWhiteSpace())
+		{
+			notification.Show("Ошибка!", "Не все поля заполнены", NotificationType.Error);
+			return;
+		}
+
 		if (CurrentMode == EMode.Adding)
 		{
-
+			var new_analysis = new Analysis
+			{
+				Name = analysis_name.Text!.Trim(),
+				Price = decimal.Parse(analysis_price.Text!.Trim()),
+				Biomaterial = analysis_biomaterial.Text!.Trim(),
+				Preparation = analysis_preparation.Text!.Trim(),
+				Description = analysis_description.Text!.Trim(),
+				ResultsAfter = analysis_results_after.Text!.Trim()
+			};
+			using var response = await APIService.For<IAnalysis>().AddAnalysis(new_analysis);
+			if(!response.IsSuccessful)
+			{
+				notification.Show("Ошибка!", $"Message: {response.Error.Message}", NotificationType.Error);
+				return;
+			}
 		}
 
 		ClearDialog();
