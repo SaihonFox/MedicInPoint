@@ -268,6 +268,8 @@ public partial class AnalysesAdminView : UserControl
 		analysis_price.Text = string.Empty;
 		analysis_preparation.Text = string.Empty;
 		analysis_results_after.Text = string.Empty;
+
+		categories_in_analysis.Items.Clear();
 	}
 
 	void Reject_btn_Click(object? sender, RoutedEventArgs e)
@@ -308,6 +310,39 @@ public partial class AnalysesAdminView : UserControl
 			if(!response.IsSuccessful)
 			{
 				notification.Show("Ошибка!", $"Message: {response.Error.Message}", NotificationType.Error);
+				return;
+			}
+			using var responseCategory = await APIService.For<IAnalysisCategoriesLists>().UpdateCategories4Analysis(
+				ViewModel.SelectedAnalysis!.Id,
+				[.. categories_in_analysis.Items.Cast<AnalysisCategory>().Select(x => x.Id)]
+			);
+			if (!response.IsSuccessful)
+			{
+				notification.Show("Ошибка категорий!", $"Message: {response.Error.Message}", NotificationType.Error);
+				return;
+			}
+		}
+		if(CurrentMode == EMode.Editing)
+		{
+			ViewModel.SelectedAnalysis!.Name = analysis_name.Text!.Trim();
+			ViewModel.SelectedAnalysis.Price = decimal.Parse(analysis_price.Text!.Trim());
+			ViewModel.SelectedAnalysis.Biomaterial = analysis_biomaterial.Text!.Trim();
+			ViewModel.SelectedAnalysis.ResultsAfter = analysis_results_after.Text!.Trim();
+			ViewModel.SelectedAnalysis.Description = analysis_description.Text.IsNullOrWhiteSpace() ? null : analysis_description.Text!.Trim();
+			ViewModel.SelectedAnalysis.Preparation = analysis_preparation.Text.IsNullOrWhiteSpace() ? null : analysis_preparation.Text!.Trim();
+			using var response = await APIService.For<IAnalysis>().UpdateAnalysis(ViewModel.SelectedAnalysis!);
+			if (!response.IsSuccessful)
+			{
+				notification.Show("Ошибка!", $"Message: {response.Error.Message}", NotificationType.Error);
+				return;
+			}
+			using var responseCategory = await APIService.For<IAnalysisCategoriesLists>().UpdateCategories4Analysis(
+				ViewModel.SelectedAnalysis!.Id,
+				[.. categories_in_analysis.Items.Cast<AnalysisCategory>().Select(x => x.Id)]
+			);
+			if (!response.IsSuccessful)
+			{
+				notification.Show("Ошибка категорий!", $"Message: {response.Error.Message}", NotificationType.Error);
 				return;
 			}
 		}

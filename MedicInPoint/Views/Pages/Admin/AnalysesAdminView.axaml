@@ -192,19 +192,22 @@
 
 						<Grid Grid.Column="1" RowDefinitions="auto,auto,*" RowSpacing="10" MinWidth="300">
 							<TextBlock Grid.Row="0" Text="Категории" FontSize="24" HorizontalAlignment="Center" />
-							<ComboBox Grid.Row="1" Name="categories_list_in_analysis" SelectedIndex="0" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
-								<ComboBox.ItemTemplate>
-									<DataTemplate DataType="model:AnalysisCategory">
-										<TextBlock Text="{CompiledBinding Name}" TextWrapping="Wrap" FontSize="20" />
-									</DataTemplate>
-								</ComboBox.ItemTemplate>
-								<ComboBox.Styles>
-									<Style Selector="ComboBoxItem">
-										<Setter Property="CornerRadius" Value="10" />
-										<Setter Property="Margin" Value="5" />
-									</Style>
-								</ComboBox.Styles>
-							</ComboBox>
+							<StackPanel Grid.Row="1" Orientation="Vertical" Spacing="4">
+								<ComboBox Name="categories_list_in_analysis" SelectedIndex="0" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+									<ComboBox.ItemTemplate>
+										<DataTemplate DataType="model:AnalysisCategory">
+											<TextBlock Text="{CompiledBinding Name}" TextWrapping="Wrap" FontSize="20" />
+										</DataTemplate>
+									</ComboBox.ItemTemplate>
+									<ComboBox.Styles>
+										<Style Selector="ComboBoxItem">
+											<Setter Property="CornerRadius" Value="10" />
+											<Setter Property="Margin" Value="5" />
+										</Style>
+									</ComboBox.Styles>
+								</ComboBox>
+								<Button Content="Добавить" FontSize="13" TextBlock.LineHeight="14" Padding="0,4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+							</StackPanel>
 							<ScrollViewer Grid.Row="2">
 								<ItemsControl Name="categories_in_analysis">
 									<ItemsControl.ItemsPanel>
