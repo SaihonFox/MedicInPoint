@@ -4,7 +4,6 @@ using Avalonia.Logging;
 using Avalonia.Xaml.Interactivity;
 
 using Medic.API.Refit.Placeholders;
-using Medic.Theme.Controls.Custom;
 
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
@@ -19,12 +18,9 @@ using MedicInPoint.Views.UserControls.Items;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
 
 using MIP.LocalDB;
-
-using Tmds.DBus.Protocol;
 
 namespace MedicInPoint.Views.Pages.Doctor;
 
@@ -64,39 +60,36 @@ public partial class RnRDoctorView : UserControl
 
 		void fixTime()
 		{
-			if (datepicker.SelectedDate.HasValue && timepicker.SelectedTime.HasValue)
+			if (datepicker.SelectedDate.HasValue && timepicker.SelectedValue != null)
 			{
-				if(DateTime.Now.TimeOfDay > TimeSpan.FromHours(20))
+				if (DateTime.Now.TimeOfDay > TimeSpan.FromHours(20))
 					datepicker.SelectedDate = datepicker.SelectedDate.Value.AddDays(1);
 
-				var checkTime = new TimeSpan(timepicker.SelectedTime.Value.Hours, timepicker.SelectedTime.Value.Minutes, 0);
+				var checkTime = new TimeSpan((int)timepicker.SelectedValue, 0, 0);
 				var currentTime = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
 
 				if (datepicker.SelectedDate.Value.Date == DateTime.Today &&
 					checkTime <= currentTime
 				)
 				{
-					var nextTime = checkTime.Add(new TimeSpan(0, 30, 0));
+					var nextTime = checkTime.Add(TimeSpan.FromHours(1));
 					while (nextTime <= currentTime)
-						nextTime = nextTime.Add(new TimeSpan(0, 30, 0));
+						nextTime = nextTime.Add(TimeSpan.FromHours(1));
 
-					timepicker.SelectedTime = nextTime;
+					timepicker.SelectedValue = nextTime.Hours;
 				}
 			}
 		}
 
-		timepicker.SelectedTimeChanged += (_, e) =>
+		timepicker.SelectionChanged += (_, e) =>
 		{
-			if(e.NewTime == null)
-			{
-				timepicker.SelectedTime = null;
+			if (timepicker.SelectedItem == null)
 				return;
-			}
 
-			if (e.NewTime!.Value < TimeSpan.FromHours(8))
-				timepicker.SelectedTime = TimeSpan.FromHours(8);
-			if (e.NewTime.Value > TimeSpan.FromHours(20))
-				timepicker.SelectedTime = TimeSpan.FromHours(20);
+			if (new TimeSpan((int)timepicker.SelectedItem, 0, 0) < TimeSpan.FromHours(8))
+				timepicker.SelectedItem = TimeSpan.FromHours(8).Hours;
+			if (new TimeSpan((int)timepicker.SelectedItem, 0, 0) > TimeSpan.FromHours(20))
+				timepicker.SelectedItem = TimeSpan.FromHours(20).Hours;
 			fixTime();
 		};
 		datepicker.SelectedDateChanged += (_, e) =>

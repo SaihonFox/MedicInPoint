@@ -49,26 +49,22 @@ public partial class PatientDoctorViewModel() : ViewModelBase
 		});
 	}
 
-	public string CurrentUser => _appService.CurrentUser!.FullName;
+	public User CurrentUser => _appService.CurrentUser!;
 
 	async void FillPatients()
 	{
-		var response = await APIService.For<IPatient>().GetPatients();
+		using var response = await APIService.For<IPatient>().GetPatients();
 		if (!response.IsSuccessStatusCode)
 			return;
 
-		AllPatients = [..response.Content!
-			/*..(Design.IsDesignMode ?
-				response.Content! :
-				response.Content!.Where(p => p.AnalysisOrders.Select(o => o.User).ToList().FirstOrDefault(x => x.Id == _appService.CurrentUser?.Id) != null)
-			)*/
-		];
+		foreach (var patient in response.Content!)
+			AllPatients.Add(patient);
 		Patients = [.. SearchPatientsText()];
 	}
 
 	async Task FillAnalysisOrders()
 	{
-		var response = await APIService.For<IAnalysisOrder>().GetAnalysisOrders();
+		using var response = await APIService.For<IAnalysisOrder>().GetAnalysisOrders();
 		if (!response.IsSuccessStatusCode)
 			return;
 

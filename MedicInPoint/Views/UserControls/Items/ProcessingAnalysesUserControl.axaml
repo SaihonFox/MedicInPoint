@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+			 xmlns:model="using:MedicInPoint.Models"
+			 ClipToBounds="False"
+			 d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="MedicInPoint.Views.UserControls.Items.ProcessingAnalysesUserControl">
+	<Border Classes="drawerbg">
+		<StackPanel Orientation="Vertical" Spacing="10">
+			<Button Name="apply" CornerRadius="12" Content="Подтвердить" FontSize="24" Background="#00B712" Foreground="White" Margin="200,0" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch">
+				<Button.Styles>
+					<Style Selector="Button:disabled /template/ ContentPresenter">
+						<Setter Property="Background" Value="Gray" />
+					</Style>
+				</Button.Styles>
+			</Button>
+			<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
+				<TextBlock Text="Дата и время" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
+				<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
+					<TextBlock Name="datetime" FontSize="20" LineHeight="20" />
+				</Border>
+			</StackPanel>
+			<StackPanel Orientation="Vertical" Spacing="5">
+				<TextBlock Text="Пациент" Foreground="#7E7E9A" Margin="8,0" />
+				<TextBox Name="patient" IsReadOnly="True" FontSize="20" Padding="10" />
+			</StackPanel>
+
+			<Border Background="#DBDBDC" CornerRadius="100" Height="1" />
+			<TextBlock Text="Анализы" FontSize="26" HorizontalAlignment="Center" />
+
+			<ItemsControl Name="items_ic" ClipToBounds="False">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel ClipToBounds="False" Orientation="Vertical" Spacing="10" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="model:PatientAnalysisCartItem">
+						<Border ClipToBounds="False" Background="White" CornerRadius="15" Padding="10">
+							<Border.Effect>
+								<DropShadowEffect Color="#E4E8F5" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
+							</Border.Effect>
+							<Grid RowDefinitions="auto,auto" RowSpacing="4">
+								<TextBlock Grid.Row="0" Text="{CompiledBinding Analysis.Name}" FontSize="16" />
+								<TextBox Grid.Row="1" Text="{CompiledBinding ResultsDescription, Mode=TwoWay}" FontSize="22" Watermark="Результат" />
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
+	</Border>
+</UserControl>

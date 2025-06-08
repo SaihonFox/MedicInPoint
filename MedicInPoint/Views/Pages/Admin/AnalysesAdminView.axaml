@@ -1,10 +1,12 @@
-	<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:drawer="using:MedicInPoint.Views.UserControls.Drawers"
 			 xmlns:model="using:MedicInPoint.Models"
+			 xmlns:btn="using:MedicInPoint.Views.UserControls.Drawers.Buttons"
 			 xmlns:vm="using:MedicInPoint.ViewModels.Pages.Admin"
+			 xmlns:blur="using:MedicInPoint.Views.UserControls"
 			 xmlns:dialog="using:MedicInPoint.Views.Pages"
 			 xmlns:item="using:MedicInPoint.Views.UserControls.Items"
 			 xmlns:converter="using:MedicInPoint.Converters"
@@ -23,7 +25,8 @@
 	</UserControl.Resources>
 
 	<Panel>
-		<Grid>
+		<!-- Main Content -->
+		<Grid Name="main">
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,50,0,0" HorizontalAlignment="Left" />
 			<TextBlock Text="{CompiledBinding CurrentUser}" FontSize="30" LineHeight="30" Margin="0,50,30,0" HorizontalAlignment="Right" />
 			<AutoCompleteBox Name="acb" Classes="search" IsDropDownOpen="False" Text="{Binding SearchText, Mode=TwoWay}" Watermark="Искать анализ" FilterMode="ContainsOrdinal" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="500" Height="50">
@@ -33,7 +36,7 @@
 			</AutoCompleteBox>
 			<!-- <TextBox Classes="search" Watermark="Искать анализ" Margin="0,40,0,0" VerticalAlignment="Top" Width="500" Height="50" /> -->
 
-			<Grid ColumnDefinitions="*,auto" Margin="30,125">
+			<Grid ColumnDefinitions="*,auto" ColumnSpacing="10" Margin="30,125">
 				<Grid Grid.Column="0" RowDefinitions="auto,*">
 					<ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden">
 						<ListBox Name="categories_list">
@@ -86,6 +89,131 @@
 
 				<drawer:AnalysisDrawerView Grid.Column="1" Name="drawer" Width="0" />
 			</Grid>
+			<Button Name="add_analysis" Padding="6" Margin="0,30" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="CornerRadius" Value="10" />
+						<Setter Property="Background" Value="#00B712" />
+						<Setter Property="Foreground" Value="White" />
+
+						<Setter Property="RenderTransform" Value="none" />
+						<Setter Property="Transitions">
+							<Transitions>
+								<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+							</Transitions>
+						</Setter>
+
+						<Style Selector="^:pointerover">
+							<Setter Property="Background" Value="#00B712" />
+							<Style.Animations>
+								<Animation Duration="0:0:.2">
+									<KeyFrame Cue="0%">
+										<Setter Property="Effect">
+											<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
+										</Setter>
+									</KeyFrame>
+									<KeyFrame Cue="100%">
+										<Setter Property="Effect">
+											<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+										</Setter>
+									</KeyFrame>
+								</Animation>
+							</Style.Animations>
+							<Setter Property="Effect">
+								<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+							</Setter>
+						</Style>
+						<Style Selector="^:not(:pointerover)">
+							<Setter Property="Background" Value="#00B712" />
+							<Style.Animations>
+								<Animation Duration="0:0:.2">
+									<KeyFrame Cue="0%">
+										<Setter Property="Effect">
+											<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+										</Setter>
+									</KeyFrame>
+									<KeyFrame Cue="100%">
+										<Setter Property="Effect">
+											<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
+										</Setter>
+									</KeyFrame>
+								</Animation>
+							</Style.Animations>
+						</Style>
+					</Style>
+				</Button.Styles>
+
+				<StackPanel Orientation="Horizontal" Spacing="6">
+					<Svg Path="avares://MedicInPoint/Assets/SVGs/add_analysis_order.svg" Width="22" Height="22" />
+					<TextBlock Text="Добавить" FontSize="16" LineHeight="16" VerticalAlignment="Center" />
+				</StackPanel>
+			</Button>
+		</Grid>
+		
+		<!--  Dialog -->
+		<Grid Name="dialog" IsVisible="False" Opacity="0">
+			<Grid.Transitions>
+				<Transitions>
+					<DoubleTransition Property="Opacity" Duration="0:0:.4" Easing="QuinticEaseInOut" />
+				</Transitions>
+			</Grid.Transitions>
+			
+			<blur:BackdropBlurControl />
+			<StackPanel Orientation="Vertical" Spacing="20" ClipToBounds="False" Margin="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+				<Border Classes="drawerbg">
+					<Grid ColumnDefinitions="auto,auto" ColumnSpacing="20">
+						<ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
+							<StackPanel Orientation="Vertical" Spacing="10" MinWidth="250">
+								<!-- Name -->
+								<TextBlock Text="Название" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_name" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+
+								<!-- Price -->
+								<TextBlock Text="Цена (руб.)" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_price" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+
+								<!-- Description -->
+								<TextBlock Text="Описание" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_description" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+
+								<!-- Preparation -->
+								<TextBlock Text="Подготовка" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_preparation" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+
+								<!-- Results After -->
+								<TextBlock Text="Готовность результатов" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_results_after" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+
+								<!-- Biomaterial -->
+								<TextBlock Text="Биоматериал" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_biomaterial" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+							</StackPanel>
+						</ScrollViewer>
+
+						<Grid Grid.Column="1" RowDefinitions="auto,auto" RowSpacing="10">
+							<TextBlock Grid.Row="0" Text="Категории" FontSize="24" HorizontalAlignment="Center" />
+							<ComboBox Grid.Row="1" Name="categories_in_analysis" SelectedIndex="0" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+								<ComboBox.ItemTemplate>
+									<DataTemplate DataType="model:AnalysisCategory">
+										<TextBlock Text="{CompiledBinding Name}" TextWrapping="Wrap" FontSize="20" />
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+								<ComboBox.Styles>
+									<Style Selector="ComboBoxItem">
+										<Setter Property="CornerRadius" Value="10" />
+										<Setter Property="Margin" Value="5" />
+									</Style>
+								</ComboBox.Styles>
+							</ComboBox>
+						</Grid>
+					</Grid>
+				</Border>
+
+				<StackPanel Orientation="Horizontal" Spacing="10" ClipToBounds="False" HorizontalAlignment="Center">
+					<btn:AnalysisApplyBtn Name="apply_btn" />
+					<btn:AnalysisDeclineBtn Name="reject_btn" />
+				</StackPanel>
+			</StackPanel>
 		</Grid>
 	</Panel>
 </UserControl>

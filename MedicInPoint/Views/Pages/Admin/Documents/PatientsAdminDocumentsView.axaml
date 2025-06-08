@@ -39,7 +39,7 @@
 									</StackPanel>
 									<Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10" VerticalAlignment="Bottom">
 										<TextBlock Text="{CompiledBinding User.FullName, StringFormat='Лаборант: {0}'}" FontSize="18" VerticalAlignment="Center" />
-										<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).OutWordCommand}" CommandParameter="{CompiledBinding $self.DataContext}" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinHeight="40">
+										<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).OutExcelCommand}" CommandParameter="{CompiledBinding $self.DataContext}" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinHeight="40">
 											<Button.Styles>
 												<Style Selector="Button">
 													<Setter Property="Background" Value="#1A6FEE" />

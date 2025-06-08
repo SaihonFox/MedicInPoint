@@ -24,6 +24,8 @@
 
 		<Setter Property="MinWidth" Value="34" />
 		<Setter Property="Height" Value="34" />
+		
+		<Setter Property="Content" Value="{DynamicResource APPLY}" />
 
 		<Setter Property="Transitions">
 			<Transitions>
@@ -40,7 +42,7 @@
 						HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
 					<StackPanel Orientation="Horizontal" Spacing="6">
 						<Svg Path="/Assets/SVGs/buttons/confirm.svg" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}" Width="22" Height="22" />
-						<TextBlock Text="{DynamicResource APPLY}" FontSize="16" FontWeight="Bold" Foreground="White" />
+						<TextBlock Text="{TemplateBinding Content}" FontSize="16" FontWeight="Bold" Foreground="White" />
 					</StackPanel>
 				</Border>
 			</ControlTemplate>

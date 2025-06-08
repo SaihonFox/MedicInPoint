@@ -24,7 +24,7 @@ public static class JsonSettings
 			new TimeOnlyConverter(),
 			new DateTimeConverter()
 		]*/
-	}.Also(x => x.Converters.Add(new DateTimeConverter()));
+	};//.Also(x => x.Converters.Add(new DateTimeConverter()));
 }
 
 internal class DateTimeConverter : JsonConverter<DateTime>

@@ -106,7 +106,7 @@
 
 				<!-- Categories -->
 				<!-- IsVisible="{CompiledBinding !Analysis.Preparation, Converter={x:Static ObjectConverters.IsNull}}" -->
-				<StackPanel IsVisible="False" Orientation="Vertical" Spacing="5">
+				<StackPanel IsVisible="true" Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Категории" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
 					<TextBlock Text="Отсутствуют" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" HorizontalAlignment="Center">
 						<TextBlock.IsVisible>
@@ -187,81 +187,24 @@
 			</StackPanel>
 			<TextBlock Grid.Row="2" IsVisible="{Binding Analysis, Converter={x:Static ObjectConverters.IsNull}}" Text="Данные" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-			<Border Grid.Row="3" IsVisible="False" Background="#DBDBDC" CornerRadius="100" Height="1" />
-			<Border Grid.Row="4" IsVisible="False">
+			<Border Grid.Row="3" IsVisible="true" Background="#DBDBDC" CornerRadius="100" Height="1" />
+			<Border Grid.Row="4" IsVisible="true">
 				<Border Background="White" CornerRadius="18" Padding="8" HorizontalAlignment="Center" MinWidth="100">
 					<Border.Effect>
 						<DropShadowEffect Color="#DADEDA" BlurRadius="10" OffsetX="0" OffsetY="0" />
 					</Border.Effect>
 
 					<StackPanel Orientation="Vertical" Spacing="7.5">
-						<Grid ColumnDefinitions="auto,auto,auto" ColumnSpacing="7.5">
-							<btn:AnalysisEditBtn Grid.Column="0" Name="edit_btn" />
-							<btn:AnalysisApplyBtn Grid.Column="0" Name="apply_btn" IsVisible="False" />
-							<Border Grid.Column="1" Background="#DBDBDC" CornerRadius="100" Width="1" />
-							<btn:AnalysisDeleteBtn Grid.Column="2" Name="delete_btn" />
-							<btn:AnalysisDeclineBtn Grid.Column="2" Name="reject_btn" IsVisible="False" />
+						<Grid Grid.Column="0" ColumnDefinitions="auto,auto,auto" ColumnSpacing="7.5">
+							<TextBlock Grid.Column="1" IsVisible="{CompiledBinding !#edit_btn.IsVisible}" Text="Вы точно хотите удалить?" FontSize="20" Foreground="#FD3535" HorizontalAlignment="Center" VerticalAlignment="Center" />
+							<btn:AnalysisEditBtn Grid.Column="2" Name="edit_btn" />
 						</Grid>
-						<Border Background="#DBDBDC" IsVisible="{CompiledBinding #add_order.IsVisible}" CornerRadius="100" Height="1" />
-						<Button Name="add_order" Padding="6" HorizontalAlignment="Center">
-							<Button.Styles>
-								<Style Selector="Button">
-									<Setter Property="CornerRadius" Value="10" />
-									<Setter Property="Background" Value="#00B712" />
-									<Setter Property="Foreground" Value="White" />
-
-									<Setter Property="RenderTransform" Value="none" />
-									<Setter Property="Transitions">
-										<Transitions>
-											<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
-										</Transitions>
-									</Setter>
-
-									<Style Selector="^:pointerover">
-										<Setter Property="Background" Value="#00B712" />
-										<Style.Animations>
-											<Animation Duration="0:0:.2">
-												<KeyFrame Cue="0%">
-													<Setter Property="Effect">
-														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
-													</Setter>
-												</KeyFrame>
-												<KeyFrame Cue="100%">
-													<Setter Property="Effect">
-														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
-													</Setter>
-												</KeyFrame>
-											</Animation>
-										</Style.Animations>
-										<Setter Property="Effect">
-											<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
-										</Setter>
-									</Style>
-									<Style Selector="^:not(:pointerover)">
-										<Setter Property="Background" Value="#00B712" />
-										<Style.Animations>
-											<Animation Duration="0:0:.2">
-												<KeyFrame Cue="0%">
-													<Setter Property="Effect">
-														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
-													</Setter>
-												</KeyFrame>
-												<KeyFrame Cue="100%">
-													<Setter Property="Effect">
-														<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0" OffsetX="0" OffsetY="0" />
-													</Setter>
-												</KeyFrame>
-											</Animation>
-										</Style.Animations>
-									</Style>
-								</Style>
-							</Button.Styles>
-
-							<StackPanel Orientation="Horizontal" Spacing="6">
-								<Svg Path="avares://MedicInPoint/Assets/SVGs/add_analysis_order.svg" Width="22" Height="22" />
-								<TextBlock Text="Добавить" FontSize="16" LineHeight="16" VerticalAlignment="Center" />
-							</StackPanel>
-						</Button>
+						<Border Background="#DBDBDC" IsVisible="{CompiledBinding #edit_btn.IsVisible}" CornerRadius="100" Height="1" />
+						<StackPanel Orientation="Horizontal" Spacing="7.5" HorizontalAlignment="Center">
+							<btn:AnalysisApplyBtn Name="apply_btn" IsVisible="False" />
+							<btn:AnalysisDeleteBtn Name="delete_btn" />
+							<btn:AnalysisDeclineBtn Name="reject_btn" IsVisible="False" />
+						</StackPanel>
 					</StackPanel>
 				</Border>
 			</Border>

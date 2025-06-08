@@ -29,5 +29,5 @@ public partial class AnalysesAdminViewModel() : ViewModelBase
 	private string _searchText = string.Empty;
 
 	[ObservableProperty]
-	private Analysis? _selectedAnalysis = null;//Design.IsDesignMode ? null : new() { Name = "Какое то имя", Price = 169, Biomaterial = "Венозная кровь", ResultsAfter = "2 дня", Preparation = "Подготовка к анализу" };
+	private Analysis? _selectedAnalysis = null;
 }

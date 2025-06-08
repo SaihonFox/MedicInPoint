@@ -51,7 +51,7 @@
 
 										<TextBlock IsVisible="{CompiledBinding AnalysisOrderStateId, Converter={StaticResource IntConverter}, ConverterParameter=2}" Text="Экспорт чека" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
 										<Grid ColumnDefinitions="*,*" IsVisible="{CompiledBinding AnalysisOrderStateId, Converter={StaticResource IntConverter}, ConverterParameter=2}" ColumnSpacing="10" VerticalAlignment="Bottom">
-											<Button Grid.Column="0" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).SendEmailCommand}" CommandParameter="{CompiledBinding $self.DataContext}" Padding="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="40">
+											<Button Grid.Column="0" IsEnabled="{CompiledBinding Patient.Email, Converter={x:Static ObjectConverters.IsNotNull}}" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).SendEmailCommand}" CommandParameter="{CompiledBinding $self.DataContext}" Padding="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="40">
 												<Button.Styles>
 													<Style Selector="Button">
 														<Setter Property="Background" Value="#FF7B00" />
@@ -74,31 +74,40 @@
 														<Style Selector="^:pointerover">
 															<Setter Property="Background" Value="#CC6200" />
 														</Style>
+														<Style Selector="^:disabled">
+															<Setter Property="Background" Value="Gray" />
+														</Style>
 													</Style>
 												</Button.Styles>
 											</Button>
-											<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).OutWordCommand}" CommandParameter="{CompiledBinding $self.DataContext}" Padding="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="40">
+											<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).OutExcelCommand}" CommandParameter="{CompiledBinding $self.DataContext}" Padding="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="40">
 												<Button.Styles>
 													<Style Selector="Button">
-														<Setter Property="Background" Value="#1A6FEE" />
+														<Setter Property="Background" Value="#00B712" />
 														<Setter Property="Foreground" Value="White" />
 
 														<Setter Property="Padding" Value="10" />
-														
+
 														<Setter Property="Effect">
-															<DropShadowEffect Color="#1A6FEE" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+															<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
 														</Setter>
 
 														<Setter Property="Template">
 															<ControlTemplate>
 																<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="0" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-																	<ContentPresenter Name="PART_Content" Content="Word" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
+																	<ContentPresenter Name="PART_Content" Content="Excel" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
 																</Border>
 															</ControlTemplate>
 														</Setter>
 
 														<Style Selector="^:pointerover">
 															<Setter Property="Background" Value="#1457bb" />
+														</Style>
+														<Style Selector="^:disabled">
+															<Setter Property="Background" Value="Gray" />
+															<Setter Property="Effect">
+																<DropShadowEffect Color="#00B712" BlurRadius="0" Opacity="0" OffsetX="0" OffsetY="0" />
+															</Setter>
 														</Style>
 													</Style>
 												</Button.Styles>

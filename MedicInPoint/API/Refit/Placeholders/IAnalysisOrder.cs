@@ -14,4 +14,10 @@ public interface IAnalysisOrder
 
 	[Post("/analysis_orders")]
 	Task<IApiResponse<User>> Post([Body] AnalysisOrder analysisOrder);
+
+	[Put("/analysis_orders")]
+	Task<IApiResponse<User>> Update([Body] AnalysisOrder analysisOrder);
+
+	[Delete("/analysis_orders/{id}")]
+	Task<IApiResponse<User>> Delete(int id);
 }

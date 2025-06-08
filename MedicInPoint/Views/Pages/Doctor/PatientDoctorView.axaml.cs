@@ -2,9 +2,16 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 
+using Medic.API.Refit.Placeholders;
+
+using MedicInPoint.API.Refit;
 using MedicInPoint.Extensions;
+using MedicInPoint.Services;
+using MedicInPoint.ViewModels.Pages.Doctor;
+using MedicInPoint.Views.UserControls.Items;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 using MIP.LocalDB;
 
@@ -27,6 +34,12 @@ public partial class PatientDoctorView : UserControl
 		acb.ItemsSource = names.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct();
 
 		acb.KeyDown += acb_KeyDown;
+
+		if (!Design.IsDesignMode)
+		{
+			patients.SelectionChanged += (_, _) => FillOrdersInProcesses();
+			proccesses_rb.IsCheckedChanged += (_, _) => FillOrdersInProcesses();
+		}
 	}
 
 	async void acb_KeyDown(object? source, KeyEventArgs e)
@@ -47,5 +60,25 @@ public partial class PatientDoctorView : UserControl
 			acb.ItemsSource = enumerable;
 		}
 		await context.DisposeAsync();
+	}
+
+	async void FillOrdersInProcesses()
+	{
+		var ViewModel = (DataContext as PatientDoctorViewModel)!;
+
+		if (!proccesses_rb.IsChecked!.Value || ViewModel?.SelectedPatient == null)
+			return;
+
+		processes_ic.Items.Clear();
+		using var response = await APIService.For<IAnalysisOrder>().GetAnalysisOrders4User(ViewModel.CurrentUser!.Id);
+		var list = response.Content!.Where(x => x.AnalysisOrderStateId == 1 && x.PatientId == ViewModel.SelectedPatient!.Id).ToList();
+
+		foreach (var item in list)
+			processes_ic.Items.Add(new ProcessingAnalysesUserControl { CurrentOrder = item, OnApply = OnApply });
+	}
+
+	void OnApply(ProcessingAnalysesUserControl uc)
+	{
+		processes_ic.Items.Remove(uc);
 	}
 }

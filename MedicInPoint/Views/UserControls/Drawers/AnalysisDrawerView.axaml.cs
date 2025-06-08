@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Xml.Linq;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
@@ -8,7 +7,6 @@ using Avalonia.Threading;
 
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
-using MedicInPoint.Extensions;
 using MedicInPoint.Models;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels.UserControls.Drawers;
@@ -25,6 +23,9 @@ public partial class AnalysisDrawerView : UserControl
 
 	public readonly INotificationService notification = App.services.GetRequiredService<INotificationService>();
 
+	public Action<AnalysisDrawerView> OnAdding = null!;
+	public Action<AnalysisDrawerView> OnEditing = null!;
+
 	public Action<AnalysisDrawerView?>? ActionOnSelect = null;
 	public Action<AnalysisDrawerView>? ActionOnDelete = null;
 	public Action<AnalysisDrawerView>? ActionOnPreDelete = null;
@@ -32,7 +33,6 @@ public partial class AnalysisDrawerView : UserControl
 	public bool IsAdding { get; set; } = false;
 	public bool IsEditing { get; set; } = false;
 	public bool IsDeleting { get; set; } = false;
-	private Analysis? initData = null;
 
 	public List<AnalysisCategory> CategoriesInAnalysis = [];
 
@@ -42,18 +42,16 @@ public partial class AnalysisDrawerView : UserControl
 
 		FillCategories();
 
-		edit_btn.Click += first_btn_Click;
-		apply_btn.Click += first_btn_Click;
-		delete_btn.Click += second_btn_Click;
-		reject_btn.Click += second_btn_Click;
+		delete_btn.Click += Delete_btn_Click;
+		apply_btn.Click += Apply_btn_Click;
+		reject_btn.Click += Reject_btn_Click;
 
-		add_order.Click += add_order_Click;
-		add_category.Click += add_category_Click;
+		edit_btn.Click += Edit_btn_Click;
 
+		if(!Design.IsDesignMode)
 		Loaded += (_, _) =>
 		{
 			CategoriesInAnalysis.AddRange(ViewModel.AnalysisCategories);
-			
 		};
 	}
 
@@ -74,183 +72,51 @@ public partial class AnalysisDrawerView : UserControl
 		});
 	}
 
-	async void first_btn_Click(object? sender, RoutedEventArgs e)
+	void Add_analysis_Click(object? sender, RoutedEventArgs e)
 	{
-		await Dispatcher.UIThread.Invoke(async() =>
-		{
-			if (!IsEditing)
-			{
-				if (IsDeleting)
-				{
-					try
-					{
-						using var response = await APIService.For<IAnalysis>().DeleteAnalysis(ViewModel!.Analysis!.Id);
-						if (!response.IsSuccessful)
-							notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
-						else
-						{
-							notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
-
-							IsDeleting = false;
-
-							ActionOnDelete?.Invoke(this);
-
-							edit_btn.IsVisible = true;
-							delete_btn.IsVisible = true;
-							apply_btn.IsVisible = false;
-							reject_btn.IsVisible = false;
-							add_order.IsVisible = true;
-						}
-					}
-					catch (Exception ex)
-					{
-						notification.Show("Ошибка", ex.StackTrace!, NotificationType.Error);
-					}
-				}
-				else if (IsAdding)
-				{
-					try
-					{
-						using var response = await APIService.For<IAnalysis>().AddAnalysis(ViewModel.Analysis);
-						if(!response.IsSuccessful)
-						{
-							notification.Show("Ошибка", $"Сообщение: {response.Error.Message}", NotificationType.Error);
-							return;
-						}
-
-						notification.Show("Успех!", $"Вы успешно добавили анализ", NotificationType.Success);
-					}
-					catch (Exception ex)
-					{
-					}
-					finally
-					{
-						IsAdding = false;
-						ViewModel.IsEditable = false;
-
-						edit_btn.IsVisible = true;
-						delete_btn.IsVisible = true;
-						apply_btn.IsVisible = false;
-						reject_btn.IsVisible = false;
-						add_order.IsVisible = true;
-					}
-				}
-				else
-				{
-					ActionOnSelect?.Invoke(this);
-
-					initData = ViewModel.Analysis;
-
-					IsEditing = true;
-					ViewModel.IsEditable = true;
-
-					edit_btn.IsVisible = false;
-					delete_btn.IsVisible = false;
-					apply_btn.IsVisible = true;
-					reject_btn.IsVisible = true;
-					add_order.IsVisible = false;
-				}
-			}
-			else
-			{
-				if (new[] { name.Text, results_after.Value, price.Value, biomaterial.Value }.Any(x => x.IsNullOrWhiteSpace()))
-				{
-					notification.Show("Внимание", "Пустые поля", NotificationType.Warning);
-					return;
-				}
-
-				ActionOnSelect?.Invoke(null);
-
-				try
-				{
-					using var response = await APIService.For<IAnalysis>().UpdateAnalysis(ViewModel.Analysis!);
-					if (!response.IsSuccessful)
-						notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
-					else
-					{
-						notification.Show("Успех!", $"Успешно обновлено!", NotificationType.Success);
-
-						IsEditing = false;
-						ViewModel.IsEditable = false;
-
-						edit_btn.IsVisible = true;
-						delete_btn.IsVisible = true;
-						apply_btn.IsVisible = false;
-						reject_btn.IsVisible = false;
-						add_order.IsVisible = true;
-					}
-				}
-				catch (Exception ex)
-				{
-					notification.Show("Ошибка", ex.StackTrace!, NotificationType.Error);
-				}
-			}
-		});
+		OnAdding?.Invoke(this);
 	}
 
-	async void second_btn_Click(object? sender, RoutedEventArgs e)
+	void Edit_btn_Click(object? sender, RoutedEventArgs e)
 	{
-		await Dispatcher.UIThread.Invoke(async () =>
-		{
-			if (IsEditing || IsAdding)
-			{
-				IsEditing = false;
-				IsAdding = false;
-				ViewModel.IsEditable = false;
-
-				edit_btn.IsVisible = true;
-				delete_btn.IsVisible = true;
-				apply_btn.IsVisible = false;
-				reject_btn.IsVisible = false;
-				add_order.IsVisible = true;
-			}
-			else if (!IsDeleting)
-			{
-				IsDeleting = true;
-
-				edit_btn.IsVisible = false;
-				delete_btn.IsVisible = false;
-				apply_btn.IsVisible = true;
-				reject_btn.IsVisible = true;
-				add_order.IsVisible = false;
-			}
-			else
-			{
-				IsDeleting = false;
-
-				edit_btn.IsVisible = true;
-				delete_btn.IsVisible = true;
-				apply_btn.IsVisible = false;
-				reject_btn.IsVisible = false;
-				add_order.IsVisible = true;
-			}
-
-			ViewModel.Analysis = initData;
-		});
+		OnEditing?.Invoke(this);
 	}
 
-	void add_order_Click(object? sender, RoutedEventArgs e)
+	void Delete_btn_Click(object? sender, RoutedEventArgs e)
 	{
-		Dispatcher.UIThread.Invoke(() =>
-		{
-			ViewModel.Analysis = new Analysis { Id = 0 };
+		IsDeleting = true;
 
-			ViewModel.IsEditable = true;
-			IsAdding = true;
-
-			edit_btn.IsVisible = false;
-			delete_btn.IsVisible = false;
-			apply_btn.IsVisible = true;
-			reject_btn.IsVisible = true;
-			add_order.IsVisible = false;
-
-
-		});
+		edit_btn.IsVisible = false;
+		delete_btn.IsVisible = false;
+		apply_btn.IsVisible = true;
+		reject_btn.IsVisible = true;
 	}
 
-	void add_category_Click(object? sender, RoutedEventArgs e)
+	void Reject_btn_Click(object? sender, RoutedEventArgs e)
 	{
-		initData = new();
-		ViewModel.Analysis = new();
+		IsDeleting = false;
+
+		edit_btn.IsVisible = true;
+		delete_btn.IsVisible = true;
+		apply_btn.IsVisible = false;
+		reject_btn.IsVisible = false;
+	}
+
+	async void Apply_btn_Click(object? sender, RoutedEventArgs e)
+	{
+		using var response = await APIService.For<IAnalysis>().DeleteAnalysis(ViewModel!.Analysis!.Id);
+		if (!response.IsSuccessful)
+			notification.Show("Ошибка!", $"Не удалось удалить: {response.StatusCode}", NotificationType.Error);
+		else
+		{
+			notification.Show("Успех!", "Успешно удалено", NotificationType.Success);
+
+			IsDeleting = false;
+
+			edit_btn.IsVisible = true;
+			delete_btn.IsVisible = true;
+			apply_btn.IsVisible = false;
+			reject_btn.IsVisible = false;
+		}
 	}
 }

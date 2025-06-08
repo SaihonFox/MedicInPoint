@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 
@@ -32,6 +34,14 @@ public partial class AnalysesAdminView : UserControl
 	private ObservableCollection<AnalysisItem_UserControl_View> AllAnalysesView = [];
 	public AnalysesAdminViewModel ViewModel => (DataContext as AnalysesAdminViewModel)!;
 
+	public enum EMode
+	{
+		None,
+		Adding,
+		Editing
+	}
+	public EMode CurrentMode = EMode.None;
+
 	public AnalysesAdminView()
 	{
 		InitializeComponent();
@@ -50,6 +60,10 @@ public partial class AnalysesAdminView : UserControl
 
 		acb.KeyDown += acb_KeyDown;
 		acb.TextChanged += acb_TextChanged;
+
+		add_analysis.Click += Add_analysis_Click;
+		apply_btn.Click += Apply_btn_Click;
+		reject_btn.Click += Reject_btn_Click;
 
 		categories_list.SelectionChanged += async(_, _) => await FillWithSearch();
 
@@ -138,6 +152,7 @@ public partial class AnalysesAdminView : UserControl
 			return;
 
 		AllCategories = [.. response.Content!];
+		categories_in_analysis.ItemsSource = new List<AnalysisCategory>(AllCategories);
 
 		var allCategory = new AnalysisCategory { Id = 0, Name = "Все" };
 		AllCategories.Insert(0, allCategory);
@@ -205,7 +220,7 @@ public partial class AnalysesAdminView : UserControl
 			return list;
 		});
 		Dispatcher.UIThread.Invoke(() => {
-			//centerText.IsVisible = analyses.Count == 0;
+			centerText.IsVisible = analyses.Count == 0;
 			centerText.Text = "Пустой список";
 		});
 
@@ -226,14 +241,61 @@ public partial class AnalysesAdminView : UserControl
 			});
 		}
 
-		/*Dispatcher.UIThread.Invoke(() => {
+		Dispatcher.UIThread.Invoke(() => {
 			centerText.IsVisible = analyses.Count == 0;
 			centerText.Text = "Пустой список";
-		});*/
+		});
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			ViewModel.SelectedAnalysis = selectedAnalysis?.ViewModel?.Analysis;
 			drawer.ViewModel.Analysis = ViewModel.SelectedAnalysis;
 		});
+	}
+
+	void ClearDialog()
+	{
+		analysis_name.Text = string.Empty;
+		analysis_description.Text = string.Empty;
+		analysis_biomaterial.Text = string.Empty;
+		analysis_price.Text = string.Empty;
+		analysis_preparation.Text = string.Empty;
+		analysis_results_after.Text = string.Empty;
+	}
+
+	void Reject_btn_Click(object? sender, RoutedEventArgs e)
+	{
+		ClearDialog();
+		CurrentMode = EMode.None;
+		dialog.Opacity = 0;
+		(dialog.Transitions[0] as DoubleTransition).PropertyChanged += (_, e) =>
+		{
+			dialog.IsVisible = false;
+		};
+		dialog.IsVisible = false;
+	}
+
+	void Apply_btn_Click(object? sender, RoutedEventArgs e)
+	{
+		if (CurrentMode == EMode.Adding)
+		{
+
+		}
+
+		ClearDialog();
+		dialog.Opacity = 0;
+		(dialog.Transitions[0] as DoubleTransition).PropertyChanged += (_, e) =>
+		{
+			App.services.GetRequiredService<INotificationService>().Show("%", e.NewValue.ToString());
+			dialog.IsVisible = false;
+		};
+		dialog.IsVisible = false;
+	}
+
+	void Add_analysis_Click(object? sender, RoutedEventArgs e)
+	{
+		CurrentMode = EMode.Adding;
+
+		dialog.IsVisible = true;
+		dialog.Opacity = 1;
 	}
 }

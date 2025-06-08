@@ -168,48 +168,34 @@
 											</Style>
 										</Button.Styles>
 									</Button>
+									
+									<TextBlock Text="Забор анализов" FontSize="20" HorizontalAlignment="Center" />
 
-									<StackPanel Orientation="Vertical" Spacing="5">
-										<TextBlock Text="Адрес" Foreground="#7E7E9A" Margin="8,0" />
-										<TextBox FontSize="20" Text="{CompiledBinding Address, Mode=TwoWay}" Padding="10" />
-
-										<Grid ColumnDefinitions="*,5,*,5,*,5,*">
-											<Grid.Styles>
-												<Style Selector="NumericUpDown">
-													<Setter Property="Background" Value="#F3F3F7" />
-													<Setter Property="BorderThickness" Value="0" />
-													<Setter Property="CornerRadius" Value="12" />
-													<Setter Property="ParsingNumberStyle" Value="Integer" />
-													<Setter Property="Padding" Value="10" />
-													<Setter Property="Increment" Value="1" />
-													<Setter Property="Minimum" Value="1" />
-													<Setter Property="ClipValueToMinMax" Value="True" />
-												</Style>
-											</Grid.Styles>
-
-											<StackPanel Grid.Column="0" Orientation="Vertical" Spacing="5">
-												<TextBlock Text="Квартира" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="address_nup" AllowSpin="True" Text="{CompiledBinding Room, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
-											</StackPanel>
-											<StackPanel Grid.Column="2" Orientation="Vertical" Spacing="5">
-												<TextBlock Text="Подъезд" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="entrance_nup" Text="{CompiledBinding Entrance, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
-											</StackPanel>
-											<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
-												<TextBlock Text="Этаж" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="floor_nup" Text="{CompiledBinding Floor, Mode=TwoWay}" Maximum="100" HorizontalContentAlignment="Center" />
-											</StackPanel>
-											<StackPanel Grid.Column="6" Orientation="Vertical" Spacing="5">
-												<TextBlock Text="Домофон" Foreground="#7E7E9A" HorizontalAlignment="Center" />
-												<NumericUpDown Name="intercome_nup" Text="{CompiledBinding Intercome, Mode=TwoWay}" Maximum="1000" HorizontalContentAlignment="Center" />
-											</StackPanel>
-										</Grid>
-									</StackPanel>
+									<Grid ColumnDefinitions="auto,auto" ColumnSpacing="20" HorizontalAlignment="Center" Height="50">
+										<RadioButton Classes="ac" Grid.Column="0" GroupName="address_group" Name="at_clinic_rb"
+													 IsChecked="{CompiledBinding !AtHome}"
+													 Content="В клинике"
+													 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+													 HorizontalAlignment="Right"
+													 Height="50" />
+										<RadioButton Classes="ac" Grid.Column="2" GroupName="address_group" Name="at_home_rb"
+													 IsChecked="{CompiledBinding AtHome}"
+													 Content="Дома у пациента"
+													 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+													 HorizontalAlignment="Left"
+													 Height="50" />
+									</Grid>
 
 									<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
 										<TextBlock Text="Дата и время" Foreground="#7E7E9A" HorizontalAlignment="Center" />
 										<DatePicker Name="datepicker" SelectedDate="{CompiledBinding SelectedDate, Mode=TwoWay}" HorizontalAlignment="Center" />
+										<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+											<ComboBox Name="timepicker" ItemsSource="{CompiledBinding Hours}" SelectedItem="{CompiledBinding SelectedTime, Mode=TwoWay}" />
+											<TextBlock Text=":00 ч." VerticalAlignment="Center" />
+										</StackPanel>
+										<!--
 										<TimePicker Name="timepicker" SelectedTime="{CompiledBinding SelectedTime, Mode=TwoWay}" SecondIncrement="1" MinuteIncrement="30" ClockIdentifier="24HourClock" HorizontalAlignment="Center" />
+										-->
 									</StackPanel>
 
 									<StackPanel Orientation="Vertical" Spacing="5">

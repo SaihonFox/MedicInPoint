@@ -19,7 +19,7 @@ public class BackdropBlurControl : Control
 	}
 
 	// Same as #10ffffff for UWP CardBackgroundBrush.
-	static readonly ImmutableExperimentalAcrylicMaterial DefaultAcrylicMaterial = (ImmutableExperimentalAcrylicMaterial)new ExperimentalAcrylicMaterial()
+	static readonly ImmutableExperimentalAcrylicMaterial DefaultAcrylicMaterial = (ImmutableExperimentalAcrylicMaterial)new ExperimentalAcrylicMaterial
 	{
 		MaterialOpacity = 0.2,
 		TintColor = Colors.White,
@@ -93,7 +93,7 @@ public class BackdropBlurControl : Control
 				(int)Math.Ceiling(_bounds.Width),
 				(int)Math.Ceiling(_bounds.Height), SKImageInfo.PlatformColorType, SKAlphaType.Premul));
 
-			using (var filter = SKImageFilter.CreateBlur(3, 3, SKShaderTileMode.Clamp)) // using (var filter = SKImageFilter.CreateBlur(10, 10, SKShaderTileMode.Clamp))
+			using (var filter = SKImageFilter.CreateBlur(5, 5, SKShaderTileMode.Clamp)) // using (var filter = SKImageFilter.CreateBlur(10, 10, SKShaderTileMode.Clamp))
 			using (var blurPaint = new SKPaint
 			{
 				Shader = backdropShader,

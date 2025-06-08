@@ -225,39 +225,26 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 	[ObservableProperty]
 	private DateTimeOffset? _selectedDate = null;
 	[ObservableProperty]
-	private TimeSpan? _selectedTime = null;
-
-
-	#region Address
+	private List<int> _hours = Enumerable.Range(8, 20 - 8 + 1).ToList();
 	[ObservableProperty]
-	private string _address = string.Empty;
+	private int? _selectedTime = null;
 
 	[ObservableProperty]
-	private string _room = string.Empty;
-
-	[ObservableProperty]
-	private string _entrance = string.Empty;
-
-	[ObservableProperty]
-	private string _floor = string.Empty;
-
-	[ObservableProperty]
-	private string? _intercome = null;
-	#endregion Address
+	private bool _atHome = false;
 
 
 	[RelayCommand]
 	private async Task NewOrder()
 	{
-		if(SelectedDate == null || SelectedTime == null || Address.IsNullOrWhiteSpace() || AnalysesInRecord.Count == 0)
+		if(SelectedDate == null || SelectedTime == null || AnalysesInRecord.Count == 0)
 		{
-			_notificationService.Show("Ошибка", "Поля 'Адрес', 'Дата и время', 'Анализы' не могут быть пустыми", NotificationType.Error);
+			_notificationService.Show("Ошибка", "Поля 'Дата и время', 'Анализы' не могут быть пустыми", NotificationType.Error);
 			return;
 		}
 
 		IsRecordButtonEnabled = false;
 
-		var analysisDateTime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.Date), new TimeOnly(SelectedTime!.Value.Hours, SelectedTime.Value.Minutes));
+		var analysisDateTime = new DateTime(DateOnly.FromDateTime(SelectedDate.Value.Date), new TimeOnly(SelectedTime.Value, 0, 0));
 
 		try
 		{
@@ -274,7 +261,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		} catch(ArgumentNullException ex)
 		{
 			_notificationService.Show("Ошибка", $"Message: {ex.Message}, Param Name: {ex.ParamName}");
-			Logger.Sink.Log(LogEventLevel.Error, "SOMEAREA", this, $"Message: {ex.Message}, Param Name: {ex.ParamName}");
+			Logger.Sink!.Log(LogEventLevel.Error, "SOMEAREA", this, $"Message: {ex.Message}, Param Name: {ex.ParamName}");
 		}
 
 		using var cartResponse = await APIService.For<IPatientAnalysisCart>().Post(new PatientAnalysisCart { PatientId = SelectedPatient!.Id }).ConfigureAwait(false);
@@ -284,6 +271,8 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		{
 			PatientAnalysisCart = cartResponse.Content,
 			PatientAnalysisCartId = cartResponse.Content!.Id,
+			
+			AnalysisOrderStateId = 1,
 
 			Patient = SelectedPatient,
 			PatientId = SelectedPatient.Id,
@@ -316,11 +305,6 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			Logger.Sink!.Log(LogEventLevel.Error, "NewOrder", this, $"Message: {orderResponse.Error.Content}");
 		}
 
-		Address = string.Empty;
-		Intercome = string.Empty;
-		Floor = string.Empty;
-		Entrance = string.Empty;
-		Room = string.Empty;
 		AnalysesInRecord.Clear();
 		SelectedDate = null;
 		SelectedTime = null;
