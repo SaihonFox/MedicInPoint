@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -24,6 +22,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using MIP.LocalDB;
+
+using System.Collections.ObjectModel;
 
 namespace MedicInPoint.Views.Pages.Admin;
 
@@ -71,7 +71,7 @@ public partial class AnalysesAdminView : UserControl
 		{
 			Loaded += async(s, e) =>
 			{
-				await FillCategories().ContinueWith(async t => await FillAnalyses());
+				await Task.WhenAll(FillCategories(), FillAnalyses());
 			};
 		}
 
@@ -103,6 +103,9 @@ public partial class AnalysesAdminView : UserControl
 			AllAnalyses.Remove(c!);
 			await FillWithSearch();
 		});
+
+		drawer.OnEditing += Drawer_OnEditing;
+		drawer.OnDeleting += Drawer_OnDeleting;
 	}
 
 	private async void acb_TextChanged(object? sender, TextChangedEventArgs e) => await FillWithSearch();
@@ -146,13 +149,13 @@ public partial class AnalysesAdminView : UserControl
 
 	async Task FillCategories()
 	{
-		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка");
+		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка категорий").Expiration = TimeSpan.FromSeconds(1.2);
 		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
 
 		AllCategories = [.. response.Content!];
-		categories_in_analysis.ItemsSource = new List<AnalysisCategory>(AllCategories);
+		Dispatcher.UIThread.Invoke(() => categories_list_in_analysis.ItemsSource = new List<AnalysisCategory>(AllCategories));
 
 		var allCategory = new AnalysisCategory { Id = 0, Name = "Все" };
 		AllCategories.Insert(0, allCategory);
@@ -164,8 +167,11 @@ public partial class AnalysesAdminView : UserControl
 			});
 		}
 
-		categories_list.SelectedItem = allCategory;
-		categories_list.UpdateLayout();
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			categories_list.SelectedItem = allCategory;
+			categories_list.UpdateLayout();
+		});
 
 		foreach(var category in AllCategories)
 			AnalysisDrawerView.AllCategories.Add(category);
@@ -173,6 +179,7 @@ public partial class AnalysesAdminView : UserControl
 
 	async Task FillAnalyses()
 	{
+		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка анализов").Expiration = TimeSpan.FromSeconds(1.2);
 		using var response = await APIService.For<IAnalysis>().GetAnalyses().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
@@ -266,8 +273,9 @@ public partial class AnalysesAdminView : UserControl
 		ClearDialog();
 		CurrentMode = EMode.None;
 		dialog.Opacity = 0;
-		(dialog.Transitions[0] as DoubleTransition).PropertyChanged += (_, e) =>
+		(dialog.Transitions![0] as DoubleTransition)!.PropertyChanged += (_, e) =>
 		{
+			App.services.GetRequiredService<INotificationService>().Show("%", e.NewValue!.ToString()!);
 			dialog.IsVisible = false;
 		};
 		dialog.IsVisible = false;
@@ -281,10 +289,11 @@ public partial class AnalysesAdminView : UserControl
 		}
 
 		ClearDialog();
+		categories_in_analysis.Items.Clear();
 		dialog.Opacity = 0;
-		(dialog.Transitions[0] as DoubleTransition).PropertyChanged += (_, e) =>
+		(dialog.Transitions![0] as DoubleTransition)!.PropertyChanged += (_, e) =>
 		{
-			App.services.GetRequiredService<INotificationService>().Show("%", e.NewValue.ToString());
+			App.services.GetRequiredService<INotificationService>().Show("%", e.NewValue!.ToString()!);
 			dialog.IsVisible = false;
 		};
 		dialog.IsVisible = false;
@@ -296,5 +305,38 @@ public partial class AnalysesAdminView : UserControl
 
 		dialog.IsVisible = true;
 		dialog.Opacity = 1;
+	}
+
+	void Drawer_OnEditing(AnalysisDrawerView obj)
+	{
+		CurrentMode = EMode.Editing;
+
+		dialog.IsVisible = true;
+		dialog.Opacity = 1;
+
+		analysis_name.Text = ViewModel.SelectedAnalysis!.Name;
+		analysis_description.Text = ViewModel.SelectedAnalysis.Description;
+		analysis_biomaterial.Text = ViewModel.SelectedAnalysis.Biomaterial;
+		analysis_preparation.Text = ViewModel.SelectedAnalysis.Preparation;
+		analysis_price.Text = ViewModel.SelectedAnalysis.Price.ToString();
+		analysis_results_after.Text = ViewModel.SelectedAnalysis.ResultsAfter;
+
+		foreach(var category in ViewModel.SelectedAnalysis.AnalysisCategoriesLists)
+			categories_in_analysis.Items.Add(category.AnalysisCategory);
+	}
+
+	void Drawer_OnDeleting(AnalysisDrawerView view)
+	{
+		Dispatcher.UIThread.Invoke(async() =>
+		{
+			var analysis = view.ViewModel.Analysis!;
+			var ucView = analyses_list.Items.Cast<AnalysisItem_UserControl_View>().ToList().First(c => c.ViewModel.Analysis!.Id == analysis.Id);
+			AllAnalyses.Remove(ucView.ViewModel.Analysis!);
+			analyses_list.Items.Remove(ucView);
+
+			var analysisView = AllAnalysesView.First(x => x.ViewModel.Analysis!.Id == analysis.Id);
+			AllAnalysesView.Remove(analysisView);
+			await FillWithSearch();
+		});
 	}
 }

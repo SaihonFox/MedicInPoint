@@ -23,9 +23,8 @@ public partial class AnalysisDrawerView : UserControl
 
 	public readonly INotificationService notification = App.services.GetRequiredService<INotificationService>();
 
-	public Action<AnalysisDrawerView> OnAdding = null!;
-	public Action<AnalysisDrawerView> OnEditing = null!;
-	public Action<AnalysisDrawerView> OnDeleting = null!;
+	public event Action<AnalysisDrawerView> OnEditing = null!;
+	public event Action<AnalysisDrawerView> OnDeleting = null!;
 
 	public Action<AnalysisDrawerView?>? ActionOnSelect = null;
 	public Action<AnalysisDrawerView>? ActionOnDelete = null;
@@ -61,7 +60,7 @@ public partial class AnalysisDrawerView : UserControl
 		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
-
+		
 		Dispatcher.UIThread.Invoke(() =>
 		{
 			foreach (var category in response.Content)
@@ -71,11 +70,6 @@ public partial class AnalysisDrawerView : UserControl
 			}
 			all_categories_cb.SelectedIndex = 0;
 		});
-	}
-
-	void Add_analysis_Click(object? sender, RoutedEventArgs e)
-	{
-		OnAdding?.Invoke(this);
 	}
 
 	void Edit_btn_Click(object? sender, RoutedEventArgs e)
@@ -93,16 +87,6 @@ public partial class AnalysisDrawerView : UserControl
 		reject_btn.IsVisible = true;
 	}
 
-	void Reject_btn_Click(object? sender, RoutedEventArgs e)
-	{
-		IsDeleting = false;
-
-		edit_btn.IsVisible = true;
-		delete_btn.IsVisible = true;
-		apply_btn.IsVisible = false;
-		reject_btn.IsVisible = false;
-	}
-
 	async void Apply_btn_Click(object? sender, RoutedEventArgs e)
 	{
 		using var response = await APIService.For<IAnalysis>().DeleteAnalysis(ViewModel!.Analysis!.Id);
@@ -118,6 +102,18 @@ public partial class AnalysisDrawerView : UserControl
 			delete_btn.IsVisible = true;
 			apply_btn.IsVisible = false;
 			reject_btn.IsVisible = false;
+
+			OnDeleting?.Invoke(this);
 		}
+	}
+
+	void Reject_btn_Click(object? sender, RoutedEventArgs e)
+	{
+		IsDeleting = false;
+
+		edit_btn.IsVisible = true;
+		delete_btn.IsVisible = true;
+		apply_btn.IsVisible = false;
+		reject_btn.IsVisible = false;
 	}
 }

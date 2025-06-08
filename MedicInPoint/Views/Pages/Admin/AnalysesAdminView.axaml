@@ -87,7 +87,7 @@
 					</ScrollViewer>
 				</Grid>
 
-				<drawer:AnalysisDrawerView Grid.Column="1" Name="drawer" Width="0" />
+				<drawer:AnalysisDrawerView Grid.Column="1" Name="drawer" VerticalAlignment="Stretch" Width="0" />
 			</Grid>
 			<Button Name="add_analysis" Padding="6" Margin="0,30" HorizontalAlignment="Center" VerticalAlignment="Bottom">
 				<Button.Styles>
@@ -162,37 +162,37 @@
 			<StackPanel Orientation="Vertical" Spacing="20" ClipToBounds="False" Margin="50" HorizontalAlignment="Center" VerticalAlignment="Center">
 				<Border Classes="drawerbg">
 					<Grid ColumnDefinitions="auto,auto" ColumnSpacing="20">
-						<ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
-							<StackPanel Orientation="Vertical" Spacing="10" MinWidth="250">
+						<ScrollViewer Grid.Column="0" ClipToBounds="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
+							<StackPanel ClipToBounds="True" Orientation="Vertical" Spacing="10" MinWidth="250" MaxWidth="500">
 								<!-- Name -->
 								<TextBlock Text="Название" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
-								<TextBox Name="analysis_name" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+								<TextBox Name="analysis_name" TextWrapping="Wrap" FontSize="16" MaxLength="100" LineHeight="16" />
 
 								<!-- Price -->
 								<TextBlock Text="Цена (руб.)" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
 								<TextBox Name="analysis_price" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
 
-								<!-- Description -->
-								<TextBlock Text="Описание" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
-								<TextBox Name="analysis_description" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
-
-								<!-- Preparation -->
-								<TextBlock Text="Подготовка" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
-								<TextBox Name="analysis_preparation" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
-
 								<!-- Results After -->
-								<TextBlock Text="Готовность результатов" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
-								<TextBox Name="analysis_results_after" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+								<TextBlock Text="Готовность результатов (в днях)" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_results_after" TextWrapping="WrapWithOverflow" FontSize="16" MaxLength="20" LineHeight="16" />
 
 								<!-- Biomaterial -->
 								<TextBlock Text="Биоматериал" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
-								<TextBox Name="analysis_biomaterial" TextWrapping="WrapWithOverflow" FontSize="16" LineHeight="16" />
+								<TextBox Name="analysis_biomaterial" TextWrapping="WrapWithOverflow" FontSize="16" MaxLength="50" LineHeight="16" />
+
+								<!-- Description -->
+								<TextBlock Text="Описание" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_description" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" FontSize="16" MaxLength="300" LineHeight="16" ScrollViewer.VerticalScrollBarVisibility="Visible" />
+
+								<!-- Preparation -->
+								<TextBlock Text="Подготовка" FontSize="16" LineHeight="16" FontWeight="Medium" Foreground="#939396" />
+								<TextBox Name="analysis_preparation" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" FontSize="16" MaxLength="300" LineHeight="16" />
 							</StackPanel>
 						</ScrollViewer>
 
-						<Grid Grid.Column="1" RowDefinitions="auto,auto" RowSpacing="10">
+						<Grid Grid.Column="1" RowDefinitions="auto,auto,*" RowSpacing="10" MinWidth="300">
 							<TextBlock Grid.Row="0" Text="Категории" FontSize="24" HorizontalAlignment="Center" />
-							<ComboBox Grid.Row="1" Name="categories_in_analysis" SelectedIndex="0" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+							<ComboBox Grid.Row="1" Name="categories_list_in_analysis" SelectedIndex="0" CornerRadius="8" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
 								<ComboBox.ItemTemplate>
 									<DataTemplate DataType="model:AnalysisCategory">
 										<TextBlock Text="{CompiledBinding Name}" TextWrapping="Wrap" FontSize="20" />
@@ -205,6 +205,15 @@
 									</Style>
 								</ComboBox.Styles>
 							</ComboBox>
+							<ScrollViewer Grid.Row="2">
+								<ItemsControl Name="categories_in_analysis">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<StackPanel Orientation="Vertical" Spacing="5" />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+								</ItemsControl>
+							</ScrollViewer>
 						</Grid>
 					</Grid>
 				</Border>
