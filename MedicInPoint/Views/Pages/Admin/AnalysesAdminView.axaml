@@ -206,7 +206,7 @@
 										</Style>
 									</ComboBox.Styles>
 								</ComboBox>
-								<Button Content="Добавить" FontSize="13" TextBlock.LineHeight="14" Padding="0,4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+								<Button Name="add_category_to_analysis" Content="Добавить" FontSize="13" TextBlock.LineHeight="14" Padding="0,4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
 							</StackPanel>
 							<ScrollViewer Grid.Row="2">
 								<ItemsControl Name="categories_in_analysis">

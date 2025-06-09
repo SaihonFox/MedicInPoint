@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+			 d:DesignWidth="200" d:DesignHeight="50"
+			 x:Class="MedicInPoint.Views.UserControls.Items.CategoryInAnalysisUserControl">
+	<Border BorderThickness="1.5" BorderBrush="#ADADAD" CornerRadius="12" Padding="6,3">
+		<Grid ColumnDefinitions="*,auto">
+			<TextBlock Grid.Column="0" Name="name" FontSize="18" VerticalAlignment="Center" />
+			<Button Grid.Column="1" Name="delete_btn" CornerRadius="16" ClipToBounds="False" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="{CompiledBinding $self.Height}">
+				<Button.Styles>
+					<Style Selector="Button:pressed">
+						<Setter Property="RenderTransform" Value="scale(0.95)" />
+					</Style>
+				</Button.Styles>
+				<Svg Path="avares://MedicInPoint/Assets/SVGs/buttons/delete_category.svg" Stretch="Fill" />
+			</Button>
+		</Grid>
+	</Border>
+</UserControl>

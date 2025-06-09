@@ -25,7 +25,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MIP.LocalDB;
 
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace MedicInPoint.Views.Pages.Admin;
 
@@ -66,6 +65,8 @@ public partial class AnalysesAdminView : UserControl
 		add_analysis.Click += Add_analysis_Click;
 		apply_btn.Click += Apply_btn_Click;
 		reject_btn.Click += Reject_btn_Click;
+
+		add_category_to_analysis.Click += Add_category_to_analysis_Click;
 
 		categories_list.SelectionChanged += async(_, _) => await FillWithSearch();
 
@@ -321,6 +322,21 @@ public partial class AnalysesAdminView : UserControl
 				notification.Show("Ошибка категорий!", $"Message: {response.Error.Message}", NotificationType.Error);
 				return;
 			}
+
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				AllAnalyses.Add(response.Content);
+				AllAnalysesView.Add(new AnalysisItem_UserControl_View
+				{
+					DataContext = new AnalysisItem_UserControl_ViewModel
+					{
+						Analysis = response.Content,
+						IsSelected = response.Content.Id == selectedAnalysis?.ViewModel.Analysis?.Id
+					},
+					OnToggle = OnSelectAnalysis
+				});
+			});
+			notification.Show("Успех!", $"Успешно добавлено!", NotificationType.Success);
 		}
 		if(CurrentMode == EMode.Editing)
 		{
@@ -338,13 +354,33 @@ public partial class AnalysesAdminView : UserControl
 			}
 			using var responseCategory = await APIService.For<IAnalysisCategoriesLists>().UpdateCategories4Analysis(
 				ViewModel.SelectedAnalysis!.Id,
-				[.. categories_in_analysis.Items.Cast<AnalysisCategory>().Select(x => x.Id)]
+				[.. categories_in_analysis.Items.Cast<CategoryInAnalysisUserControl>().Select(x => x.Category.Id)]
 			);
 			if (!response.IsSuccessful)
 			{
 				notification.Show("Ошибка категорий!", $"Message: {response.Error.Message}", NotificationType.Error);
 				return;
 			}
+
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				var analysis = AllAnalyses.First(x => x.Id == ViewModel.SelectedAnalysis.Id);
+				analysis.Name = analysis_name.Text!.Trim();
+				analysis.Price = decimal.Parse(analysis_price.Text!.Trim());
+				analysis.Biomaterial = analysis_biomaterial.Text!.Trim();
+				analysis.ResultsAfter = analysis_results_after.Text!.Trim();
+				analysis.Description = analysis_description.Text.IsNullOrWhiteSpace() ? null : analysis_description.Text!.Trim();
+				analysis.Preparation = analysis_preparation.Text.IsNullOrWhiteSpace() ? null : analysis_preparation.Text!.Trim();
+
+				var analysisView = AllAnalysesView.First(x => x.ViewModel.Analysis!.Id == ViewModel.SelectedAnalysis.Id);
+				analysisView.ViewModel.Analysis!.Name = analysis_name.Text!.Trim();
+				analysisView.ViewModel.Analysis.Price = decimal.Parse(analysis_price.Text!.Trim());
+				analysisView.ViewModel.Analysis.Biomaterial = analysis_biomaterial.Text!.Trim();
+				analysisView.ViewModel.Analysis.ResultsAfter = analysis_results_after.Text!.Trim();
+				analysisView.ViewModel.Analysis.Description = analysis_description.Text.IsNullOrWhiteSpace() ? null : analysis_description.Text!.Trim();
+				analysisView.ViewModel.Analysis.Preparation = analysis_preparation.Text.IsNullOrWhiteSpace() ? null : analysis_preparation.Text!.Trim();
+			});
+			notification.Show("Успех!", $"Успешно изменено!", NotificationType.Success);
 		}
 
 		ClearDialog();
@@ -356,6 +392,7 @@ public partial class AnalysesAdminView : UserControl
 			dialog.IsVisible = false;
 		};
 		dialog.IsVisible = false;
+		await FillWithSearch();
 	}
 
 	void Add_analysis_Click(object? sender, RoutedEventArgs e)
@@ -381,7 +418,7 @@ public partial class AnalysesAdminView : UserControl
 		analysis_results_after.Text = ViewModel.SelectedAnalysis.ResultsAfter;
 
 		foreach(var category in ViewModel.SelectedAnalysis.AnalysisCategoriesLists)
-			categories_in_analysis.Items.Add(category.AnalysisCategory);
+			categories_in_analysis.Items.Add(new CategoryInAnalysisUserControl { Category = category.AnalysisCategory, OnDelete = DeleteCategoryFromAnalysis });
 	}
 
 	void Drawer_OnDeleting(AnalysisDrawerView view)
@@ -397,5 +434,22 @@ public partial class AnalysesAdminView : UserControl
 			AllAnalysesView.Remove(analysisView);
 			await FillWithSearch();
 		});
+	}
+
+	void Add_category_to_analysis_Click(object? sender, RoutedEventArgs e)
+	{
+		var category = (categories_list_in_analysis.SelectedItem as AnalysisCategory)!;
+		if (categories_in_analysis.Items.Cast<CategoryInAnalysisUserControl>().Any(x => x.Category.Id == category.Id))
+		{
+			App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Уже имеется такая категория");
+			return;
+		}
+
+		categories_in_analysis.Items.Add(new CategoryInAnalysisUserControl { Category = category, OnDelete = DeleteCategoryFromAnalysis });
+	}
+
+	void DeleteCategoryFromAnalysis(CategoryInAnalysisUserControl uc)
+	{
+		categories_in_analysis.Items.Remove(uc);
 	}
 }

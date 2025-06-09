@@ -3,10 +3,15 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d"
+			 xmlns:converter="using:MedicInPoint.Converters"
 			 xmlns:model="using:MedicInPoint.Models"
 			 ClipToBounds="False"
 			 d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="MedicInPoint.Views.UserControls.Items.ProcessingAnalysesUserControl">
+	<UserControl.Resources>
+		<converter:ColorByNameConverter x:Key="ColorByNameConverter" />
+	</UserControl.Resources>
+	
 	<Border Classes="drawerbg">
 		<StackPanel Orientation="Vertical" Spacing="10">
 			<Button Name="apply" CornerRadius="12" Content="Подтвердить" FontSize="24" Background="#00B712" Foreground="White" Margin="200,0" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch">
@@ -38,12 +43,25 @@
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate DataType="model:PatientAnalysisCartItem">
-						<Border ClipToBounds="False" Background="White" CornerRadius="15" Padding="10">
+						<Border Classes="brd" ClipToBounds="False" Background="White" CornerRadius="15" Padding="8">
 							<Border.Effect>
 								<DropShadowEffect Color="#E4E8F5" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
 							</Border.Effect>
+							<Border.Styles>
+								<Style Selector="Border.brd:not(:pointerover)">
+									<Setter Property="BorderBrush" Value="Transparent" />
+									<Setter Property="BorderThickness" Value="1.5" />
+								</Style>
+								<Style Selector="Border.brd:pointerover">
+									<Setter Property="BorderBrush" Value="{CompiledBinding Analysis.Name, Converter={StaticResource ColorByNameConverter}}" />
+									<Setter Property="BorderThickness" Value="1.5" />
+									<Setter Property="Effect">
+										<DropShadowEffect Color="{CompiledBinding Analysis.Name, Converter={StaticResource ColorByNameConverter}}" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
+									</Setter>
+								</Style>
+							</Border.Styles>
 							<Grid RowDefinitions="auto,auto" RowSpacing="4">
-								<TextBlock Grid.Row="0" Text="{CompiledBinding Analysis.Name}" FontSize="16" />
+								<SelectableTextBlock Grid.Row="0" Text="{CompiledBinding Analysis.Name}" FontSize="16" />
 								<TextBox Grid.Row="1" Text="{CompiledBinding ResultsDescription, Mode=TwoWay}" FontSize="22" Watermark="Результат" />
 							</Grid>
 						</Border>

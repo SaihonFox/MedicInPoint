@@ -290,7 +290,7 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 		{
 			try
 			{
-				_notificationService.Show("Успех!", $"Пациент успешно записан на {analysisDateTime:dd.MM.yyyy HH:mm}");
+				_notificationService.Show("Успех!", $"Пациент успешно записан на {analysisDateTime:dd.MM.yyyy HH:mm}", NotificationType.Success);
 				if (!SelectedPatient.Email.IsNullOrWhiteSpace())
 					_notificationService.Show("Уведомление", "Также при подключении к интернету пациенту могло прийти сообщение на почту");
 			}

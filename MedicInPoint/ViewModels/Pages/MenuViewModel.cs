@@ -73,7 +73,7 @@ public partial class MenuViewModel() : ViewModelBase
 		_router = router;
 		_appService = appService;
 		
-		Title = "Меню " + (_appService.CurrentUser!.Post == 1 ? "Администратора" : "Доктора");
+		Title = "Меню " + (_appService.CurrentUser!.Post == 1 ? "Администратора" : "Лаборанта");
 	}
 
 	[RelayCommand]
