@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq.Dynamic.Core;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
 using Avalonia.Controls;
@@ -14,7 +13,6 @@ using CommunityToolkit.Mvvm.Input;
 
 using Medic.API.Refit.Placeholders;
 
-using MedicInPoint.API;
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.API.SignalR;
@@ -23,8 +21,6 @@ using MedicInPoint.Models;
 using MedicInPoint.Services;
 
 using Microsoft.AspNetCore.SignalR.Client;
-
-using Newtonsoft.Json;
 
 namespace MedicInPoint.ViewModels.Pages.Doctor;
 
@@ -269,18 +265,17 @@ public partial class RnRDoctorViewModel() : ViewModelBase
 			await APIService.For<IPatientAnalysisCartItem>().Post(new PatientAnalysisCartItem { AnalysisId = item.Id, PatientAnalysisCartId = cartResponse.Content!.Id });
 		using var orderResponse = await APIService.For<IAnalysisOrder>().Post(new AnalysisOrder
 		{
-			PatientAnalysisCart = cartResponse.Content,
 			PatientAnalysisCartId = cartResponse.Content!.Id,
 			
 			AnalysisOrderStateId = 1,
 
-			Patient = SelectedPatient,
 			PatientId = SelectedPatient.Id,
 
-			User = _appService.CurrentUser!,
 			UserId = _appService.CurrentUser!.Id,
 
 			Comment = OrderRecord.Comment,
+
+			AtHome = OrderRecord.AtHome,
 
 			RegistrationDate = DateTime.Now,
 			AnalysisDatetime = analysisDateTime

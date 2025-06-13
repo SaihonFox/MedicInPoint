@@ -152,13 +152,16 @@ public partial class AnalysesAdminView : UserControl
 
 	async Task FillCategories()
 	{
-		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка категорий").Expiration = TimeSpan.FromSeconds(1.2);
+		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка категорий", expiration: TimeSpan.FromSeconds(1.2));
 		using var response = await APIService.For<IAnalysisCategory>().GetAnalysisCategories().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
 
 		AllCategories = [.. response.Content!];
-		Dispatcher.UIThread.Invoke(() => categories_list_in_analysis.ItemsSource = new List<AnalysisCategory>(AllCategories));
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			categories_list_in_analysis.ItemsSource = new List<AnalysisCategory>(AllCategories);
+		});
 
 		var allCategory = new AnalysisCategory { Id = 0, Name = "Все" };
 		AllCategories.Insert(0, allCategory);
@@ -182,7 +185,7 @@ public partial class AnalysesAdminView : UserControl
 
 	async Task FillAnalyses()
 	{
-		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка анализов").Expiration = TimeSpan.FromSeconds(1.2);
+		App.services.GetRequiredService<INotificationService>().Show("Уведомление", "Загрузка списка анализов", expiration: TimeSpan.FromSeconds(1.2));
 		using var response = await APIService.For<IAnalysis>().GetAnalyses().ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
@@ -271,6 +274,7 @@ public partial class AnalysesAdminView : UserControl
 		analysis_results_after.Text = string.Empty;
 
 		categories_in_analysis.Items.Clear();
+		categories_list_in_analysis.SelectedIndex = 0;
 	}
 
 	void Reject_btn_Click(object? sender, RoutedEventArgs e)
@@ -292,7 +296,7 @@ public partial class AnalysesAdminView : UserControl
 
 		if (analysis_name.Text.IsNullOrWhiteSpace() || analysis_price.Text.IsNullOrWhiteSpace() || analysis_results_after.Text.IsNullOrWhiteSpace() || analysis_biomaterial.Text.IsNullOrWhiteSpace())
 		{
-			notification.Show("Ошибка!", "Не все поля заполнены", NotificationType.Error);
+			notification.Show("Ошибка!", "Поля не могут быть пустыми", NotificationType.Error);
 			return;
 		}
 
@@ -303,9 +307,9 @@ public partial class AnalysesAdminView : UserControl
 				Name = analysis_name.Text!.Trim(),
 				Price = decimal.Parse(analysis_price.Text!.Trim()),
 				Biomaterial = analysis_biomaterial.Text!.Trim(),
-				Preparation = analysis_preparation.Text!.Trim(),
-				Description = analysis_description.Text!.Trim(),
-				ResultsAfter = analysis_results_after.Text!.Trim()
+				ResultsAfter = analysis_results_after.Text!.Trim(),
+				Preparation = analysis_preparation.Text.IsNullOrWhiteSpace() ? null : analysis_preparation.Text!.Trim(),
+				Description = analysis_description.Text.IsNullOrWhiteSpace() ? null : analysis_description.Text!.Trim(),
 			};
 			using var response = await APIService.For<IAnalysis>().AddAnalysis(new_analysis);
 			if(!response.IsSuccessful)
@@ -314,8 +318,8 @@ public partial class AnalysesAdminView : UserControl
 				return;
 			}
 			using var responseCategory = await APIService.For<IAnalysisCategoriesLists>().UpdateCategories4Analysis(
-				ViewModel.SelectedAnalysis!.Id,
-				[.. categories_in_analysis.Items.Cast<AnalysisCategory>().Select(x => x.Id)]
+				response.Content.Id,
+				[.. categories_in_analysis.Items.Cast<CategoryInAnalysisUserControl>().Select(x => x.Category.Id)]
 			);
 			if (!response.IsSuccessful)
 			{
@@ -336,7 +340,7 @@ public partial class AnalysesAdminView : UserControl
 					OnToggle = OnSelectAnalysis
 				});
 			});
-			notification.Show("Успех!", $"Успешно добавлено!", NotificationType.Success);
+			notification.Show("Успех!", "Успешно добавлено!", NotificationType.Success);
 		}
 		if(CurrentMode == EMode.Editing)
 		{
@@ -352,6 +356,7 @@ public partial class AnalysesAdminView : UserControl
 				notification.Show("Ошибка!", $"Message: {response.Error.Message}", NotificationType.Error);
 				return;
 			}
+			var analysis = response.Content;
 			using var responseCategory = await APIService.For<IAnalysisCategoriesLists>().UpdateCategories4Analysis(
 				ViewModel.SelectedAnalysis!.Id,
 				[.. categories_in_analysis.Items.Cast<CategoryInAnalysisUserControl>().Select(x => x.Category.Id)]
@@ -365,23 +370,34 @@ public partial class AnalysesAdminView : UserControl
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				var analysis = AllAnalyses.First(x => x.Id == ViewModel.SelectedAnalysis.Id);
-				analysis.Name = analysis_name.Text!.Trim();
+				int analysisIndex = AllAnalyses.IndexOf(analysis);
+				analysis!.Name = analysis_name.Text!.Trim();
 				analysis.Price = decimal.Parse(analysis_price.Text!.Trim());
 				analysis.Biomaterial = analysis_biomaterial.Text!.Trim();
 				analysis.ResultsAfter = analysis_results_after.Text!.Trim();
 				analysis.Description = analysis_description.Text.IsNullOrWhiteSpace() ? null : analysis_description.Text!.Trim();
 				analysis.Preparation = analysis_preparation.Text.IsNullOrWhiteSpace() ? null : analysis_preparation.Text!.Trim();
+				AllAnalyses[analysisIndex] = analysis;
+				drawer.ViewModel.Analysis = analysis;
+				ViewModel.SelectedAnalysis = analysis;
 
-				var analysisView = AllAnalysesView.First(x => x.ViewModel.Analysis!.Id == ViewModel.SelectedAnalysis.Id);
-				analysisView.ViewModel.Analysis!.Name = analysis_name.Text!.Trim();
-				analysisView.ViewModel.Analysis.Price = decimal.Parse(analysis_price.Text!.Trim());
-				analysisView.ViewModel.Analysis.Biomaterial = analysis_biomaterial.Text!.Trim();
-				analysisView.ViewModel.Analysis.ResultsAfter = analysis_results_after.Text!.Trim();
-				analysisView.ViewModel.Analysis.Description = analysis_description.Text.IsNullOrWhiteSpace() ? null : analysis_description.Text!.Trim();
-				analysisView.ViewModel.Analysis.Preparation = analysis_preparation.Text.IsNullOrWhiteSpace() ? null : analysis_preparation.Text!.Trim();
+				var analysisUCView = AllAnalysesView.First(x => x.ViewModel.Analysis!.Id == ViewModel.SelectedAnalysis.Id);
+				var analysisView = analysisUCView.ViewModel.Analysis;
+				int analysisViewIndex = AllAnalysesView.IndexOf(analysisUCView);
+				analysisView!.Name = analysis_name.Text!.Trim();
+				analysisView.Price = decimal.Parse(analysis_price.Text!.Trim());
+				analysisView.Biomaterial = analysis_biomaterial.Text!.Trim();
+				analysisView.ResultsAfter = analysis_results_after.Text!.Trim();
+				analysisView.Description = analysis_description.Text.IsNullOrWhiteSpace() ? null : analysis_description.Text!.Trim();
+				analysisView.Preparation = analysis_preparation.Text.IsNullOrWhiteSpace() ? null : analysis_preparation.Text!.Trim();
+				analysisUCView.ViewModel.Analysis = analysisView;
+				AllAnalysesView[analysisViewIndex] = analysisUCView;
+
+				ViewModel.SelectedAnalysis = null;
 			});
-			notification.Show("Успех!", $"Успешно изменено!", NotificationType.Success);
+			notification.Show("Успех!", "Успешно изменено!", NotificationType.Success);
 		}
+		await Dispatcher.UIThread.Invoke(FillWithSearch);
 
 		ClearDialog();
 		categories_in_analysis.Items.Clear();
@@ -392,7 +408,6 @@ public partial class AnalysesAdminView : UserControl
 			dialog.IsVisible = false;
 		};
 		dialog.IsVisible = false;
-		await FillWithSearch();
 	}
 
 	void Add_analysis_Click(object? sender, RoutedEventArgs e)

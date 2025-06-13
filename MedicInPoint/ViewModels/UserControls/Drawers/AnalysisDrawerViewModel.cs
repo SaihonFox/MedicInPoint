@@ -4,7 +4,7 @@ using MedicInPoint.Models;
 
 namespace MedicInPoint.ViewModels.UserControls.Drawers;
 
-public partial class	AnalysisDrawerViewModel : ViewModelBase
+public partial class AnalysisDrawerViewModel : ViewModelBase
 {
 	[ObservableProperty]
 	private Analysis? _analysis;

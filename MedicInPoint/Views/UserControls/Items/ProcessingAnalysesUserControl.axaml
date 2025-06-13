@@ -61,8 +61,11 @@
 								</Style>
 							</Border.Styles>
 							<Grid RowDefinitions="auto,auto" RowSpacing="4">
-								<SelectableTextBlock Grid.Row="0" Text="{CompiledBinding Analysis.Name}" FontSize="16" />
-								<TextBox Grid.Row="1" Text="{CompiledBinding ResultsDescription, Mode=TwoWay}" FontSize="22" Watermark="Результат" />
+								<SelectableTextBlock Grid.Row="0" Text="{CompiledBinding Analysis.Name}" FontSize="20" />
+								<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="10">
+									<TextBlock Text="Результат" FontSize="18" VerticalAlignment="Center" />
+									<ComboBox Name="result_cb" ItemsSource="{CompiledBinding $parent[ItemsControl].DataContext}" SelectedValue="{CompiledBinding ResultsDescription, Mode=TwoWay}" SelectedIndex="0" FontSize="18" VerticalAlignment="Center" />
+								</StackPanel>
 							</Grid>
 						</Border>
 					</DataTemplate>

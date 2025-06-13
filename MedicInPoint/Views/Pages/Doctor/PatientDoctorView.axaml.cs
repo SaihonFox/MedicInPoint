@@ -6,6 +6,7 @@ using Medic.API.Refit.Placeholders;
 
 using MedicInPoint.API.Refit;
 using MedicInPoint.Extensions;
+using MedicInPoint.Models;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels.Pages.Doctor;
 using MedicInPoint.Views.UserControls.Items;
@@ -19,6 +20,8 @@ namespace MedicInPoint.Views.Pages.Doctor;
 
 public partial class PatientDoctorView : UserControl
 {
+	public PatientDoctorViewModel ViewModel => (DataContext as PatientDoctorViewModel)!;
+
 	public PatientDoctorView()
 	{
 		InitializeComponent();
@@ -72,7 +75,7 @@ public partial class PatientDoctorView : UserControl
 		processes_ic.Items.Clear();
 		using var response = await APIService.For<IAnalysisOrder>().GetAnalysisOrders4User(ViewModel.CurrentUser!.Id);
 		var list = response.Content!.Where(x => x.AnalysisOrderStateId == 1 && x.PatientId == ViewModel.SelectedPatient!.Id).ToList();
-
+		
 		foreach (var item in list)
 			processes_ic.Items.Add(new ProcessingAnalysesUserControl { CurrentOrder = item, OnApply = OnApply });
 	}
@@ -80,5 +83,12 @@ public partial class PatientDoctorView : UserControl
 	void OnApply(ProcessingAnalysesUserControl uc)
 	{
 		processes_ic.Items.Remove(uc);
+
+		var order = ViewModel.UserOrders.First(x => x.Id == uc.CurrentOrder.Id);
+		var orderIndex = ViewModel.UserOrders.IndexOf(order);
+		ViewModel.UserOrders[orderIndex].AnalysisOrderStateId = 2;
+		var item = requests_ic.Items[orderIndex] as AnalysisOrder;
+		item.AnalysisOrderStateId = 2;
+		requests_ic.UpdateLayout();
 	}
 }

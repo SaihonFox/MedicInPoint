@@ -76,7 +76,7 @@ public partial class AnalysesAdminDocumentsViewModel() : ViewModelBase
 		int maxPriceLen = order.PatientAnalysisCart!.PatientAnalysisCartItems.Max(x => x.Analysis.Price.ToString("0.00").Length);
 
 		List<string> list = [
-			$"Запись на сдачу анализов на {order.AnalysisDatetime:dd.MM.yyyy HH:mm}",
+			$"Ваши результаты анализов на {order.AnalysisDatetime:dd.MM.yyyy HH:mm}",
 			"< Анализы ",
 			$"| на общую сумму {order.PatientAnalysisCart!.PatientAnalysisCartItems.ToList().Sum(x => x.Analysis.Price):0.00} руб.",
 			"#",
@@ -106,7 +106,7 @@ public partial class AnalysesAdminDocumentsViewModel() : ViewModelBase
 		int maxPriceLen = order.PatientAnalysisCart!.PatientAnalysisCartItems.Max(x => x.Analysis.Price.ToString("0.00").Length);
 
 		List<string> list = [
-			$"Запись на сдачу анализов на {order.AnalysisDatetime:dd.MM.yyyy HH:mm}",
+			$"Ваши результаты анализов на {order.AnalysisDatetime:dd.MM.yyyy HH:mm}",
 			"< Анализы ",
 			$"| на общую сумму {order.PatientAnalysisCart!.PatientAnalysisCartItems.ToList().Sum(x => x.Analysis.Price):0.00} руб.",
 			"#",

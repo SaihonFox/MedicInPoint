@@ -160,9 +160,19 @@ public partial class RnRDoctorView : UserControl
 
 	async Task<Request?> RequestAccepted(Request request)
 	{
-		request.RequestStateId = 3;
-		request.RequestChanged = DateTime.Now;
-		using var response = await APIService.For<IRequest>().PutRequest(request);
+		using var response = await APIService.For<IRequest>().PutRequest(new Request
+		{
+			Id = request.Id,
+			RequestStateId = 3,
+			RequestChanged = DateTime.Now,
+			DoctorId = request.DoctorId,
+			PatientId = request.PatientId,
+			PatientAnalysisCartId = request.PatientAnalysisCartId,
+			AtHome = request.AtHome,
+			RequestSended = request.RequestSended,
+			Comment = request.Comment,
+			AnalysisDatetime = request.AnalysisDatetime
+		});
 		if (!response.IsSuccessful)
 			return null;
 
@@ -173,9 +183,19 @@ public partial class RnRDoctorView : UserControl
 
 	async Task<Request?> RequestDeclined(Request request)
 	{
-		request.RequestStateId = 2;
-		request.RequestChanged = DateTime.Now;
-		using var response = await APIService.For<IRequest>().PutRequest(request);
+		using var response = await APIService.For<IRequest>().PutRequest(new Request
+		{
+			Id = request.Id,
+			RequestStateId = 2,
+			RequestChanged = DateTime.Now,
+			DoctorId = request.DoctorId,
+			PatientId = request.PatientId,
+			PatientAnalysisCartId = request.PatientAnalysisCartId,
+			AtHome = true,
+			RequestSended = request.RequestSended,
+			Comment = request.Comment,
+			AnalysisDatetime = request.AnalysisDatetime
+		});
 		if (!response.IsSuccessful)
 			return null;
 		return response.Content!;
@@ -193,17 +213,10 @@ public partial class RnRDoctorView : UserControl
 			return;
 		}
 
-		using var cartResponse = await APIService.For<IPatientAnalysisCart>().Post(new PatientAnalysisCart { PatientId = request.PatientId }).ConfigureAwait(false);
-		foreach (var item in request.PatientAnalysisCart.PatientAnalysisCartItems)
-		{
-			Logger.Sink.Log(LogEventLevel.Error, "CART", this, $"Item: {item.Analysis.Id} - {cartResponse.Content.Id}");
-			await APIService.For<IPatientAnalysisCartItem>().Post(new PatientAnalysisCartItem { AnalysisId = item.Analysis.Id, PatientAnalysisCartId = cartResponse.Content!.Id });
-		}
-
 		using var orderResponse = await APIService.For<IAnalysisOrder>().Post(new AnalysisOrder
 		{
-			PatientAnalysisCart = cartResponse.Content,
-			PatientAnalysisCartId = cartResponse.Content!.Id,
+			PatientAnalysisCart = request.PatientAnalysisCart,
+			PatientAnalysisCartId = request.PatientAnalysisCartId,
 
 			Patient = request.Patient,
 			PatientId = request.PatientId,
@@ -212,6 +225,9 @@ public partial class RnRDoctorView : UserControl
 			UserId = request.DoctorId,
 
 			Comment = request.Comment,
+
+			AtHome = true,
+			AnalysisOrderStateId = 1,
 
 			RegistrationDate = DateTime.Now,
 			AnalysisDatetime = request.AnalysisDatetime

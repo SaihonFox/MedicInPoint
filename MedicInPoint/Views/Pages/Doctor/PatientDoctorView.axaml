@@ -114,10 +114,8 @@
 						<TextBlock.IsVisible>
 							<MultiBinding Converter="{x:Static BoolConverters.And}">
 								<CompiledBinding Path="!#centerText.IsVisible" />
-								<MultiBinding Converter="{x:Static BoolConverters.And}">
-									<CompiledBinding Path="UserOrders.Count" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
-									<CompiledBinding Path="#processes_ic.Items.Count" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
-								</MultiBinding>
+								<CompiledBinding Path="#requests_ic.Items.Count" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
+								<CompiledBinding Path="#processes_ic.Items.Count" Converter="{StaticResource IntConverter}" ConverterParameter="0" />
 							</MultiBinding>
 						</TextBlock.IsVisible>
 					</TextBlock>
@@ -140,6 +138,8 @@
 									<DataTemplate DataType="model:AnalysisOrder">
 										<Border Classes="drawerbg" Padding="16" HorizontalAlignment="Stretch" MinWidth="500">
 											<StackPanel Orientation="Vertical" Spacing="10">
+												<TextBlock Text="В процессе" FontSize="24" Foreground="#1A6FEE" IsVisible="{CompiledBinding AnalysisOrderStateId, Converter={StaticResource IntConverter}, ConverterParameter=1}" HorizontalAlignment="Center" />
+												<TextBlock Text="Пройдено" FontSize="24" Foreground="#00B712" IsVisible="{CompiledBinding AnalysisOrderStateId, Converter={StaticResource IntConverter}, ConverterParameter=2}" HorizontalAlignment="Center" />
 												<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
 													<TextBlock Text="Дата и время" FontSize="14" LineHeight="14" Foreground="#7E7E9A" HorizontalAlignment="Center" />
 													<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
@@ -166,7 +166,7 @@
 																<Border.Effect>
 																	<DropShadowEffect Color="#E4E8F5" BlurRadius="20" Opacity="0.6" OffsetX="0" OffsetY="0" />
 																</Border.Effect>
-																<Grid ColumnDefinitions="auto,5,*,10,auto">
+																<Grid ColumnDefinitions="auto,5,*,10,auto" RowDefinitions="auto,auto">
 																	<Border Grid.Column="0" Background="{CompiledBinding Analysis.Name, Converter={StaticResource ColorByNameConverter}}" CornerRadius="100" Width="5" Height="{CompiledBinding $parent[Grid].Children[1].Bounds.Height}" />
 																	<SelectableTextBlock Grid.Column="2" Text="{CompiledBinding Analysis.Name}" FontSize="20" LineHeight="20" VerticalAlignment="Center" />
 																	<StackPanel Grid.Column="4" Orientation="Vertical" Spacing="5">
@@ -175,6 +175,8 @@
 																			<TextBlock Text="{CompiledBinding Analysis.Price, StringFormat=#.## руб\\.}" FontSize="18" LineHeight="18" HorizontalAlignment="Center" />
 																		</Border>
 																	</StackPanel>
+																	
+																	<TextBlock Grid.Row="1" Grid.ColumnSpan="5" IsVisible="{CompiledBinding ResultsDescription, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{CompiledBinding ResultsDescription, StringFormat='Результаты: {0}'}" FontSize="20" TextWrapping="Wrap" Margin="5,0,5,5" />
 																</Grid>
 															</Border>
 														</DataTemplate>
