@@ -36,7 +36,7 @@
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Адрес" FontSize="14" LineHeight="14" Foreground="#7E7E9A" Margin="8,0" />
 					<Border Background="#F5F5F9" CornerRadius="10" Padding="10">
-						<TextBlock Text="{CompiledBinding Request.AnalysisDatetime, StringFormat=dd.MM.yyyy HH:mm}" FontSize="20" LineHeight="20" />
+						<TextBlock Text="{CompiledBinding Request.Patient.Address, StringFormat=dd.MM.yyyy HH:mm}" FontSize="20" LineHeight="20" />
 					</Border>
 				</StackPanel>
 				

@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Logging;
+using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 
 using Medic.API.Refit.Placeholders;
@@ -145,14 +146,17 @@ public partial class RnRDoctorView : UserControl
 		requests_ic.Items.Clear();
 		foreach (var request in response.Content!.Reverse<Request>().Where(x => x.DoctorId == _appService.CurrentUser.Id && x.PatientId == (patients_lb.SelectedItem as Patient)?.Id))
 		{
-			requests_ic.Items.Add(new RnRRequest_UserControl_View
+			Dispatcher.UIThread.Invoke(() =>
 			{
-				DataContext = new RnRRequest_UserControl_ViewModel(App.services.GetRequiredService<INotificationService>(), connections)
+				requests_ic.Items.Add(new RnRRequest_UserControl_View
 				{
-					Request = request,
-					OnAcceptRequest = RequestAccepted,
-					OnDeclineRequest = RequestDeclined
-				}
+					DataContext = new RnRRequest_UserControl_ViewModel(App.services.GetRequiredService<INotificationService>(), connections)
+					{
+						Request = request,
+						OnAcceptRequest = RequestAccepted,
+						OnDeclineRequest = RequestDeclined
+					}
+				});
 			});
 		}
 		centerText.IsVisible = requests_ic.Items.Count == 0;
@@ -215,13 +219,10 @@ public partial class RnRDoctorView : UserControl
 
 		using var orderResponse = await APIService.For<IAnalysisOrder>().Post(new AnalysisOrder
 		{
-			PatientAnalysisCart = request.PatientAnalysisCart,
 			PatientAnalysisCartId = request.PatientAnalysisCartId,
 
-			Patient = request.Patient,
 			PatientId = request.PatientId,
 
-			User = request.Doctor!,
 			UserId = request.DoctorId,
 
 			Comment = request.Comment,

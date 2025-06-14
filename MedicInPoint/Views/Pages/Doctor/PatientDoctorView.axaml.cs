@@ -22,6 +22,8 @@ public partial class PatientDoctorView : UserControl
 {
 	public PatientDoctorViewModel ViewModel => (DataContext as PatientDoctorViewModel)!;
 
+	public INotificationService notification => App.services.GetRequiredService<INotificationService>();
+
 	public PatientDoctorView()
 	{
 		InitializeComponent();
@@ -72,6 +74,7 @@ public partial class PatientDoctorView : UserControl
 		if (!proccesses_rb.IsChecked!.Value || ViewModel?.SelectedPatient == null)
 			return;
 
+		notification.Show("Уведомление", "Загрузка данных");
 		processes_ic.Items.Clear();
 		using var response = await APIService.For<IAnalysisOrder>().GetAnalysisOrders4User(ViewModel.CurrentUser!.Id);
 		var list = response.Content!.Where(x => x.AnalysisOrderStateId == 1 && x.PatientId == ViewModel.SelectedPatient!.Id).ToList();

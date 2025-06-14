@@ -1,6 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
-using Avalonia.Platform.Storage;
+﻿using Avalonia.Controls.Notifications;
 using Avalonia.SimpleRouter;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,9 +10,6 @@ using MedicInPoint.API.Refit;
 using MedicInPoint.Extensions;
 using MedicInPoint.Models;
 using MedicInPoint.Services;
-using MedicInPoint.Views;
-
-using Microsoft.Extensions.DependencyInjection;
 
 using System.Collections.ObjectModel;
 using System.Net;

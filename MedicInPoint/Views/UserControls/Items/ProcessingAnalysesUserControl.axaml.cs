@@ -1,10 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml.Templates;
-using Avalonia.Markup.Xaml.XamlIl.Runtime;
+using Avalonia.Layout;
+using Avalonia.Media;
 
 using Medic.API.Refit.Placeholders;
 
@@ -48,39 +46,36 @@ public partial class ProcessingAnalysesUserControl : UserControl
 	void FillItems()
 	{
 		foreach(var item in CurrentOrder.PatientAnalysisCart!.PatientAnalysisCartItems)
-			items_ic.Items.Add(item);
+			items_ic.Items.Add(new Border
+			{
+				DataContext = item,
+				Background = Brushes.White,
+				CornerRadius = new(15),
+				Padding = new(8),
+				Child = new Grid
+				{
+					RowSpacing = 4,
+					RowDefinitions = new("auto,auto"),
+				}.Also(x =>
+				{
+					var text = new SelectableTextBlock { Text = item.Analysis.Name, FontSize = 20 };
+					Grid.SetRow(text, 0);
+					x.Children.Add(text);
+
+					var stackpanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10 }.Also(x =>
+					{
+						x.Children.Add(new TextBlock { Text = "Результат", FontSize = 18, VerticalAlignment = VerticalAlignment.Center });
+						x.Children.Add(new ComboBox { ItemsSource = new[] { "Положительный", "Отрицательный" }, SelectedIndex = 0, FontSize = 18, VerticalAlignment = VerticalAlignment.Center });
+					});
+					Grid.SetRow(stackpanel, 1);
+					x.Children.Add(stackpanel);
+				})
+			});
 
 	}
 
 	async void Apply_Click(object? sender, RoutedEventArgs e)
 	{
-		foreach (var item in items_ic.Items)
-		{
-			var grid = ((items_ic.ContainerFromItem(item) as ContentPresenter).Child as Border).Child as Grid;
-			notification.Show("temp",
-			(
-				(
-					(grid.Children.First(x => x.GetType() == typeof(StackPanel)) as StackPanel).Children.First(x => x.GetType() == typeof(ComboBox)) as ComboBox
-				).SelectedValue
-			).ToString()
-		);
-		}
-		/*var grid = (items_ic.ItemTemplate.Build(null) as Border).Child as Grid;
-		notification.Show("temp",
-			(
-				(
-					(grid.Children.First(x => x.GetType() == typeof(StackPanel)) as StackPanel).Children.First(x => x.GetType() == typeof(ComboBox)) as ComboBox
-				)
-			).ToString()
-		);*/
-		return;
-
-		if(items_ic.Items.Cast<PatientAnalysisCartItem>().Any(x => x.ResultsDescription.IsNullOrWhiteSpace()))
-		{
-			App.services.GetRequiredService<INotificationService>().Show("Ошибка!", "Вы не заполнили все поля с результатом");
-			return;
-		}
-
 		using var orderResponse = await APIService.For<IAnalysisOrder>().Update(new AnalysisOrder
 		{
 			Id = CurrentOrder.Id,
@@ -99,9 +94,19 @@ public partial class ProcessingAnalysesUserControl : UserControl
 			return;
 		}
 
-		foreach(var item in items_ic.Items.Cast<PatientAnalysisCartItem>().ToList())
+
+		foreach (var border in items_ic.Items.Cast<Border>().ToList())
 		{
-			using var itemResponse = await APIService.For<IPatientAnalysisCartItem>().Update(new PatientAnalysisCartItem { Id = item.Id, PatientAnalysisCartId = item.PatientAnalysisCartId, AnalysisId = item.AnalysisId, ResultsDescription = item.ResultsDescription });
+			var item = border.DataContext as PatientAnalysisCartItem;
+
+			var combobox = ((border.Child as Grid)!.Children.First(x => x.GetType() == typeof(StackPanel)) as StackPanel)!.Children.First(x => x.GetType() == typeof(ComboBox)) as ComboBox;
+			using var itemResponse = await APIService.For<IPatientAnalysisCartItem>().Update(new PatientAnalysisCartItem
+			{
+				Id = item.Id,
+				PatientAnalysisCartId = item.PatientAnalysisCartId,
+				AnalysisId = item.AnalysisId,
+				ResultsDescription = combobox.SelectedValue.ToString()
+			});
 			if (!itemResponse.IsSuccessful)
 			{
 				notification.Show("Ошибка!", $"{orderResponse.Error!.Message}", NotificationType.Error);

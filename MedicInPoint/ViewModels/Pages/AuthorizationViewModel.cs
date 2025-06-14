@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Net;
-using System.Reflection;
 
 using Avalonia.Controls.Notifications;
 using Avalonia.Logging;
@@ -14,8 +13,6 @@ using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
 using MedicInPoint.Extensions;
 using MedicInPoint.Services;
-
-using Refit;
 
 namespace MedicInPoint.ViewModels.Pages;
 

@@ -41,7 +41,7 @@
 						<StackPanel ClipToBounds="False" Orientation="Vertical" Spacing="10" />
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
-				<ItemsControl.ItemTemplate>
+				<!--<ItemsControl.ItemTemplate>
 					<DataTemplate DataType="model:PatientAnalysisCartItem">
 						<Border Classes="brd" ClipToBounds="False" Background="White" CornerRadius="15" Padding="8">
 							<Border.Effect>
@@ -69,7 +69,7 @@
 							</Grid>
 						</Border>
 					</DataTemplate>
-				</ItemsControl.ItemTemplate>
+				</ItemsControl.ItemTemplate>-->
 			</ItemsControl>
 		</StackPanel>
 	</Border>

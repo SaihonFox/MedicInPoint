@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
@@ -7,7 +5,6 @@ using Avalonia.Logging;
 
 using MedicInPoint.API.Refit;
 using MedicInPoint.API.Refit.Placeholders;
-using MedicInPoint.Extensions;
 using MedicInPoint.Services;
 using MedicInPoint.ViewModels.UserControls.Drawers;
 

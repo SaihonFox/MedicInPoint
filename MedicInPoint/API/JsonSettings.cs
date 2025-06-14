@@ -3,8 +3,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-using MedicInPoint.Extensions;
-
 namespace MedicInPoint.API;
 
 public static class JsonSettings
