@@ -80,7 +80,7 @@
 													</Style>
 												</Button.Styles>
 											</Button>
-											<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).OutExcelCommand}" CommandParameter="{CompiledBinding $self.DataContext}" Padding="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="40">
+											<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).BeautyExcelReportCommand}" CommandParameter="{CompiledBinding $self.DataContext}" Padding="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="40">
 												<Button.Styles>
 													<Style Selector="Button">
 														<Setter Property="Background" Value="#00B712" />

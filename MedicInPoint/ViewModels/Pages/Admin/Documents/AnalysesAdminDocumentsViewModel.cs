@@ -54,40 +54,48 @@ public partial class AnalysesAdminDocumentsViewModel() : ViewModelBase
 			await APIService.For<IAnalysisOrder>().GetAnalysisOrders4User(_appService.CurrentUser.Id).ConfigureAwait(false);
 		if (!response.IsSuccessful)
 			return;
-
+		
 		foreach(var analysisOrder in response.Content)
 			Documents.Add(analysisOrder);
 	}
 
 	[RelayCommand]
-	private async Task OutExcel(AnalysisOrder order)
+	private void BeautyExcelReport(AnalysisOrder order)
 	{
 		var app = new Excel.Application { Visible = true };
 		var workBook = app.Workbooks.Add(Type.Missing);
 		app.DisplayAlerts = false;
 		var sheet = (Excel.Worksheet)app.Worksheets.Item[1];
 
-		int maxNameLen = order.PatientAnalysisCart!.PatientAnalysisCartItems.Max(x => x.Analysis.Name.Length);
-		int maxPriceLen = order.PatientAnalysisCart!.PatientAnalysisCartItems.Max(x => x.Analysis.Price.ToString("0.00").Length);
+		sheet.Range["A1"].Value = $"Результаты анализов на {order.AnalysisDatetime:dd.MM.yyyy HH:mm}";
+		sheet.Range["A3"].Value = "Анализы";
+		sheet.Range["A3"].Font.Bold = true;
+		sheet.Range["A4"].Value = "Наименование анализа";
+		sheet.Range["B4"].Value = "Результат анализа";
+		sheet.Range["A4"].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+		sheet.Range["B4"].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+		sheet.Range["A4"].Font.Bold = true;
+		sheet.Range["B4"].Font.Bold = true;
 
-		List<string> list = [
-			$"Ваши результаты анализов на {order.AnalysisDatetime:dd.MM.yyyy HH:mm}",
-			"< Анализы ",
-			$"| на общую сумму {order.PatientAnalysisCart!.PatientAnalysisCartItems.ToList().Sum(x => x.Analysis.Price):0.00} руб.",
-			"#",
-		];
-		if (!order.Comment.IsNullOrWhiteSpace())
-			list.InsertRange(1,	 "", $"Комментарий пациента: {order.Comment}", "");
-		list.AddRange(order.PatientAnalysisCart!.PatientAnalysisCartItems.Select(cartItem => $"|> {cartItem.Analysis.Name.PadLeft(Math.Abs(maxNameLen - cartItem.Analysis.Name.Length))} - {cartItem.Analysis.Price.ToString("0.00").PadRight(Math.Abs(cartItem.Analysis.Price.ToString("0.00").Length - maxPriceLen))} руб.\nРезультат: {cartItem.ResultsDescription}"));
-		list.Add("< " + new string('#', 10));
-		list.Add("");
-		list.Add($"Лаборант: {order.User.FullName}");
-		list.Add($"Пациент: {order.Patient.FullName}");
-		list.Add($"Место проведения: {(order.AtHome ? "Дома у клиента" : "Клиника")}");
-		for (int i = 1; i <= list.Count; i++)
-			sheet.Range[$"A{i}"].Value = list[i - 1];
-		sheet.Range[$"A1", $"A{list.Count}"].EntireColumn.AutoFit();
-		sheet.Range[$"A1", $"A{list.Count}"].EntireRow.AutoFit();
+		int analysisCount = order.PatientAnalysisCart!.PatientAnalysisCartItems.Count;
+		for (int i = 0; i < analysisCount; i++)
+		{
+			var cartItem = order.PatientAnalysisCart.PatientAnalysisCartItems.ToList()[i];
+			sheet.Range[$"A{5 + i}"].Value = cartItem.Analysis.Name;
+			sheet.Range[$"B{5 + i}"].Value = cartItem.ResultsDescription;
+		}
+		sheet.Range[sheet.Range["A4"], sheet.Range[$"B{4 + analysisCount}"]].Borders.Color = Excel.XlRgbColor.rgbBlack;
+		sheet.Range[sheet.Range["A4"], sheet.Range[$"B{4 + analysisCount}"]].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
+		
+		sheet.Range[$"A{6 + analysisCount}"].Value = $"ФИО Лаборанта: {order.User.FullName}";
+		sheet.Range[$"A{7 + analysisCount}"].Value = $"ФИО Клиента: {order.Patient.FullName}";
+		sheet.Range[$"A{8 + analysisCount}"].Value = $"Адрес забора анализов: {(order.AtHome ? order.Patient.Address : "В клинике")}";
+		if(order.Comment != null)
+			sheet.Range[$"A{9 + analysisCount}"].Value = $"Комментарии клиента: {order.Comment}";
+
+		sheet.Rows.EntireRow.AutoFit();
+		sheet.Columns.EntireColumn.AutoFit();
 	}
 
 	void CreateExcelFile(AnalysisOrder order, string fileName)

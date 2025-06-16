@@ -22,52 +22,131 @@
 			<Button Classes="back" Command="{CompiledBinding BackCommand}" HotKey="Escape" Margin="30,40,0,0" HorizontalAlignment="Left" />
 			<TextBlock Text="{CompiledBinding CurrentUser}" FontSize="30" LineHeight="30" Margin="0,40,30,0" HorizontalAlignment="Right" />
 
-			<TextBlock IsVisible="{CompiledBinding Documents.Count, Converter={StaticResource IntConverter}, ConverterParameter=0}" Text="Пустой список" FontSize="44" Margin="20,100" HorizontalAlignment="Center" VerticalAlignment="Center" />
-			<ScrollViewer Margin="20,100">
-				<ItemsControl ItemsSource="{CompiledBinding Documents}">
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<WrapPanel ItemsAlignment="Center" />
-						</ItemsPanelTemplate>
-					</ItemsControl.ItemsPanel>
-					<ItemsControl.ItemTemplate>
-						<DataTemplate DataType="model:AnalysisOrder">
-							<Border Classes="drawerbg" Margin="10">
-								<Grid RowDefinitions="*,auto" RowSpacing="5">
-									<StackPanel Grid.Row="0" Orientation="Vertical" Spacing="7">
-										<TextBlock Text="{CompiledBinding AnalysisDatetime, StringFormat='Дата проведения: {0:dd.MM.yyyy HH:mm}'}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+			<Grid ColumnDefinitions="auto,*" ColumnSpacing="10" Margin="20,100">
+				<Border Grid.Column="0" Classes="drawerbg" ClipToBounds="False" Padding="6" MinWidth="300">
+					<Grid>
+						<ListBox Name="patients_lb" ClipToBounds="False" ItemsSource="{CompiledBinding Patients}" Background="Transparent" SelectionMode="Single" SelectedIndex="{CompiledBinding SelectedPatientIndex, Mode=TwoWay}" SelectedItem="{CompiledBinding SelectedPatient, Mode=TwoWay}" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel ClipToBounds="False" Orientation="Vertical" />
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+							<ListBox.Styles>
+								<Style Selector="ListBoxItem">
+									<Setter Property="Padding" Value="10,5" />
+									<Setter Property="ClipToBounds" Value="False" />
+									<Setter Property="Transitions">
+										<Transitions>
+											<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
+										</Transitions>
+									</Setter>
+								</Style>
+								<Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+									<Setter Property="ClipToBounds" Value="False" />
+									<Setter Property="Background" Value="Transparent" />
+								</Style>
+								<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+									<Setter Property="ClipToBounds" Value="False" />
+									<Setter Property="Background" Value="Transparent" />
+									<Setter Property="Effect">
+										<DropShadowEffect Color="#E4E8F5" BlurRadius="20" OffsetX="0" OffsetY="0" />
+									</Setter>
+									<Setter Property="RenderTransform" Value="scale(1.02)" />
+								</Style>
+								<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+									<Setter Property="ClipToBounds" Value="False" />
+									<Setter Property="Background" Value="Transparent" />
+									<Setter Property="Effect">
+										<DropShadowEffect Color="#BFBEBE" BlurRadius="20" OffsetX="0" OffsetY="0" />
+									</Setter>
+								</Style>
+							</ListBox.Styles>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border ClipToBounds="False" CornerRadius="16" Background="#F5F5F9" Padding="10">
+										<Grid ColumnDefinitions="auto,5,*">
+											<Border Grid.Column="0" CornerRadius="100" Background="#1A6FEE" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Мужской}" Width="5" />
+											<Border Grid.Column="0" CornerRadius="100" Background="#FF47CA" IsVisible="{CompiledBinding Sex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Женский}" Width="5" />
+											<TextBlock Grid.Column="2" Text="{CompiledBinding FullName}" FontSize="20" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="0" VerticalAlignment="Center" />
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+						<TextBlock IsVisible="{CompiledBinding Patients.Count, Converter={StaticResource IntConverter}, ConverterParameter=0}" Text="Список пуст" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					</Grid>
+				</Border>
+				
+				<TextBlock Grid.Column="1" IsVisible="{CompiledBinding Documents.Count, Converter={StaticResource IntConverter}, ConverterParameter=0}" Text="Пустой список" FontSize="44" Margin="20,100" HorizontalAlignment="Center" VerticalAlignment="Center" />
+				<ScrollViewer Grid.Column="1">
+					<ItemsControl ItemsSource="{CompiledBinding Documents}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel ItemsAlignment="Center" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate DataType="model:AnalysisOrder">
+								<Border Classes="drawerbg" Margin="10" Padding="0" ClipToBounds="True" VerticalAlignment="Center">
+									<StackPanel ClipToBounds="True">
+										<Border Background="#1A6FEE" IsVisible="{CompiledBinding AnalysisOrderState.Name, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='in process'}">
+											<TextBlock Text="На изучении" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										</Border>
+										<Border Background="#00B712" IsVisible="{CompiledBinding AnalysisOrderState.Name, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='passed'}">
+											<TextBlock Text="Изучено" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										</Border>
+
+										<StackPanel Orientation="Vertical" Spacing="4" Margin="16,4,16,16">
+											<TextBlock IsVisible="{CompiledBinding !AtHome}" Text="Адрес: Клиника" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+											<TextBlock Text="{CompiledBinding Patient.Address, StringFormat='Адрес: {0}'}" IsVisible="{CompiledBinding AtHome}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+											<TextBlock Text="{CompiledBinding AnalysisDatetime, StringFormat='Дата проведения: {0:dd.MM.yyyy HH:mm}'}" FontSize="24" TextAlignment="Center" TextWrapping="WrapWithOverflow" />
+
+											<SelectableTextBlock Text="{CompiledBinding User.FullName, StringFormat='Лаборант: {0}'}" FontSize="16" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" />
+											<SelectableTextBlock Text="{CompiledBinding Patient.FullName, StringFormat='Пациент: {0}'}" FontSize="16" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" />
+
+											<TextBlock IsVisible="{CompiledBinding AnalysisOrderStateId, Converter={StaticResource IntConverter}, ConverterParameter=2}" Text="Экспорт чека" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
+											<Grid ColumnDefinitions="*" IsVisible="{CompiledBinding AnalysisOrderStateId, Converter={StaticResource IntConverter}, ConverterParameter=2}" ColumnSpacing="10" VerticalAlignment="Bottom">
+												<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:PatientsAdminDocumentsViewModel)DataContext).BeautyExcelReportCommand}" CommandParameter="{CompiledBinding $self.DataContext}" Padding="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="40">
+													<Button.Styles>
+														<Style Selector="Button">
+															<Setter Property="Background" Value="#00B712" />
+															<Setter Property="Foreground" Value="White" />
+
+															<Setter Property="Padding" Value="10" />
+
+															<Setter Property="Effect">
+																<DropShadowEffect Color="#00B712" BlurRadius="6" Opacity="0.75" OffsetX="0" OffsetY="0" />
+															</Setter>
+
+															<Setter Property="Template">
+																<ControlTemplate>
+																	<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="0" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+																		<ContentPresenter Name="PART_Content" Content="Excel" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
+																	</Border>
+																</ControlTemplate>
+															</Setter>
+
+															<Style Selector="^:pointerover">
+																<Setter Property="Background" Value="#1457bb" />
+															</Style>
+															<Style Selector="^:disabled">
+																<Setter Property="Background" Value="Gray" />
+																<Setter Property="Effect">
+																	<DropShadowEffect Color="#00B712" BlurRadius="0" Opacity="0" OffsetX="0" OffsetY="0" />
+																</Setter>
+															</Style>
+														</Style>
+													</Button.Styles>
+												</Button>
+											</Grid>
+										</StackPanel>
 									</StackPanel>
-									<Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10" VerticalAlignment="Bottom">
-										<TextBlock Text="{CompiledBinding User.FullName, StringFormat='Лаборант: {0}'}" FontSize="18" VerticalAlignment="Center" />
-										<Button Grid.Column="1" Command="{CompiledBinding $parent[UserControl].((vm:AnalysesAdminDocumentsViewModel)DataContext).OutExcelCommand}" CommandParameter="{CompiledBinding $self.DataContext}" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinHeight="40">
-											<Button.Styles>
-												<Style Selector="Button">
-													<Setter Property="Background" Value="#1A6FEE" />
-													<Setter Property="Foreground" Value="White" />
-
-													<Setter Property="Padding" Value="10" />
-
-													<Setter Property="Template">
-														<ControlTemplate>
-															<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="0" Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-																<ContentPresenter Name="PART_Content" Content="Подробнее" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
-															</Border>
-														</ControlTemplate>
-													</Setter>
-
-													<Style Selector="^:pointerover">
-														<Setter Property="Background" Value="#1457bb" />
-													</Style>
-												</Style>
-											</Button.Styles>
-										</Button>
-									</Grid>
-								</Grid>
-							</Border>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</ScrollViewer>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Grid>
 		</Grid>
 	</Grid>
 </UserControl>

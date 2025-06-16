@@ -92,7 +92,7 @@ public partial class App : Application
 
 		services.AddSingleton<AuthorizationViewModel>();
 		services.AddSingleton<FlyoutMenuViewModel>();
-		services.AddSingleton<MenuViewModel>();
+		services.AddTransient<MenuViewModel>();
 
 		// Admin
 		services.AddTransient<AnalysesAdminViewModel>();

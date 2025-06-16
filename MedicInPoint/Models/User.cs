@@ -33,5 +33,5 @@ public partial class User
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public virtual ICollection<UserStatus> UserStatuses { get; set; } = new List<UserStatus>();
+    public virtual ICollection<UserData> UserStatuses { get; set; } = new List<UserData>();
 }

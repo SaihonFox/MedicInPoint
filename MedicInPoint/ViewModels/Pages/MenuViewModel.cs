@@ -43,8 +43,8 @@ public partial class MenuViewModel() : ViewModelBase
 		new ScrollViewer {
 			Content = new WrapPanel { ItemsAlignment = WrapPanelItemsAlignment.Center }.Also(x => {
 				x.Children.AddRange([
-					//BorderDocument("Отчеты\nлаборантов", AdminDocumentUsersCommand),
-					//BorderDocument("Отчеты\nпациентов", AdminDocumentPatientsCommand),
+					BorderDocument("Отчеты\nлаборантов", AdminDocumentUsersCommand),
+					BorderDocument("Отчеты\nпациентов", AdminDocumentPatientsCommand),
 					BorderDocument("Отчеты\nрезультатов\nанализов", AdminDocumentAnalysesCommand),
 				]);
 			}),
@@ -75,6 +75,7 @@ public partial class MenuViewModel() : ViewModelBase
 		
 		Title = "Меню " + (_appService.CurrentUser!.Post == 1 ? "Администратора" : "Лаборанта");
 	}
+	
 
 	[RelayCommand]
 	private void Back()
